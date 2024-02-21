@@ -11,6 +11,7 @@
 #include "ResourceManager.h"
 #include <chrono>
 #include <thread>
+#include <math.h>
 
 SDL_Window* g_window{};
 using namespace std::chrono;
@@ -56,8 +57,8 @@ dae::Minigin::Minigin(const std::string &dataPath)
 		"Programming 4 assignment",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		640,
-		480,
+		gWindowWidth,
+		gWindowHeight,
 		SDL_WINDOW_OPENGL
 	);
 	if (g_window == nullptr) 
@@ -89,27 +90,32 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	// todo: this update loop could use some work.
 	bool doContinue = true;
 	auto lastTime = high_resolution_clock::now();
-	float lag{ 0.f };
-	float fixedTimeStep{ .1f };
-
+	double lag{ 0.f };
+	constexpr double fixedTimeStep{ 1 / 60.0 };
+	
 	while (doContinue)
 	{
 		const auto currentTime = high_resolution_clock::now();
-		const float delta_time = duration<float>(currentTime - lastTime).count();
+		double deltaTime = duration<double>(currentTime - lastTime).count();
 		lastTime = currentTime;
-		lag += delta_time;
+		lag += deltaTime;
 
 		doContinue = input.ProcessInput();
 		while (lag >= fixedTimeStep)
 		{
-			sceneManager.FixedUpdate();
+			sceneManager.FixedUpdate(fixedTimeStep);
 			lag -= fixedTimeStep;
 		};
-		sceneManager.Update();
+		sceneManager.Update(deltaTime);
 		renderer.Render();
 
-		const auto sleepTime{ currentTime + milliseconds() - high_resolution_clock::now() };
+		const auto sleepTime{ currentTime + milliseconds(1 / static_cast<long long>(60)) - high_resolution_clock::now()};
 
 		std::this_thread::sleep_for(sleepTime);
 	}
+}
+
+void dae::Minigin::CountFPS()
+{
+
 }

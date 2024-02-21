@@ -5,9 +5,11 @@
 
 dae::GameObject::~GameObject() = default;
 
-void dae::GameObject::Update(){}
+void dae::GameObject::Start(){}
 
-void dae::GameObject::FixedUpdate(){}
+void dae::GameObject::Update(const double){}
+
+void dae::GameObject::FixedUpdate(const double){}
 
 void dae::GameObject::Render() const
 {

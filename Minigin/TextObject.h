@@ -1,17 +1,15 @@
 #pragma once
-#include <string>
-#include <memory>
 #include "GameObject.h"
-#include "Transform.h"
-
+#include "TextComponent.h"
 namespace dae
 {
 	class Font;
 	class Texture2D;
+	class TextComponent;
 	class TextObject final : public GameObject
 	{
 	public:
-		void Update() override;
+		void Update(const double deltaTime) override;
 		void Render() const override;
 
 		void SetText(const std::string& text);
@@ -23,11 +21,12 @@ namespace dae
 		TextObject(TextObject&& other) = delete;
 		TextObject& operator=(const TextObject& other) = delete;
 		TextObject& operator=(TextObject&& other) = delete;
+
 	private:
-		bool m_needsUpdate;
 		std::string m_text;
 		Transform m_transform{};
 		std::shared_ptr<Font> m_font;
-		std::shared_ptr<Texture2D> m_textTexture;
+		//std::shared_ptr<Texture2D> m_textTexture;
+		std::shared_ptr<TextComponent> m_TextComponent;
 	};
 }
