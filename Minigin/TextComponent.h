@@ -1,21 +1,20 @@
 #pragma once
 #include <string>
-#include <memory>
-#include "GameObject.h"
-#include "Transform.h"
+#include "Component.h"
+#include "Font.h"
 
 namespace dae
 {
 	class Font;
-	class Texture2D;
-	class TextComponent
+	class TextComponent : 
+		public Component
 	{
 	public:
-		void Update(const double deltaTime);
-		void Render() const;
+		virtual void Update(const double deltaTime) override;
+		virtual void Render() const override;
 
-		void SetText(const std::string& text);
-		void SetPosition(float x, float y);
+		virtual void SetText(const std::string& text);
+		virtual void SetPosition(float x, float y);
 
 		TextComponent(const std::string& text, std::shared_ptr<Font> font);
 		virtual ~TextComponent() = default;
@@ -23,7 +22,7 @@ namespace dae
 		TextComponent(TextComponent&& other) = delete;
 		TextComponent& operator=(const TextComponent& other) = delete;
 		TextComponent& operator=(TextComponent&& other) = delete;
-	private:
+	protected:
 		bool m_needsUpdate;
 		std::string m_text;
 		Transform m_transform{};

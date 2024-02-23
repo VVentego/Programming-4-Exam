@@ -109,7 +109,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		sceneManager.Update(deltaTime);
 		renderer.Render();
 
-		const auto sleepTime{ currentTime + milliseconds(1 / static_cast<long long>(60)) - high_resolution_clock::now()};
+		const auto sleepTime{ currentTime + milliseconds(16) - high_resolution_clock::now()};
 
 		std::this_thread::sleep_for(sleepTime);
 	}
