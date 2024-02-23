@@ -32,11 +32,6 @@ void dae::GameObject::Render() const
 	}
 }
 
-//void dae::GameObject::SetTexture(const std::string& filename)
-//{
-//	m_texture = ResourceManager::GetInstance().LoadTexture(filename);
-//}
-
 void dae::GameObject::SetPosition(float x, float y)
 {
 	m_transform.SetPosition(x, y, 0.0f);
@@ -66,4 +61,15 @@ std::shared_ptr<dae::Component> dae::GameObject::GetComponent(const std::string&
 	}
 
 	return nullptr;
+}
+
+bool dae::GameObject::ComponentExists(const std::string& componentName) const
+{
+	auto it = m_pComponents.find(componentName);
+	if (it != m_pComponents.end())
+	{
+		return true;
+	}
+
+	return false;
 }

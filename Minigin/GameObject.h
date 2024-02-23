@@ -25,6 +25,8 @@ namespace dae
 		virtual void RemoveComponent(const std::string& componentName) final;
 		virtual std::shared_ptr<Component> GetComponent(const std::string& componentName) final;
 
+		virtual bool ComponentExists(const std::string& componentName) const final;
+
 		GameObject() = default;
 		virtual ~GameObject();
 		GameObject(const GameObject& other) = delete;
