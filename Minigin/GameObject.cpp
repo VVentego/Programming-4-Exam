@@ -10,6 +10,8 @@ void dae::GameObject::Start(){}
 
 void dae::GameObject::Update(const double deltaTime)
 {
+	if (m_IsDestroyed) return;
+
 	for (auto& component : m_pComponents)
 	{
 		component.second->Update(deltaTime);
@@ -18,6 +20,8 @@ void dae::GameObject::Update(const double deltaTime)
 
 void dae::GameObject::FixedUpdate(const double fixedDeltaTime)
 {
+	if (m_IsDestroyed) return;
+
 	for (auto& component : m_pComponents)
 	{
 		component.second->FixedUpdate(fixedDeltaTime);
@@ -26,6 +30,8 @@ void dae::GameObject::FixedUpdate(const double fixedDeltaTime)
 
 void dae::GameObject::Render() const
 {
+	if (m_IsDestroyed) return;
+
 	for (auto& component : m_pComponents)
 	{
 		component.second->Render();
@@ -47,9 +53,25 @@ void dae::GameObject::AddComponent(const std::string& componentName, std::shared
 	m_pComponents.emplace(componentName, std::move(component));
 }
 
-void dae::GameObject::RemoveComponent(const std::string& componentName)
+void dae::GameObject::DestroyComponent(const std::string& componentName)
 {
-	m_pComponents.erase(componentName);
+	GetComponent(componentName)->Destroy();
+}
+
+void dae::GameObject::RemoveComponent()
+{
+	std::vector<std::string> componentsToRemove;
+
+	for (auto& component : m_pComponents)
+	{
+		if (component.second->m_IsDestroyed)
+			componentsToRemove.emplace_back(component.first);
+	}
+
+	for (auto& componentName : componentsToRemove)
+	{
+		m_pComponents.erase(componentName);
+	}
 }
 
 std::shared_ptr<dae::Component> dae::GameObject::GetComponent(const std::string& componentName)
@@ -72,4 +94,9 @@ bool dae::GameObject::ComponentExists(const std::string& componentName) const
 	}
 
 	return false;
+}
+
+void dae::GameObject::Destroy()
+{
+	m_IsDestroyed = true;
 }

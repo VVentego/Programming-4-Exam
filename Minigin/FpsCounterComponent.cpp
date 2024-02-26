@@ -1,37 +1,17 @@
 #include "FpsCounterComponent.h"
+#include "GameObject.h"
 
-dae::FpsCounterComponent::FpsCounterComponent(std::shared_ptr<Font> font) :
-	dae::TextComponent::TextComponent("60.0", font)
+dae::FpsCounterComponent::FpsCounterComponent(GameObject* pOwner) :
+	Component::Component(pOwner)
 {
-
+	m_pTextComponent = m_pOwner->GetComponent<TextComponent>();
 }
 
 void dae::FpsCounterComponent::Update(const double deltaTime)
 {
-	const double fps{ 1 / deltaTime };
+	Component::Update(deltaTime);
+	m_Fps = 1 / deltaTime;
 
-	SetText(std::to_string(fps));
-
-	TextComponent::Update(deltaTime);
-}
-
-void dae::FpsCounterComponent::FixedUpdate(const double)
-{
-
-}
-
-void dae::FpsCounterComponent::Render() const
-{
-	TextComponent::Render();
-}
-
-// This implementation uses the "dirty flag" pattern
-void dae::FpsCounterComponent::SetText(const std::string& text)
-{
-	TextComponent::SetText(text);
-}
-
-void dae::FpsCounterComponent::SetPosition(const float x, const float y)
-{
-	m_transform.SetPosition(x, y, 0.0f);
+	if (m_pTextComponent != nullptr)
+		m_pTextComponent->SetText(std::to_string(m_Fps));
 }

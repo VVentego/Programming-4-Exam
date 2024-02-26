@@ -12,14 +12,13 @@ namespace dae
 	{
 	public:
 		void Update(const double deltaTime) override;
-		void FixedUpdate(const double fixedTimeStep) override;
 		void Render() const override;
 		void Start() override;
 
 		void SetTexture(const std::string& filename);
 		void SetPosition(float x, float y);
 
-		TextureComponent() = default;
+		TextureComponent(GameObject* pOwner);
 		virtual ~TextureComponent() = default;
 		TextureComponent(const TextureComponent& other) = delete;
 		TextureComponent(TextureComponent&& other) = delete;

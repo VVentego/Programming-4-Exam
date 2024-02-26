@@ -108,6 +108,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		};
 		sceneManager.Update(deltaTime);
 		renderer.Render();
+		sceneManager.DestroyObjects();
 
 		const auto sleepTime{ currentTime + milliseconds(16) - high_resolution_clock::now()};
 

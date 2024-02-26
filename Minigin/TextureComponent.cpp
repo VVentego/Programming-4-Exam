@@ -1,5 +1,11 @@
 #include "TextureComponent.h"
 
+dae::TextureComponent::TextureComponent(GameObject* pOwner) :
+	dae::Component::Component(pOwner)
+{
+
+}
+
 void dae::TextureComponent::Start()
 {
 
@@ -7,15 +13,13 @@ void dae::TextureComponent::Start()
 
 void dae::TextureComponent::Update(const double)
 {
-	
-}
-
-void dae::TextureComponent::FixedUpdate(const double)
-{
+	if (m_IsDestroyed) return;
 }
 
 void dae::TextureComponent::Render() const
 {
+	if (m_IsDestroyed) return;
+
 	const auto& pos = m_transform.GetPosition();
 	Renderer::GetInstance().RenderTexture(*m_texture, pos.x, pos.y);
 }

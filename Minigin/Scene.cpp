@@ -50,3 +50,17 @@ void Scene::Render() const
 	}
 }
 
+void dae::Scene::Destroy()
+{
+	for (auto& object : m_objects)
+	{
+		if (object->m_IsDestroyed)
+		{
+			Remove(object);
+			return;
+		}
+
+		object->RemoveComponent();
+	}
+}
+
