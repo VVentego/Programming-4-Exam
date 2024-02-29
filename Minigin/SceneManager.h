@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SCENEMANAGER
+#define SCENEMANAGER
+
 #include <vector>
 #include <string>
 #include <memory>
@@ -23,3 +25,4 @@ namespace dae
 		std::vector<std::shared_ptr<Scene>> m_scenes;
 	};
 }
+#endif

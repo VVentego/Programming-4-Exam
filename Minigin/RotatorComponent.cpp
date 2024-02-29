@@ -4,6 +4,7 @@ dae::RotatorComponent::RotatorComponent(GameObject* owner, const glm::vec3 centr
     Component::Component(owner),
     m_Centre{ centre }, m_RotationRadius{ radius }, m_RotationSpeed{ speed } 
 {
+    
 }
 
 void dae::RotatorComponent::Update(const double deltaTime)
@@ -16,4 +17,6 @@ void dae::RotatorComponent::Update(const double deltaTime)
     newPosition.y = m_Centre.y + m_RotationRadius * sin(m_Angle);
 
     m_CalculatedPos = newPosition;
+
+    m_pOwner->SetPosition(m_CalculatedPos.x, m_CalculatedPos.y);
 }

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef FONT
+#define FONT
+
 #include <string>
 
 struct _TTF_Font;
@@ -22,3 +24,4 @@ namespace dae
 		_TTF_Font* m_font;
 	};
 }
+#endif // !FONT

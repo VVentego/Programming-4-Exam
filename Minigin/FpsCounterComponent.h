@@ -1,4 +1,5 @@
-#pragma once
+#ifndef FPSCOUNTER
+#define FPSCOUNTER
 #include "TextComponent.h"
 
 namespace dae
@@ -23,3 +24,4 @@ namespace dae
     };
 }
 
+#endif

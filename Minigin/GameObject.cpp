@@ -1,9 +1,5 @@
-#include <string>
 #include "GameObject.h"
-#include "ResourceManager.h"
-#include "Renderer.h"
-#include "Component.h"
-#include <iostream>
+
 dae::GameObject::~GameObject() = default;
 
 void dae::GameObject::Start(){}
@@ -22,6 +18,7 @@ void dae::GameObject::Update(const double deltaTime)
 		{
 			glm::vec3 position{ GetPosition() };
 			child->SetPosition(position.x + child->m_LocalPosition.x, position.y + child->m_LocalPosition.y);
+			m_NeedsUpdate = false;
 		}
 }
 

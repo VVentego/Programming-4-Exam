@@ -1,5 +1,8 @@
-#pragma once
+#ifndef ROTATORCOMPONENT
+#define ROTATORCOMPONENT
 #include "Component.h"
+#include "GameObject.h"
+
 namespace dae
 {
 	class RotatorComponent :
@@ -24,3 +27,5 @@ namespace dae
 		glm::vec2 m_CalculatedPos{};
 	};
 }
+
+#endif // !ROTATORCOMPONENT

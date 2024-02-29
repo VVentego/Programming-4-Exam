@@ -1,4 +1,6 @@
-#pragma once
+#ifndef COMPONENT
+#define COMPONENT
+
 #include <memory>
 #include "Transform.h"
 #include "Renderer.h"
@@ -35,3 +37,4 @@ namespace dae
 	};
 }
 
+#endif

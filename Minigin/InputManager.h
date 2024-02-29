@@ -1,4 +1,6 @@
-#pragma once
+#ifndef INPUTMANAGER
+#define INPUTMANAGER
+
 #include "Singleton.h"
 
 namespace dae
@@ -10,3 +12,4 @@ namespace dae
 	};
 
 }
+#endif // !INPUTMANAGER

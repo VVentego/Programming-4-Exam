@@ -1,4 +1,6 @@
-#pragma once
+#ifndef TEXTCOMPONENT
+#define TEXTCOMPONENT
+
 #include <string>
 #include "Component.h"
 #include "Font.h"
@@ -30,4 +32,5 @@ namespace dae
 		std::shared_ptr<Texture2D> m_textTexture;
 	};
 }
+#endif // !TEXTCOMPONENT
 

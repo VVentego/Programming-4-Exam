@@ -1,9 +1,11 @@
-#pragma once
+#ifndef GAMEOBJECT 
+#define GAMEOBJECT
 #include <memory>
 #include "Transform.h"
 #include <unordered_map>
-#include <any>
-
+#include "ResourceManager.h"
+#include "Renderer.h"
+#include "Component.h"
 namespace dae
 {
 	class Texture2D;
@@ -24,8 +26,6 @@ namespace dae
 		void DestroyComponent(const std::string& componentName);
 		void RemoveComponent();
 		std::shared_ptr<Component> GetComponent(const std::string& componentName);
-
-
 
 		template <typename T>
 		std::shared_ptr<T> GetComponent()
@@ -80,3 +80,4 @@ namespace dae
 		bool m_NeedsUpdate{ false };
 	};
 }
+#endif
