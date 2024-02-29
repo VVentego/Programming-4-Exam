@@ -4,12 +4,23 @@ dae::RotatorComponent::RotatorComponent(GameObject* owner, const glm::vec3 centr
     Component::Component(owner),
     m_Centre{ centre }, m_RotationRadius{ radius }, m_RotationSpeed{ speed } 
 {
-    
+    m_pParent = m_pOwner->GetParent();
+    if (m_pParent != nullptr)
+    {
+        glm::vec3 parentPosition = m_pParent->GetPosition();
+        m_Centre = glm::vec2{ parentPosition.x, parentPosition.y };
+    }
 }
 
 void dae::RotatorComponent::Update(const double deltaTime)
 {
     m_Angle += m_RotationSpeed * static_cast<float>(deltaTime);
+    
+    if (m_pParent != nullptr)
+    {
+        glm::vec3 parentPosition = m_pParent->GetPosition();
+        m_Centre = glm::vec2{ parentPosition.x, parentPosition.y };
+    }
 
     // Calculate new position based on angle and radius
     glm::vec2 newPosition{};

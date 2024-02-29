@@ -20,11 +20,12 @@ namespace dae
 		RotatorComponent& operator=(RotatorComponent&& other) = delete;
 
 	private:
-		const glm::vec2 m_Centre{};
-		const float m_RotationSpeed{};
-		const float m_RotationRadius{};
+		glm::vec2 m_Centre{};
+		float m_RotationSpeed{};
+		float m_RotationRadius{};
 		float m_Angle{};
 		glm::vec2 m_CalculatedPos{};
+		GameObject* m_pParent{};
 	};
 }
 

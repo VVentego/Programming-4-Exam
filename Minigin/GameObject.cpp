@@ -140,7 +140,7 @@ void dae::GameObject::SetParent(GameObject* pParentObject, const bool worldPosit
 	}
 }
 
-dae::GameObject* dae::GameObject::GetChildAt(const int index) {
+dae::GameObject* dae::GameObject::GetChildAt(const size_t index) {
 	if (m_pChildren.empty()) return nullptr;
 	if (index < 0) return m_pChildren[0];
 	if (index >= m_pChildren.size()) return m_pChildren.back();
