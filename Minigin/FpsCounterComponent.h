@@ -1,5 +1,4 @@
 #pragma once
-#include "Component.h"
 #include "TextComponent.h"
 
 namespace dae
@@ -8,8 +7,8 @@ namespace dae
         public Component
     {
 	public:
-		virtual void Update(const double deltaTime) override;
-		double GetFps() { return m_Fps; }
+		void Update(const double deltaTime) override;
+		double GetFps() const { return m_Fps; }
 
 		FpsCounterComponent(GameObject* pOwner);
 		virtual ~FpsCounterComponent() = default;

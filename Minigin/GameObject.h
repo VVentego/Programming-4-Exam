@@ -18,7 +18,7 @@ namespace dae
 		void Start();
 
 		void SetPosition(float x, float y);
-		glm::vec3 GetPosition() const { m_transform.GetPosition(); };
+		glm::vec3 GetPosition() const { return m_transform.GetPosition(); };
 
 		void AddComponent(const std::string& componentName, std::shared_ptr<dae::Component> ComponentPtr);
 		void DestroyComponent(const std::string& componentName);
@@ -53,6 +53,12 @@ namespace dae
 		}
 
 		void Destroy();
+		void SetParent(GameObject* pParentObject, const bool worldPositionStays = true);
+		GameObject* GetParent() { return m_pParent; }
+		int GetChildCount() const { return static_cast<int>(m_pChildren.size()); }
+		GameObject* GetChildAt(const int index);
+		void RemoveChild(GameObject* pChildObject);
+		void AddChild(GameObject* pChildObject, const bool worldPositionStays = true);
 
 		GameObject() = default;
 		~GameObject();
@@ -63,8 +69,14 @@ namespace dae
 
 		bool m_IsDestroyed{};
 	private:
+		void AddChildToVector(GameObject* pChildObject) { m_pChildren.emplace_back(pChildObject); }
+
 		Transform m_transform{};
+		glm::vec3 m_LocalPosition{};
 
 		std::unordered_map<std::string, std::shared_ptr<Component>> m_pComponents;
+		GameObject* m_pParent{ nullptr };
+		std::vector<GameObject*> m_pChildren;
+		bool m_NeedsUpdate{ false };
 	};
 }

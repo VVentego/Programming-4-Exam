@@ -3,7 +3,7 @@
 #include "ResourceManager.h"
 #include "Renderer.h"
 #include "Component.h"
-
+#include <iostream>
 dae::GameObject::~GameObject() = default;
 
 void dae::GameObject::Start(){}
@@ -16,6 +16,13 @@ void dae::GameObject::Update(const double deltaTime)
 	{
 		component.second->Update(deltaTime);
 	}
+
+	if (m_NeedsUpdate == true && !m_pChildren.empty())
+		for (GameObject* child : m_pChildren)
+		{
+			glm::vec3 position{ GetPosition() };
+			child->SetPosition(position.x + child->m_LocalPosition.x, position.y + child->m_LocalPosition.y);
+		}
 }
 
 void dae::GameObject::FixedUpdate(const double fixedDeltaTime)
@@ -41,11 +48,13 @@ void dae::GameObject::Render() const
 void dae::GameObject::SetPosition(float x, float y)
 {
 	m_transform.SetPosition(x, y, 0.0f);
-	
-	for (auto component : m_pComponents)
+
+	for (auto& component : m_pComponents)
 	{
 		component.second->SetPosition(x, y);
 	}
+
+	m_NeedsUpdate = true;
 }
 
 void dae::GameObject::AddComponent(const std::string& componentName, std::shared_ptr<Component> component)
@@ -99,4 +108,61 @@ bool dae::GameObject::ComponentExists(const std::string& componentName) const
 void dae::GameObject::Destroy()
 {
 	m_IsDestroyed = true;
+}
+
+void dae::GameObject::SetParent(GameObject* pParentObject, const bool worldPositionStays)
+{
+	//If self, return
+	if (pParentObject == this) return;
+	//Remove parent
+	if (pParentObject == nullptr)
+	{
+		m_pParent = nullptr;
+		m_LocalPosition = glm::vec3{ 0, 0, 0 };
+		return;
+	}
+
+	if (m_pParent != nullptr) m_pParent->RemoveChild(this);
+
+	m_pParent = pParentObject;
+	pParentObject->AddChildToVector(this);
+
+	const glm::vec3 parentTransform{ pParentObject->GetPosition() };
+	if (worldPositionStays)
+	{
+		glm::vec3 localPosition{ m_transform.GetPosition() - parentTransform };
+		m_LocalPosition = localPosition;
+		glm::vec3 newWorldPos{ parentTransform + localPosition };
+
+		SetPosition(newWorldPos.x, newWorldPos.y);
+	}
+
+	if (worldPositionStays == false)
+	{
+		SetPosition(parentTransform.x, parentTransform.y);
+	}
+}
+
+dae::GameObject* dae::GameObject::GetChildAt(const int index) {
+	if (m_pChildren.empty()) return nullptr;
+	if (index < 0) return m_pChildren[0];
+	if (index >= m_pChildren.size()) return m_pChildren.back();
+
+	return m_pChildren[index];
+}
+
+void dae::GameObject::RemoveChild(GameObject* pChildObject)
+{
+	if (pChildObject == nullptr) return;
+
+	m_pChildren.erase(remove(m_pChildren.begin(), m_pChildren.end(), pChildObject), m_pChildren.end());
+	pChildObject->SetParent(nullptr);
+}
+
+void dae::GameObject::AddChild(GameObject* pChildObject, const bool worldPositionStays) 
+{
+	if (pChildObject == this || pChildObject == nullptr) return;
+	if (pChildObject == m_pParent) return;
+
+	 pChildObject->SetParent(this, worldPositionStays);
 }
