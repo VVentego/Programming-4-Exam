@@ -4,6 +4,9 @@ dae::RotatorComponent::RotatorComponent(GameObject* owner, const glm::vec3 centr
     Component::Component(owner),
     m_Centre{ centre }, m_RotationRadius{ radius }, m_RotationSpeed{ speed } 
 {
+    //Centre should be a gameObject, don't need it
+
+    //Doesn't need to know parent. Just use local position
     m_pParent = m_pOwner->GetParent();
     if (m_pParent != nullptr)
     {
@@ -15,7 +18,9 @@ dae::RotatorComponent::RotatorComponent(GameObject* owner, const glm::vec3 centr
 void dae::RotatorComponent::Update(const double deltaTime)
 {
     m_Angle += m_RotationSpeed * static_cast<float>(deltaTime);
-    
+    constexpr float twoPi{ 2 * static_cast<float>(M_PI) };
+    if (m_Angle > twoPi) m_Angle -= twoPi;
+
     if (m_pParent != nullptr)
     {
         glm::vec3 parentPosition = m_pParent->GetPosition();
@@ -28,6 +33,6 @@ void dae::RotatorComponent::Update(const double deltaTime)
     newPosition.y = m_Centre.y + m_RotationRadius * sin(m_Angle);
 
     m_CalculatedPos = newPosition;
-
+    //Set local position
     m_pOwner->SetPosition(m_CalculatedPos.x, m_CalculatedPos.y);
 }

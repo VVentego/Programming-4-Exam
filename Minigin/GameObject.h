@@ -57,8 +57,9 @@ namespace dae
 		GameObject* GetParent() { return m_pParent; }
 		int GetChildCount() const { return static_cast<int>(m_pChildren.size()); }
 		GameObject* GetChildAt(const size_t index);
-		void RemoveChild(GameObject* pChildObject);
-		void AddChild(GameObject* pChildObject, const bool worldPositionStays = true);
+		void RemoveChild(std::unique_ptr<GameObject> pChildObject);
+		void AddChild(std::unique_ptr<GameObject> pChildObject, const bool worldPositionStays = true);
+		bool IsChild();
 
 		GameObject() = default;
 		~GameObject();
@@ -69,14 +70,14 @@ namespace dae
 
 		bool m_IsDestroyed{};
 	private:
-		void AddChildToVector(GameObject* pChildObject) { m_pChildren.emplace_back(pChildObject); }
+		void AddChildToVector(std::unique_ptr<GameObject> pChildObject) { m_pChildren.emplace_back(std::move(pChildObject)); }
 
 		Transform m_transform{};
 		glm::vec3 m_LocalPosition{};
 
 		std::unordered_map<std::string, std::shared_ptr<Component>> m_pComponents;
 		GameObject* m_pParent{ nullptr };
-		std::vector<GameObject*> m_pChildren;
+		std::vector<std::unique_ptr<GameObject>> m_pChildren;
 		bool m_NeedsUpdate{ false };
 	};
 }
