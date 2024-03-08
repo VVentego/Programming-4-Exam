@@ -2,9 +2,9 @@
 #define TEXTURECOMPONENT
 
 #include "Transform.h"
-#include "TextureComponent.h"
 #include "ResourceManager.h"
 #include "Component.h"
+#include "Texture2D.h"
 #include <string>
 
 namespace dae
@@ -13,13 +13,11 @@ namespace dae
 		public Component
 	{
 	public:
-		void Update(const double deltaTime) override;
 		void Render() const override;
 		void Start() override;
 
 		void SetTexture(const std::string& filename);
-		void SetPosition(float x, float y);
-
+		void SetTexture(std::shared_ptr<Texture2D> texture);
 		TextureComponent(GameObject* pOwner);
 		virtual ~TextureComponent() = default;
 		TextureComponent(const TextureComponent& other) = delete;
@@ -28,7 +26,6 @@ namespace dae
 		TextureComponent& operator=(TextureComponent&& other) = delete;
 
 	private:
-		Transform m_transform{};
 		std::shared_ptr<Texture2D> m_texture{};
 	};
 }

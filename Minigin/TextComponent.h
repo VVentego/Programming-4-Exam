@@ -3,6 +3,7 @@
 
 #include <string>
 #include "Component.h"
+#include "TextureComponent.h"
 #include "Font.h"
 
 namespace dae
@@ -16,7 +17,6 @@ namespace dae
 		virtual void Render() const override;
 
 		virtual void SetText(const std::string& text);
-		virtual void SetPosition(float x, float y);
 
 		TextComponent(const std::string& text, std::shared_ptr<Font> font, GameObject* owner);
 		virtual ~TextComponent() = default;
@@ -27,9 +27,8 @@ namespace dae
 	protected:
 		bool m_needsUpdate;
 		std::string m_text;
-		Transform m_transform{};
 		std::shared_ptr<Font> m_font;
-		std::shared_ptr<Texture2D> m_textTexture;
+		std::unique_ptr<dae::TextureComponent> m_pTextureComponent;
 	};
 }
 #endif // !TEXTCOMPONENT

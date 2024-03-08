@@ -17,12 +17,16 @@ namespace dae
 		void Update(const double deltaTime);
 		void FixedUpdate(const double fixedTimeStep);
 		void Render() const;
+		void SetLocalPosition(const float x, const float y, const float z);
+		void SetLocalPosition(const glm::vec3& localPosition);
+		void SetPositionDirty();
 		void Start();
 
-		void SetPosition(float x, float y);
-		glm::vec3 GetPosition() const { return m_transform.GetPosition(); };
+		void SetWorldPosition(const float x, const float y, const float z);
+		void SetWorldPosition(const glm::vec3& worldPosition);
+		const glm::vec3 GetWorldPosition() const;
 
-		void AddComponent(const std::string& componentName, std::shared_ptr<dae::Component> ComponentPtr);
+		void AddComponent(const std::string& componentName, std::unique_ptr<dae::Component> ComponentPtr);
 		void DestroyComponent(const std::string& componentName);
 		void RemoveComponent();
 		std::shared_ptr<Component> GetComponent(const std::string& componentName);
@@ -57,12 +61,10 @@ namespace dae
 		GameObject* GetParent() { return m_pParent; }
 		int GetChildCount() const { return static_cast<int>(m_pChildren.size()); }
 		GameObject* GetChildAt(const size_t index);
-		void RemoveChild(std::unique_ptr<GameObject> pChildObject);
-		void AddChild(std::unique_ptr<GameObject> pChildObject, const bool worldPositionStays = true);
-		bool IsChild();
+		bool IsChild(GameObject* pParent);
 
 		GameObject() = default;
-		~GameObject();
+		~GameObject() = default;
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
 		GameObject& operator=(const GameObject& other) = delete;
@@ -70,15 +72,17 @@ namespace dae
 
 		bool m_IsDestroyed{};
 	private:
-		void AddChildToVector(std::unique_ptr<GameObject> pChildObject) { m_pChildren.emplace_back(std::move(pChildObject)); }
 
-		Transform m_transform{};
-		glm::vec3 m_LocalPosition{};
+		Transform m_Transform{};
 
 		std::unordered_map<std::string, std::shared_ptr<Component>> m_pComponents;
 		GameObject* m_pParent{ nullptr };
-		std::vector<std::unique_ptr<GameObject>> m_pChildren;
-		bool m_NeedsUpdate{ false };
+		std::vector<GameObject*> m_pChildren;
+		bool m_TransformNeedsUpdate{ false };
+
+		void RemoveChild(GameObject* pChildObject);
+		void AddChild(GameObject* pChildObject);
+		void RecalculateTransform();
 	};
 }
 #endif

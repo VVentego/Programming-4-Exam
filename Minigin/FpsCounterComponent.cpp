@@ -1,5 +1,4 @@
 #include "FpsCounterComponent.h"
-#include "GameObject.h"
 
 dae::FpsCounterComponent::FpsCounterComponent(GameObject* pOwner) :
 	Component::Component(pOwner)

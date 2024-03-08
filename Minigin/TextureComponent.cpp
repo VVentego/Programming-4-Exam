@@ -11,16 +11,11 @@ void dae::TextureComponent::Start()
 
 }
 
-void dae::TextureComponent::Update(const double)
-{
-	if (m_IsDestroyed) return;
-}
-
 void dae::TextureComponent::Render() const
 {
 	if (m_IsDestroyed) return;
 
-	const auto& pos = m_transform.GetPosition();
+	const auto& pos = m_pOwner->GetWorldPosition();
 	Renderer::GetInstance().RenderTexture(*m_texture, pos.x, pos.y);
 }
 
@@ -29,7 +24,7 @@ void dae::TextureComponent::SetTexture(const std::string& filename)
 	m_texture = ResourceManager::GetInstance().LoadTexture(filename);
 }
 
-void dae::TextureComponent::SetPosition(const float x, const float y)
+void dae::TextureComponent::SetTexture(std::shared_ptr<Texture2D> texture)
 {
-	m_transform.SetPosition(x, y, 0.0f);
+	m_texture = texture;
 }

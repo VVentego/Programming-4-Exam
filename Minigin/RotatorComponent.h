@@ -10,7 +10,6 @@ namespace dae
 	{
 	public:
 		void Update(const double deltaTime) override;
-		glm::vec2 GetNewPosition() const { return m_CalculatedPos; }
 
 		RotatorComponent(GameObject* owner, const glm::vec3 centre, const float radius = 5.f, const float speed = 1.f);
 		virtual ~RotatorComponent() = default;
@@ -25,7 +24,6 @@ namespace dae
 		float m_RotationRadius{};
 		float m_Angle{};
 		glm::vec2 m_CalculatedPos{};
-		GameObject* m_pParent{};
 	};
 }
 

@@ -2,14 +2,11 @@
 #define COMPONENT
 
 #include <memory>
-#include "Transform.h"
-#include "Renderer.h"
-#include "Texture2D.h"
+#include "GameObject.h"
 
 namespace dae
 {
 	class Renderer;
-	class Texture2D;
 	class GameObject;
 	class Component
 	{
@@ -19,7 +16,6 @@ namespace dae
 		virtual void Start();
 		virtual void Render() const;
 
-		virtual void SetPosition(float x, float y);
 		virtual void Destroy();
 
 		Component(GameObject* owner);
@@ -29,10 +25,9 @@ namespace dae
 		Component& operator=(const Component& other) = delete;
 		Component& operator=(Component&& other) = delete;
 		bool m_IsDestroyed{};
-		//void SetOwner(std::shared_ptr<GameObject> pOwner);
 
 	protected:
-		Transform m_transform{};
+		glm::vec3 m_Position{};
 		GameObject* m_pOwner{};
 	};
 }

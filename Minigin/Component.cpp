@@ -1,9 +1,8 @@
 #include "Component.h"
 #include <stdexcept>
-#include "GameObject.h"
 
 dae::Component::Component(GameObject* owner) : 
-	m_pOwner{ owner }
+	m_pOwner{ owner }, m_Position{ owner->GetWorldPosition() }
 {
 }
 
@@ -24,11 +23,6 @@ void dae::Component::Update(const double)
 void dae::Component::FixedUpdate(const double) 
 {
 	if (m_IsDestroyed) return;
-}
-
-void dae::Component::SetPosition(float x, float y)
-{
-	m_transform.SetPosition(x, y, 0.0f);
 }
 
 void dae::Component::Destroy()
