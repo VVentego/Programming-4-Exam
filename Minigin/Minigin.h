@@ -3,6 +3,11 @@
 
 #include <string>
 #include <functional>
+#include "GameObject.h"
+#include "TextComponent.h"
+#include "FpsCounterComponent.h"
+#include "RotatorComponent.h"
+#include "TextureComponent.h"
 
 const int gWindowWidth{ 640 };
 const int gWindowHeight{ 480 };
