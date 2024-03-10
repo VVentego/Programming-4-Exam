@@ -1,8 +1,7 @@
 #pragma once
 #include "Component.h"
-#include <imgui.h>
-#include <backends/imgui_impl_sdl2.h>
-#include <backends/imgui_impl_opengl2.h>
+#include <../imgui/backends/imgui_impl_sdl2.h>
+#include <../imgui/backends/imgui_impl_opengl2.h>
 #include <vector>
 
 namespace dae
