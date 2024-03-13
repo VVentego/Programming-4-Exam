@@ -1,36 +1,52 @@
 #ifndef GAMEACTORCOMMAND
 #define GAMEACTORCOMMAND
 #include "Command.h"
-#include "GameActor.h"
 
-class GameActor;
-class GameActorCommand :
-    public Command
+namespace dae
 {
-private:
-    GameActor* m_pActor{};
-protected:
-    GameActor* GetGameActor() const { return m_pActor; }
-    virtual void Execute() = 0;
-public:
-    GameActorCommand(GameActor* actor);
-    virtual ~GameActorCommand() = default;
-    GameActorCommand(const GameActorCommand& other) = delete;
-    GameActorCommand(GameActorCommand&& other) = delete;
-    GameActorCommand& operator=(const GameActorCommand& other) = delete;
-    GameActorCommand& operator=(GameActorCommand&& other) = delete;
-};
-
-#ifndef MOVE
-#define MOVE
-class Move : 
-    public GameActorCommand
-{
-    void Execute() override
+    class GameActorCommand :
+        public Command
     {
-        //Implement this
-        //GetGameActor()->Move(someValue);
-    }
-};
-#endif // !MOVE
+    public:
+        GameActorCommand() {};
+        virtual ~GameActorCommand() = default;
+        virtual void Execute(Player1ControllerComponent* actor) = 0;
+    };
+
+    class MoveUp :
+        public GameActorCommand
+    {
+        void Execute(Player1ControllerComponent* actor) override
+        {
+            actor->MoveUp();
+        }
+    };
+    
+    class MoveDown :
+        public GameActorCommand
+    {
+        void Execute(Player1ControllerComponent* actor) override
+        {
+            actor->MoveDown();
+        }
+    }; 
+   
+    class MoveLeft :
+        public GameActorCommand
+    {
+        void Execute(Player1ControllerComponent* actor) override
+        {
+            actor->MoveLeft();
+        }
+    }; 
+    
+    class MoveRight :
+        public GameActorCommand
+    {
+        void Execute(Player1ControllerComponent* actor) override
+        {
+            actor->MoveRight();
+        }
+    };
+}
 #endif // !GAMEACTORCOMMAND

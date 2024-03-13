@@ -24,6 +24,7 @@ namespace dae
 
 		void SetWorldPosition(const float x, const float y, const float z);
 		void SetWorldPosition(const glm::vec3& worldPosition);
+		const glm::vec3 GetLocalPosition() const;
 		const glm::vec3 GetWorldPosition() const;
 
 		void AddComponent(const std::string& componentName, std::unique_ptr<dae::Component> ComponentPtr);

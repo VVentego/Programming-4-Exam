@@ -99,13 +99,16 @@
     <ClInclude Include="..\3rdParty\imgui\backends\imgui_impl_opengl3.h">
       <Filter>Imgui</Filter>
     </ClInclude>
-    <ClInclude Include="Command.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameActorCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameActor.h">
+    <ClInclude Include="Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Player1ControllerComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -182,13 +185,10 @@
     <ClCompile Include="..\3rdParty\imgui\backends\imgui_impl_opengl3.cpp">
       <Filter>Imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Command.cpp">
-      <Filter>Source Files\Base Classes</Filter>
-    </ClCompile>
-    <ClCompile Include="GameActorCommand.cpp">
+    <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameActor.cpp">
+    <ClCompile Include="Player1ControllerComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -68,6 +68,11 @@ void dae::GameObject::SetWorldPosition(const glm::vec3& worldPosition)
 	SetWorldPosition(worldPosition.x, worldPosition.y, worldPosition.z);
 }
 
+const glm::vec3 dae::GameObject::GetLocalPosition() const
+{
+	return m_Transform.GetLocalPosition();
+}
+
 const glm::vec3 dae::GameObject::GetWorldPosition() const
 {
 	if (m_pParent != nullptr)
