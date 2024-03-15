@@ -8,45 +8,29 @@ namespace dae
         public Command
     {
     public:
-        GameActorCommand() {};
+        GameActorCommand() = default;
         virtual ~GameActorCommand() = default;
-        virtual void Execute(Player1ControllerComponent* actor) = 0;
+        virtual void Execute(PlayerController* actor) = 0;
     };
 
-    class MoveUp :
+    class Move :
         public GameActorCommand
     {
-        void Execute(Player1ControllerComponent* actor) override
+    public:
+        void Execute(PlayerController* actor) override
         {
-            actor->MoveUp();
+            actor->Move(m_InputX, m_InputY);
         }
-    };
-    
-    class MoveDown :
-        public GameActorCommand
-    {
-        void Execute(Player1ControllerComponent* actor) override
+
+        void Update(const float x, const float y) override
         {
-            actor->MoveDown();
+            m_InputX = x;
+            m_InputY = y;
         }
-    }; 
-   
-    class MoveLeft :
-        public GameActorCommand
-    {
-        void Execute(Player1ControllerComponent* actor) override
-        {
-            actor->MoveLeft();
-        }
-    }; 
-    
-    class MoveRight :
-        public GameActorCommand
-    {
-        void Execute(Player1ControllerComponent* actor) override
-        {
-            actor->MoveRight();
-        }
+
+    private:
+        float m_InputX{};
+        float m_InputY{};
     };
 }
 #endif // !GAMEACTORCOMMAND

@@ -8,6 +8,7 @@
 #include "FpsCounterComponent.h"
 #include "RotatorComponent.h"
 #include "TextureComponent.h"
+#include "PlayerController.h"
 
 const int gWindowWidth{ 640 };
 const int gWindowHeight{ 480 };

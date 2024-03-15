@@ -11,15 +11,25 @@ namespace dae
 	{
 	public:
 		InputManager();
+		~InputManager() = default;
+		InputManager(const InputManager& other) = delete;
+		InputManager(InputManager&& other) = delete;
+		InputManager& operator=(const InputManager& other) = delete;
+		InputManager& operator=(InputManager&& other) = delete;
+
 		Command* ProcessInput();
-		void AddPlayer(Player* pPlayer) { m_pPlayers.emplace_back(pPlayer); }
+		Command* ProcessXInput();
+
+		bool HasQuit() const { return m_Quit; }
+
 	private:
-		std::vector<Player*> m_pPlayers;
 		
 		class XInputManager;
 		std::unique_ptr<XInputManager> m_XInputImpl;
 		class SDLInputManager;
 		std::unique_ptr<SDLInputManager> m_SDLInputImpl;
+
+		bool m_Quit{ false };
 	};
 
 
@@ -28,53 +38,43 @@ namespace dae
 	public:
 
 		XInputManager() = default;
-		~XInputManager() = default;
+		~XInputManager();
 		XInputManager(const XInputManager& other) = delete;
 		XInputManager(XInputManager&& other) = delete;
 		XInputManager& operator=(const XInputManager& other) = delete;
 		XInputManager& operator=(XInputManager&& other) = delete;
-		std::vector<Player*> m_pPlayers;
 
 		Command* DoProcessInput();
-		void AddPlayer(Player* pPlayer) { m_pPlayers.emplace_back(pPlayer); }
 
-		//void BindButtonUp(Command* command) {};
-		//void BindButtonDown(Command* command) {};
-		//void BindButtonLeft(Command* command) {};
-		//void BindButtonRight(Command* command) {};
+		void BindMovement(Command* command) { m_Move = command; }
 
 	private:
-		Command* m_pButtonUp{};
-		Command* m_pButtonDown{};
-		Command* m_pButtonLeft{};
-		Command* m_pButtonRight{};
+		Command* m_Move{};
 	};
 
 	class InputManager::SDLInputManager
 	{
 	public:
 
-		SDLInputManager();
-		~SDLInputManager() = default;
+		SDLInputManager() = default;
+		~SDLInputManager();
 		SDLInputManager(const SDLInputManager& other) = delete;
 		SDLInputManager(SDLInputManager&& other) = delete;
 		SDLInputManager& operator=(const SDLInputManager& other) = delete;
 		SDLInputManager& operator=(SDLInputManager&& other) = delete;
-		std::vector<Player*> m_pPlayers;
 
 		Command* DoProcessInput();
-		void AddPlayer(Player* pPlayer) { m_pPlayers.emplace_back(pPlayer); }
 
-		void BindButtonUp(Command* command) { m_pButtonUp = command; }
-		void BindButtonDown(Command* command) { m_pButtonUp = command; }
-		void BindButtonLeft(Command* command) { m_pButtonUp = command; }
-		void BindButtonRight(Command* command) { m_pButtonUp = command; }
+		void BindButtonMove(Command* command) { m_Move = command; }
+
+		bool ShouldQuit() const { return m_ShouldQuit; }
 
 	private:
-		Command* m_pButtonUp;
-		Command* m_pButtonDown;
-		Command* m_pButtonLeft;
-		Command* m_pButtonRight;
+		Command* m_Move{};
+		float m_X{};
+		float m_Y{};
+
+		bool m_ShouldQuit{ false };
 	};
 }
 #endif // !INPUTMANAGER
