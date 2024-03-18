@@ -110,6 +110,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		sceneManager.Update(deltaTime);
 		renderer.Render();
 		sceneManager.DestroyObjects();
+		SteamAPI_RunCallbacks();
 
 		const auto sleepTime{ currentTime + timeBetweenFrames - high_resolution_clock::now()};
 
@@ -118,11 +119,11 @@ void dae::Minigin::Run(const std::function<void()>& load)
 }
 
 const int dae::Minigin::GetMonitorRefreshRate() {
-	DISPLAY_DEVICE dd;
+	DISPLAY_DEVICE dd{};
 	dd.cb = sizeof(dd);
 	EnumDisplayDevices(nullptr, 0, &dd, 0);
 
-	DEVMODE dm;
+	DEVMODE dm{};
 	dm.dmSize = sizeof(dm);
 	EnumDisplaySettings(dd.DeviceName, ENUM_CURRENT_SETTINGS, &dm);
 

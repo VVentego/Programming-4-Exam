@@ -19,6 +19,7 @@ namespace dae
 		void SetTexture(const std::string& filename);
 		void SetTexture(std::shared_ptr<Texture2D> texture);
 		TextureComponent(GameObject* pOwner);
+		TextureComponent(GameObject* pOwner, const float width, const float height);
 		virtual ~TextureComponent() = default;
 		TextureComponent(const TextureComponent& other) = delete;
 		TextureComponent(TextureComponent&& other) = delete;
@@ -27,6 +28,8 @@ namespace dae
 
 	private:
 		std::shared_ptr<Texture2D> m_texture{};
+		float m_Width{};
+		float m_Height{};
 	};
 }
 #endif
