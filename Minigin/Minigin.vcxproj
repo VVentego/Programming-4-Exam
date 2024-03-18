@@ -194,6 +194,7 @@
     <ClInclude Include="GameActorCommand.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="InputManagerImpl.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerController.h" />
@@ -222,6 +223,7 @@
     <ClCompile Include="FpsCounterComponent.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="InputManagerImpl.cpp" />
     <ClCompile Include="Main.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\DAE\Programming 4\Minigin\3rdParty\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\DAE\Programming 4\Minigin\3rdParty\imgui\backends;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>

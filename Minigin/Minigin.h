@@ -29,10 +29,15 @@ namespace dae
 		void Run(const std::function<void()>& load);
 
 
+
 		Minigin(const Minigin& other) = delete;
 		Minigin(Minigin&& other) = delete;
 		Minigin& operator=(const Minigin& other) = delete;
 		Minigin& operator=(Minigin&& other) = delete;
+
+	private:
+		const int GetMonitorRefreshRate();
+		const int m_RefreshRate{ 60 };
 	};
 }
 #endif // !MINIGIN

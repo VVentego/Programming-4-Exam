@@ -2,11 +2,14 @@
 #define COMMAND
 #include "Player.h"
 class PlayerController;
-class Command
+namespace dae
 {
-public:
-	virtual ~Command() = default;
-	virtual void Execute(dae::PlayerController* actor) = 0;
-	virtual void Update(const float x, const float y) = 0;
-};
+	class Command
+	{
+	public:
+		virtual ~Command() = default;
+		virtual void Execute(dae::PlayerController* actor) = 0;
+		virtual void Update(const float x, const float y) = 0;
+	};
 #endif // !COMMAND
+}

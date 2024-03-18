@@ -44,7 +44,8 @@ void PrintSDLVersion()
 		version.major, version.minor, version.patch);
 }
 
-dae::Minigin::Minigin(const std::string &dataPath)
+dae::Minigin::Minigin(const std::string &dataPath) : 
+	m_RefreshRate{ GetMonitorRefreshRate() }
 {
 	PrintSDLVersion();
 	
@@ -91,7 +92,8 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto lastTime = high_resolution_clock::now();
 	double lag{ 0.f };
 	constexpr double fixedTimeStep{ 1 / 60.0 };
-	
+	const milliseconds timeBetweenFrames{ milliseconds(1000) / m_RefreshRate};
+
 	while (doContinue)
 	{
 		const auto currentTime = high_resolution_clock::now();
@@ -109,8 +111,20 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		renderer.Render();
 		sceneManager.DestroyObjects();
 
-		const auto sleepTime{ currentTime + milliseconds(16) - high_resolution_clock::now()};
+		const auto sleepTime{ currentTime + timeBetweenFrames - high_resolution_clock::now()};
 
 		std::this_thread::sleep_for(sleepTime);
 	}
+}
+
+const int dae::Minigin::GetMonitorRefreshRate() {
+	DISPLAY_DEVICE dd;
+	dd.cb = sizeof(dd);
+	EnumDisplayDevices(nullptr, 0, &dd, 0);
+
+	DEVMODE dm;
+	dm.dmSize = sizeof(dm);
+	EnumDisplaySettings(dd.DeviceName, ENUM_CURRENT_SETTINGS, &dm);
+
+	return dm.dmDisplayFrequency;
 }

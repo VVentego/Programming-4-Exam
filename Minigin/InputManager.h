@@ -10,7 +10,10 @@ namespace dae
 	class InputManager final : public Singleton<InputManager>
 	{
 	public:
-		InputManager();
+		static InputManager& GetInstance() {
+			static InputManager instance;
+			return instance;
+		}
 		~InputManager() = default;
 		InputManager(const InputManager& other) = delete;
 		InputManager(InputManager&& other) = delete;
@@ -23,7 +26,7 @@ namespace dae
 		bool HasQuit() const { return m_Quit; }
 
 	private:
-		
+		InputManager();
 		class XInputManager;
 		std::unique_ptr<XInputManager> m_XInputImpl;
 		class SDLInputManager;

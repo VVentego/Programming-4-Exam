@@ -13,14 +13,14 @@ dae::InputManager::InputManager() :
 	m_XInputImpl->BindMovement(new Move);
 }
 
-Command* dae::InputManager::ProcessInput()
+dae::Command* dae::InputManager::ProcessInput()
 {
 	m_Quit = m_SDLInputImpl->ShouldQuit();
 
 	return m_SDLInputImpl->DoProcessInput();
 }
 
-Command* dae::InputManager::ProcessXInput()
+dae::Command* dae::InputManager::ProcessXInput()
 {
 	return m_XInputImpl->DoProcessInput();
 }
@@ -31,7 +31,7 @@ dae::InputManager::XInputManager::~XInputManager()
 	m_Move = nullptr;
 }
 
-Command* dae::InputManager::XInputManager::DoProcessInput()
+dae::Command* dae::InputManager::XInputManager::DoProcessInput()
 {
 	XINPUT_STATE currentState{};
 	int controllerIndex{};
@@ -86,7 +86,7 @@ dae::InputManager::SDLInputManager::~SDLInputManager()
 	delete m_Move;
 }
 
-Command* dae::InputManager::SDLInputManager::DoProcessInput()
+dae::Command* dae::InputManager::SDLInputManager::DoProcessInput()
 {
 	SDL_Event e;
 
