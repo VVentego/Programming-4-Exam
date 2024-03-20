@@ -16,6 +16,16 @@
 SDL_Window* g_window{};
 using namespace std::chrono;
 
+CSteamAchievements* g_SteamAchievements{};
+Achievement_t g_Achievements[] =
+{
+	_ACH_ID(ACH_WIN_ONE_GAME, "Winner"),
+	_ACH_ID(ACH_WIN_100_GAMES, "Champion"),
+	_ACH_ID(ACH_TRAVEL_FAR_ACCUM, "Interstellar"),
+	_ACH_ID(ACH_TRAVEL_FAR_SINGLE, "Orbiter"),
+};
+
+
 void PrintSDLVersion()
 {
 	SDL_version version{};
@@ -70,13 +80,28 @@ dae::Minigin::Minigin(const std::string &dataPath) :
 	Renderer::GetInstance().Init(g_window);
 
 	ResourceManager::GetInstance().Init(dataPath);
+
+	// Initialize Steam
+	bool bRet = SteamAPI_Init();
+	// Create the SteamAchievements object if Steam was successfully initialized
+	if (bRet)
+	{
+		g_SteamAchievements = new CSteamAchievements(g_Achievements, 4);
+	}
 }
 
 dae::Minigin::~Minigin()
 {
 	Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow(g_window);
+	
 	g_window = nullptr;
+
+	SteamAPI_Shutdown();
+
+	if (g_SteamAchievements)
+		delete g_SteamAchievements;
+
 	SDL_Quit();
 }
 

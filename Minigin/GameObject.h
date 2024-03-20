@@ -2,7 +2,7 @@
 #define GAMEOBJECT
 #include <memory>
 #include "Transform.h"
-#include <unordered_map>
+#include <vector>
 #include "ResourceManager.h"
 #include "Renderer.h"
 #include "Component.h"
@@ -27,31 +27,37 @@ namespace dae
 		const glm::vec3 GetLocalPosition() const;
 		const glm::vec3 GetWorldPosition() const;
 
-		void AddComponent(const std::string& componentName, std::unique_ptr<dae::Component> ComponentPtr);
-		void DestroyComponent(const std::string& componentName);
+		void AddComponent(std::unique_ptr<dae::Component> ComponentPtr);
+		template <typename T>
+		void DestroyComponent()
+		{
+			if (ComponentExists<T>() == true)
+			{
+				T* componentToDelete = GetComponent<T>();
+				componentToDelete->Destroy();
+			}
+		}
 		void RemoveComponent();
-		std::shared_ptr<Component> GetComponent(const std::string& componentName);
 
 		template <typename T>
-		std::shared_ptr<T> GetComponent()
+		T* GetComponent()
 		{
 			auto it = std::find_if(m_pComponents.begin(), m_pComponents.end(), [](const auto& component) {
-				return std::dynamic_pointer_cast<T>(component.second) != nullptr;
+				return dynamic_cast<T*>(component.get()) != nullptr;
 				});
 			if (it != m_pComponents.end()) {
-				return std::dynamic_pointer_cast<T>(it->second);
+				return dynamic_cast<T*>(it->get());
 			}
 			else {
 				return nullptr;
 			}
 		}
 
-		bool ComponentExists(const std::string& componentName) const;
 		template <typename T> 
 		bool ComponentExists() const
 		{
 			auto it = std::find_if(m_pComponents.begin(), m_pComponents.end(), [](const auto& component) {
-				return std::dynamic_pointer_cast<T>(component.second) != nullptr;
+				return dynamic_cast<T*>(component.get()) != nullptr;
 				});
 			if (it != m_pComponents.end()) return true;
 			else return false;
@@ -76,7 +82,7 @@ namespace dae
 
 		Transform m_Transform{};
 
-		std::unordered_map<std::string, std::shared_ptr<Component>> m_pComponents;
+		std::vector<std::unique_ptr<Component>> m_pComponents;
 		GameObject* m_pParent{ nullptr };
 		std::vector<GameObject*> m_pChildren;
 		bool m_TransformNeedsUpdate{ false };

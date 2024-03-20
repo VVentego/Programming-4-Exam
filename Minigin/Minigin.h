@@ -9,7 +9,8 @@
 #include "RotatorComponent.h"
 #include "TextureComponent.h"
 #include "PlayerController.h"
-#include <steam_api.h>
+#include "PlayerObserver.h"
+#include "ScoreDisplayComponent.h"
 
 const int gWindowWidth{ 640 };
 const int gWindowHeight{ 480 };

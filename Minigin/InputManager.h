@@ -2,7 +2,7 @@
 #define INPUTMANAGER
 #include "Singleton.h"
 #include <vector>
-#include  <memory>
+#include <memory>
 #include "GameActorCommand.h"
 
 namespace dae
@@ -14,7 +14,7 @@ namespace dae
 			static InputManager instance;
 			return instance;
 		}
-		~InputManager() = default;
+		virtual ~InputManager() = default;
 		InputManager(const InputManager& other) = delete;
 		InputManager(InputManager&& other) = delete;
 		InputManager& operator=(const InputManager& other) = delete;
@@ -27,57 +27,36 @@ namespace dae
 
 	private:
 		InputManager();
-		class XInputManager;
-		std::unique_ptr<XInputManager> m_XInputImpl;
-		class SDLInputManager;
-		std::unique_ptr<SDLInputManager> m_SDLInputImpl;
+		class InputManagerImpl;
+		std::unique_ptr<InputManagerImpl> m_InputImpl;
 
 		bool m_Quit{ false };
 	};
 
-
-	class InputManager::XInputManager
+	class InputManager::InputManagerImpl
 	{
 	public:
+		InputManagerImpl() = default;
+		~InputManagerImpl() = default;
+		InputManagerImpl(const InputManagerImpl& other) = delete;
+		InputManagerImpl(InputManagerImpl&& other) = delete;
+		InputManagerImpl& operator=(const InputManagerImpl& other) = delete;
+		InputManagerImpl& operator=(InputManagerImpl&& other) = delete;
 
-		XInputManager() = default;
-		~XInputManager();
-		XInputManager(const XInputManager& other) = delete;
-		XInputManager(XInputManager&& other) = delete;
-		XInputManager& operator=(const XInputManager& other) = delete;
-		XInputManager& operator=(XInputManager&& other) = delete;
-
+		Command* DoProcessXInput();
 		Command* DoProcessInput();
 
-		void BindMovement(Command* command) { m_Move = command; }
-
-	private:
-		Command* m_Move{};
-	};
-
-	class InputManager::SDLInputManager
-	{
-	public:
-
-		SDLInputManager() = default;
-		~SDLInputManager();
-		SDLInputManager(const SDLInputManager& other) = delete;
-		SDLInputManager(SDLInputManager&& other) = delete;
-		SDLInputManager& operator=(const SDLInputManager& other) = delete;
-		SDLInputManager& operator=(SDLInputManager&& other) = delete;
-
-		Command* DoProcessInput();
-
-		void BindButtonMove(Command* command) { m_Move = command; }
+		void BindXMovement(std::unique_ptr<Command> command) { m_XMove = std::move(command); }
+		void BindButtonMove(std::unique_ptr<Command> command) { m_Move = std::move(command); }
 
 		bool ShouldQuit() const { return m_ShouldQuit; }
-
 	private:
-		Command* m_Move{};
+		bool m_ShouldQuit{ false };
+
+		std::unique_ptr<Command> m_XMove{};
+		std::unique_ptr<Command> m_Move{};
 		float m_X{};
 		float m_Y{};
-
-		bool m_ShouldQuit{ false };
 	};
 }
 #endif // !INPUTMANAGER

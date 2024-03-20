@@ -13,11 +13,11 @@ namespace dae
 		public Component
 	{
 	public:
-		virtual void Update(const double deltaTime) override;
-		virtual void Render() const override;
+		void Update(const double deltaTime) override;
+		void Render() const override;
 
-		virtual void SetText(const std::string& text);
-
+		void SetText(const std::string& text);
+		void SetColor(const SDL_Color color) { m_color = color; m_needsUpdate = true; }
 		TextComponent(const std::string& text, std::shared_ptr<Font> font, GameObject* owner);
 		virtual ~TextComponent() = default;
 		TextComponent(const TextComponent& other) = delete;
@@ -29,6 +29,7 @@ namespace dae
 		std::string m_text;
 		std::shared_ptr<Font> m_font;
 		std::unique_ptr<dae::TextureComponent> m_pTextureComponent;
+		SDL_Color m_color { 255,255,255,255 }; // white text
 	};
 }
 #endif // !TEXTCOMPONENT

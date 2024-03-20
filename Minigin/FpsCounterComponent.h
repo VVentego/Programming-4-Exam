@@ -20,7 +20,7 @@ namespace dae
 
 	private:
 		double m_Fps{};
-		std::shared_ptr<dae::TextComponent> m_pTextComponent;
+		dae::TextComponent* m_pTextComponent;
     };
 }
 

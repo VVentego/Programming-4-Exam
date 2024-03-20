@@ -10,7 +10,7 @@ namespace dae
     public:
         PlayerController(GameObject* pOwner, bool usingController);
         virtual ~PlayerController() = default;
-        PlayerController(const PlayerController& other) = delete;
+        PlayerController (const PlayerController& other) = delete;
         PlayerController(PlayerController&& other) = delete;
         PlayerController& operator=(const PlayerController& other) = delete;
         PlayerController& operator=(PlayerController&& other) = delete;

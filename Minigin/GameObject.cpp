@@ -7,7 +7,7 @@ void dae::GameObject::Update(const double deltaTime)
 
 	for (auto& component : m_pComponents)
 	{
-		component.second->Update(deltaTime);
+		component->Update(deltaTime);
 	}
 
 	if (m_TransformNeedsUpdate == true)
@@ -26,7 +26,7 @@ void dae::GameObject::FixedUpdate(const double fixedDeltaTime)
 
 	for (auto& component : m_pComponents)
 	{
-		component.second->FixedUpdate(fixedDeltaTime);
+		component->FixedUpdate(fixedDeltaTime);
 	}
 }
 
@@ -36,7 +36,7 @@ void dae::GameObject::Render() const
 
 	for (auto& component : m_pComponents)
 	{
-		component.second->Render();
+		component->Render();
 	}
 }
 
@@ -80,52 +80,21 @@ const glm::vec3 dae::GameObject::GetWorldPosition() const
 	return m_Transform.GetLocalPosition();
 }
 
-void dae::GameObject::AddComponent(const std::string& componentName, std::unique_ptr<Component> component)
+void dae::GameObject::AddComponent(std::unique_ptr<Component> component)
 {
-	m_pComponents.emplace(componentName, std::move(component));
-}
-
-void dae::GameObject::DestroyComponent(const std::string& componentName)
-{
-	GetComponent(componentName)->Destroy();
+	m_pComponents.emplace_back(std::move(component));
 }
 
 void dae::GameObject::RemoveComponent()
 {
-	std::vector<std::string> componentsToRemove;
-
 	for (auto& component : m_pComponents)
 	{
-		if (component.second->m_IsDestroyed)
-			componentsToRemove.emplace_back(component.first);
+		if (component->m_IsDestroyed)
+		{
+			m_pComponents.erase(remove(m_pComponents.begin(), m_pComponents.end(), component), m_pComponents.end());
+			break;
+		}
 	}
-
-	for (auto& componentName : componentsToRemove)
-	{
-		m_pComponents.erase(componentName);
-	}
-}
-
-std::shared_ptr<dae::Component> dae::GameObject::GetComponent(const std::string& componentName)
-{
-	auto it = m_pComponents.find(componentName);
-	if (it != m_pComponents.end())
-	{
-		return it->second;
-	}
-
-	return nullptr;
-}
-
-bool dae::GameObject::ComponentExists(const std::string& componentName) const
-{
-	auto it = m_pComponents.find(componentName);
-	if (it != m_pComponents.end())
-	{
-		return true;
-	}
-
-	return false;
 }
 
 void dae::GameObject::Destroy()

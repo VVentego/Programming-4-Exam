@@ -6,32 +6,26 @@
 #include <thread>
 
 dae::InputManager::InputManager() :
-	m_XInputImpl{ std::make_unique<XInputManager>() }, m_SDLInputImpl{ std::make_unique<SDLInputManager>() }
+	m_InputImpl{ std::make_unique<InputManagerImpl>() }
 {
-	m_SDLInputImpl->BindButtonMove(new Move);
+	m_InputImpl->BindButtonMove(std::make_unique<Move>());
 
-	m_XInputImpl->BindMovement(new Move);
+	m_InputImpl->BindXMovement(std::make_unique<Move>());
 }
 
 dae::Command* dae::InputManager::ProcessInput()
 {
-	m_Quit = m_SDLInputImpl->ShouldQuit();
+	m_Quit = m_InputImpl->ShouldQuit();
 
-	return m_SDLInputImpl->DoProcessInput();
+	return m_InputImpl->DoProcessInput();
 }
 
 dae::Command* dae::InputManager::ProcessXInput()
 {
-	return m_XInputImpl->DoProcessInput();
+	return m_InputImpl->DoProcessXInput();
 }
 
-dae::InputManager::XInputManager::~XInputManager()
-{
-	delete m_Move;
-	m_Move = nullptr;
-}
-
-dae::Command* dae::InputManager::XInputManager::DoProcessInput()
+dae::Command* dae::InputManager::InputManagerImpl::DoProcessXInput()
 {
 	XINPUT_STATE currentState{};
 	int controllerIndex{};
@@ -74,19 +68,14 @@ dae::Command* dae::InputManager::XInputManager::DoProcessInput()
 	
 	if (normalizedMagnitude != 0.0)
 	{
-		m_Move->Update(normalizedLX * normalizedMagnitude * 2, -normalizedLY * normalizedMagnitude * 2);
-		return m_Move;
+		m_XMove->Update(normalizedLX * normalizedMagnitude * 2, -normalizedLY * normalizedMagnitude * 2);
+		return m_XMove.get();
 	}
 
 	return nullptr;
 }
 
-dae::InputManager::SDLInputManager::~SDLInputManager()
-{
-	delete m_Move;
-}
-
-dae::Command* dae::InputManager::SDLInputManager::DoProcessInput()
+dae::Command* dae::InputManager::InputManagerImpl::DoProcessInput()
 {
 	SDL_Event e;
 
@@ -123,7 +112,7 @@ dae::Command* dae::InputManager::SDLInputManager::DoProcessInput()
 		if (m_X != 0 or m_Y != 0)
 		{
 			m_Move->Update(m_X, m_Y);
-			return m_Move;
+			return m_Move.get();
 		}
 	}
 		//if (e.type == SDL_MOUSEBUTTONDOWN) {

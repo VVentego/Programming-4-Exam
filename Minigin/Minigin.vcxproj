@@ -234,11 +234,13 @@ xcopy "$(SolutionDir)3rdParty\steamworks\redistributable_bin\steam_appid.txt" "$
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerController.h" />
+    <ClInclude Include="PlayerObserver.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="RotatorComponent.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="ScoreDisplayComponent.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="TextComponent.h" />
     <ClInclude Include="Texture2D.h" />
@@ -268,11 +270,13 @@ xcopy "$(SolutionDir)3rdParty\steamworks\redistributable_bin\steam_appid.txt" "$
     </ClCompile>
     <ClCompile Include="Minigin.cpp" />
     <ClCompile Include="PlayerController.cpp" />
+    <ClCompile Include="PlayerObserver.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="RotatorComponent.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="ScoreDisplayComponent.cpp" />
     <ClCompile Include="TextComponent.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TextureComponent.cpp" />
