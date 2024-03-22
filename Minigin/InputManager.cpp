@@ -62,6 +62,8 @@ dae::Command* dae::InputManager::ProcessXInput()
 
 dae::Command* dae::InputManager::InputManagerImpl::DoProcessXInput()
 {
+	m_Y = 0;
+	m_X = 0;
 	int controllerIndex{};
 	static XINPUT_STATE m_CurrentState;
 	static XINPUT_STATE m_PrevState;
@@ -83,8 +85,6 @@ dae::Command* dae::InputManager::InputManagerImpl::DoProcessXInput()
 		return m_XDeath.get();
 	}
 
-	m_Y = 0;
-	m_X = 0;
 
 	if (m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN)
 		m_Y = -1;
@@ -101,52 +101,55 @@ dae::Command* dae::InputManager::InputManagerImpl::DoProcessXInput()
 		return m_XMove.get();
 	}
 
+	/*
+	const bool invertY{ true };
 
-	//const bool invertY{ true };
+	float LX = m_CurrentState.Gamepad.sThumbLX;
+	float LY = invertY ? static_cast<float>(-m_CurrentState.Gamepad.sThumbLY) : static_cast<float>(m_CurrentState.Gamepad.sThumbLY);
 
-	//float LX = m_CurrentState.Gamepad.sThumbLX;
-	//float LY = invertY ? static_cast<float>(-m_CurrentState.Gamepad.sThumbLY) : static_cast<float>(m_CurrentState.Gamepad.sThumbLY);
+	//determine how far the controller is pushed
+	float magnitude = sqrt(LX * LX + LY * LY);
 
-	////determine how far the controller is pushed
-	//float magnitude = sqrt(LX * LX + LY * LY);
+	//determine the direction the controller is pushed
+	float normalizedLX = LX / magnitude;
+	float normalizedLY = LY / magnitude;
 
-	////determine the direction the controller is pushed
-	//float normalizedLX = LX / magnitude;
-	//float normalizedLY = LY / magnitude;
+	float normalizedMagnitude = 0;
 
-	//float normalizedMagnitude = 0;
+	//check if the controller is outside a circular dead zone
+	if (magnitude > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
+	{
+		//clip the magnitude at its expected maximum value
+		if (magnitude > 32767) magnitude = 32767;
 
-	////check if the controller is outside a circular dead zone
-	//if (magnitude > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
-	//{
-	//	//clip the magnitude at its expected maximum value
-	//	if (magnitude > 32767) magnitude = 32767;
+		//adjust magnitude relative to the end of the dead zone
+		magnitude -= XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
 
-	//	//adjust magnitude relative to the end of the dead zone
-	//	magnitude -= XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
-
-	//	//optionally normalize the magnitude with respect to its expected range
-	//	//giving a magnitude value of 0.0 to 1.0
-	//	normalizedMagnitude = magnitude / (32767 - XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
-	//}
-	//else //if the controller is in the deadzone zero out the magnitude
-	//{
-	//	magnitude = 0.0;
-	//	normalizedMagnitude = 0.0;
-	//}
-	//
-	//if (normalizedMagnitude != 0.0)
-	//{
-	//	m_XMove->Update(normalizedLX * normalizedMagnitude * 2, -normalizedLY * normalizedMagnitude * 2);
-	//	return m_XMove.get();
-	//}
-
+		//optionally normalize the magnitude with respect to its expected range
+		//giving a magnitude value of 0.0 to 1.0
+		normalizedMagnitude = magnitude / (32767 - XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
+	}
+	else //if the controller is in the deadzone zero out the magnitude
+	{
+		magnitude = 0.0;
+		normalizedMagnitude = 0.0;
+	}
+	
+	if (normalizedMagnitude != 0.0)
+	{
+		m_XMove->Update(normalizedLX * normalizedMagnitude * 2, -normalizedLY * normalizedMagnitude * 2);
+		return m_XMove.get();
+	}
+	*/
 	return nullptr;
 }
 
 dae::Command* dae::InputManager::InputManagerImpl::DoProcessInput()
 {
 	SDL_Event e;
+
+	m_X = 0.0f;
+	m_Y = 0.0f;
 
 	while (SDL_PollEvent(&e))
 	{
@@ -170,8 +173,6 @@ dae::Command* dae::InputManager::InputManagerImpl::DoProcessInput()
 
 		if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP)
 		{
-			m_X = 0.0f;
-			m_Y = 0.0f;
 			const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
 
 			if (currentKeyStates[SDL_SCANCODE_S])
