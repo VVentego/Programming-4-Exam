@@ -8,9 +8,19 @@
 dae::InputManager::InputManager() :
 	m_InputImpl{ std::make_unique<InputManagerImpl>() }
 {
-	m_InputImpl->BindButtonMove(std::make_unique<Move>());
+	BindButtonMove(std::make_unique<Move>());
 
-	m_InputImpl->BindXMovement(std::make_unique<Move>());
+	BindXMovement(std::make_unique<Move>());
+}
+
+void dae::InputManager::BindXMovement(std::unique_ptr<Command> command)
+{
+	m_InputImpl->BindXMovement(std::move(command));
+}
+
+void dae::InputManager::BindButtonMove(std::unique_ptr<Command> command) 
+{
+	m_InputImpl->BindButtonMove(std::move(command)); 
 }
 
 dae::Command* dae::InputManager::ProcessInput()

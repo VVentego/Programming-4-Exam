@@ -83,7 +83,7 @@ dae::Minigin::Minigin(const std::string &dataPath) :
 
 	// Initialize Steam
 	bool bRet = SteamAPI_Init();
-	// Create the SteamAchievements object if Steam was successfully initialized
+	// Create the CSteamAchievements object if Steam was successfully initialized
 	if (bRet)
 	{
 		g_SteamAchievements = new CSteamAchievements(g_Achievements, 4);

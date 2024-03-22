@@ -6,13 +6,14 @@
 #include "ResourceManager.h"
 #include "Renderer.h"
 #include "Component.h"
+
 namespace dae
 {
 	class Texture2D;
-	class Component;
 
 	class GameObject final
 	{
+		friend class Component;
 	public:
 		void Update(const double deltaTime);
 		void FixedUpdate(const double fixedTimeStep);

@@ -1,12 +1,50 @@
 #include "Component.h"
 #include <stdexcept>
+#include "GameObject.h"
 
 dae::Component::Component(GameObject* owner) : 
 	m_pOwner{ owner }, m_Position{ owner->GetWorldPosition() }
 {
 }
 
-dae::Component::~Component() = default;
+dae::Component::~Component() 
+{
+	RemoveAllObservers();
+}
+
+void dae::Component::NotifyObservers(Event event)
+{
+	for (PlayerObserver* observer : m_pObservers)
+	{
+		observer->OnNotify(this, event);
+	}
+}
+
+void dae::Component::AddObserver(PlayerObserver* observer)
+{
+	observer->AddSubject(this);
+	m_pObservers.emplace_back(observer);
+}
+
+void dae::Component::RemoveObserver(PlayerObserver* observer)
+{
+	observer->RemoveSubject(this);
+	m_pObservers.erase(remove(m_pObservers.begin(), m_pObservers.end(), observer), m_pObservers.end());
+}
+
+void dae::Component::OnObserverDestroyed(PlayerObserver* observer)
+{
+	m_pObservers.erase(remove(m_pObservers.begin(), m_pObservers.end(), observer), m_pObservers.end());
+}
+
+void dae::Component::RemoveAllObservers()
+{
+	for (PlayerObserver* observer : m_pObservers)
+	{
+		observer->RemoveSubject(this);
+		m_pObservers.erase(remove(m_pObservers.begin(), m_pObservers.end(), observer), m_pObservers.end());
+	}
+}
 
 void dae::Component::Start() {}
 

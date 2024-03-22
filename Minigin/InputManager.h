@@ -20,6 +20,9 @@ namespace dae
 		InputManager& operator=(const InputManager& other) = delete;
 		InputManager& operator=(InputManager&& other) = delete;
 
+		void BindXMovement(std::unique_ptr<Command> command);
+		void BindButtonMove(std::unique_ptr<Command> command);
+
 		Command* ProcessInput();
 		Command* ProcessXInput();
 
@@ -29,7 +32,6 @@ namespace dae
 		InputManager();
 		class InputManagerImpl;
 		std::unique_ptr<InputManagerImpl> m_InputImpl;
-
 		bool m_Quit{ false };
 	};
 
@@ -51,10 +53,11 @@ namespace dae
 
 		bool ShouldQuit() const { return m_ShouldQuit; }
 	private:
-		bool m_ShouldQuit{ false };
-
 		std::unique_ptr<Command> m_XMove{};
 		std::unique_ptr<Command> m_Move{};
+		
+		bool m_ShouldQuit{ false };
+
 		float m_X{};
 		float m_Y{};
 	};

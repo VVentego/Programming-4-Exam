@@ -1,12 +1,13 @@
 #ifndef COMPONENT
 #define COMPONENT
-
 #include <memory>
 #include "GameObject.h"
+#include "PlayerObserver.h"
 
 namespace dae
 {
 	class Renderer;
+	class PlayerObserver;
 	class GameObject;
 	class Component
 	{
@@ -26,9 +27,18 @@ namespace dae
 		Component& operator=(Component&& other) = delete;
 		bool m_IsDestroyed{};
 
+		virtual void AddObserver(PlayerObserver* observer);
+		virtual void RemoveObserver(PlayerObserver* observer);
+		virtual void OnObserverDestroyed(PlayerObserver* observer);
+
 	protected:
+		virtual void NotifyObservers(Event event);
+
+		virtual void RemoveAllObservers();
+
 		glm::vec3 m_Position{};
 		GameObject* m_pOwner{};
+		std::vector<PlayerObserver*> m_pObservers;
 	};
 }
 
