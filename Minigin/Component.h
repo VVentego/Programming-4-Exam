@@ -27,18 +27,17 @@ namespace dae
 		Component& operator=(Component&& other) = delete;
 		bool m_IsDestroyed{};
 
-		virtual void AddObserver(PlayerObserver* observer);
-		virtual void RemoveObserver(PlayerObserver* observer);
-		virtual void OnObserverDestroyed(PlayerObserver* observer);
+		virtual void AddObserver(std::shared_ptr<PlayerObserver> observer);
 
 	protected:
 		virtual void NotifyObservers(Event event);
+		virtual void RemoveObserver(std::weak_ptr<PlayerObserver> observer);
 
 		virtual void RemoveAllObservers();
 
 		glm::vec3 m_Position{};
 		GameObject* m_pOwner{};
-		std::vector<PlayerObserver*> m_pObservers;
+		std::vector<std::weak_ptr<PlayerObserver>> m_pObservers;
 	};
 }
 

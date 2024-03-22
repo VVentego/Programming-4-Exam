@@ -22,6 +22,10 @@ namespace dae
 
 		void BindXMovement(std::unique_ptr<Command> command);
 		void BindButtonMove(std::unique_ptr<Command> command);
+		void BindXAttack(std::unique_ptr<Command> command);
+		void BindAttack(std::unique_ptr<Command> command);
+		void BindDeath(std::unique_ptr<Command> command);
+		void BindXDeath(std::unique_ptr<Command> command);
 
 		Command* ProcessInput();
 		Command* ProcessXInput();
@@ -50,12 +54,20 @@ namespace dae
 
 		void BindXMovement(std::unique_ptr<Command> command) { m_XMove = std::move(command); }
 		void BindButtonMove(std::unique_ptr<Command> command) { m_Move = std::move(command); }
+		void BindXAttack(std::unique_ptr<Command> command) { m_XAttack = std::move(command); }
+		void BindAttack(std::unique_ptr<Command> command) { m_Attack = std::move(command); }
+		void BindDeath(std::unique_ptr<Command> command) { m_Death = std::move(command); }
+		void BindXDeath(std::unique_ptr<Command> command) { m_XDeath = std::move(command); }
 
 		bool ShouldQuit() const { return m_ShouldQuit; }
 	private:
 		std::unique_ptr<Command> m_XMove{};
 		std::unique_ptr<Command> m_Move{};
-		
+		std::unique_ptr<Command> m_XAttack{};
+		std::unique_ptr<Command> m_Attack{};
+		std::unique_ptr<Command> m_XDeath{};
+		std::unique_ptr<Command> m_Death{};
+
 		bool m_ShouldQuit{ false };
 
 		float m_X{};

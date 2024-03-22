@@ -14,7 +14,8 @@ namespace dae
 		void Add(std::unique_ptr<GameObject> object);
 		void Remove(std::unique_ptr<GameObject> object);
 		void RemoveAll();
-
+		void AddObserver(std::shared_ptr<PlayerObserver> observer);
+		void RemoveObserver(std::shared_ptr<PlayerObserver> observer);
 		void Update(const double deltaTime);
 		void FixedUpdate(const double fixedTimeStep);
 		void Render() const;
@@ -31,6 +32,7 @@ namespace dae
 
 		std::string m_name;
 		std::vector<std::unique_ptr<GameObject>> m_objects{};
+		std::vector<std::shared_ptr<PlayerObserver>> m_observers{};
 
 		static unsigned int m_idCounter; 
 	};

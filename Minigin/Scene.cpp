@@ -26,6 +26,16 @@ void Scene::RemoveAll()
 	m_objects.clear();
 }
 
+void dae::Scene::AddObserver(std::shared_ptr<PlayerObserver> observer)
+{
+	m_observers.emplace_back(std::move(observer));
+}
+
+void dae::Scene::RemoveObserver(std::shared_ptr<PlayerObserver> observer)
+{
+	m_observers.erase(std::remove(m_observers.begin(), m_observers.end(), std::move(observer)), m_observers.end());
+}
+
 void Scene::Update(const double deltaTime)
 {
 	for(auto& object : m_objects)

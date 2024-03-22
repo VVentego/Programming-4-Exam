@@ -8,7 +8,7 @@ namespace dae
         public Component
     {
     public:
-        PlayerController(GameObject* pOwner, bool usingController);
+        PlayerController(GameObject* pOwner, const std::string& playerName, bool usingController);
         virtual ~PlayerController() = default;
         PlayerController (const PlayerController& other) = delete;
         PlayerController(PlayerController&& other) = delete;
@@ -19,6 +19,10 @@ namespace dae
         void HandleInput();
 
         void Move(const float x, const float y);
+        void OnKillEnemy();
+        void OnPlayerDeath();
+
+        const std::string m_PlayerName;
     private:
         const float m_MoveSpeed{ 100.f };
         double m_deltaTime{};

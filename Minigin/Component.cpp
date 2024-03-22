@@ -14,36 +14,44 @@ dae::Component::~Component()
 
 void dae::Component::NotifyObservers(Event event)
 {
-	for (PlayerObserver* observer : m_pObservers)
+	for (std::weak_ptr<PlayerObserver> observer : m_pObservers)
 	{
-		observer->OnNotify(this, event);
+		if (!observer.expired())
+		{
+			observer.lock()->OnNotify(event);
+		}
+
+		else RemoveObserver(observer);
 	}
 }
 
-void dae::Component::AddObserver(PlayerObserver* observer)
+void dae::Component::AddObserver(std::shared_ptr<PlayerObserver> observer)
 {
 	observer->AddSubject(this);
-	m_pObservers.emplace_back(observer);
+	m_pObservers.emplace_back(std::weak_ptr<PlayerObserver>(observer));
 }
 
-void dae::Component::RemoveObserver(PlayerObserver* observer)
+void dae::Component::RemoveObserver(std::weak_ptr<PlayerObserver> observer)
 {
-	observer->RemoveSubject(this);
-	m_pObservers.erase(remove(m_pObservers.begin(), m_pObservers.end(), observer), m_pObservers.end());
-}
+	const auto pos = std::find_if(m_pObservers.begin(), m_pObservers.end(), [observer](const std::weak_ptr<PlayerObserver>& otherPtr) {
+		return otherPtr.lock().get() == observer.lock().get(); });
 
-void dae::Component::OnObserverDestroyed(PlayerObserver* observer)
-{
-	m_pObservers.erase(remove(m_pObservers.begin(), m_pObservers.end(), observer), m_pObservers.end());
+	if (pos != m_pObservers.end())
+	{
+		m_pObservers.erase(pos);
+	}
 }
 
 void dae::Component::RemoveAllObservers()
 {
-	for (PlayerObserver* observer : m_pObservers)
+	for (std::weak_ptr<PlayerObserver> observer : m_pObservers)
 	{
-		observer->RemoveSubject(this);
-		m_pObservers.erase(remove(m_pObservers.begin(), m_pObservers.end(), observer), m_pObservers.end());
+		if (!observer.expired())
+		{
+			observer.lock()->RemoveSubject(this);
+		}
 	}
+	m_pObservers.clear();
 }
 
 void dae::Component::Start() {}

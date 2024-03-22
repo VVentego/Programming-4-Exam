@@ -32,5 +32,27 @@ namespace dae
         float m_InputX{};
         float m_InputY{};
     };
+
+    class Attack :
+        public GameActorCommand
+    {
+    public:
+        void Execute(PlayerController* actor) override
+        {
+            actor->OnKillEnemy();
+        }
+        void Update(const float, const float) override { return; }
+    };
+
+    class KillPlayer :
+        public GameActorCommand
+    {
+    public:
+        void Execute(PlayerController* actor) override
+        {
+            actor->OnPlayerDeath();
+        }
+        void Update(const float, const float) override { return; }
+    };
 }
 #endif // !GAMEACTORCOMMAND
