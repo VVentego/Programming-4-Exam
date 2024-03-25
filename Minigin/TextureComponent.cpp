@@ -12,6 +12,14 @@ dae::TextureComponent::TextureComponent(GameObject* pOwner, const float width, c
 
 }
 
+const glm::vec2 dae::TextureComponent::GetSize() const
+{
+	const auto textureSize{ m_texture->GetSize() };
+	const glm::vec2 result{ textureSize.x, textureSize.y };
+
+	return result;
+}
+
 void dae::TextureComponent::Start()
 {
 

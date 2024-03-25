@@ -28,6 +28,8 @@ void dae::PlayerObserver::RemoveSubject(Component* subject)
 
 void dae::PlayerObserver::UnlockAchievement()
 {
+	//Oh dear god no
+	//Only call this if achievement is not already unlocked
 	if (m_SteamAchievements)
 		m_SteamAchievements->SetAchievement("ACH_WIN_100_GAMES");
 }

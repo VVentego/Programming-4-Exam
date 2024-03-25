@@ -15,6 +15,7 @@ namespace dae
         STRING,
     };
 
+    //Don't use a union, use templates.
     union EventArg {
         int intValue{};
         float floatValue;
@@ -35,6 +36,7 @@ namespace dae
         EventArg m_args[MAX_ARGS];
     };
 
+    //Too much coupling, it should only observe and broadcast
     class PlayerObserver
     {
         friend class Component;
