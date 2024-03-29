@@ -70,14 +70,6 @@ dae::Minigin::Minigin(const std::string &dataPath) :
 	Renderer::GetInstance().Init(g_window);
 
 	ResourceManager::GetInstance().Init(dataPath);
-
-	// Initialize Steam
-	bool bRet = SteamAPI_Init();
-	// Create the CSteamAchievements object if Steam was successfully initialized
-	if (bRet)
-	{
-		g_SteamAchievements = new CSteamAchievements(g_Achievements, 4);
-	}
 }
 
 dae::Minigin::~Minigin()
@@ -86,11 +78,6 @@ dae::Minigin::~Minigin()
 	SDL_DestroyWindow(g_window);
 	
 	g_window = nullptr;
-
-	SteamAPI_Shutdown();
-
-	if (g_SteamAchievements)
-		delete g_SteamAchievements;
 
 	SDL_Quit();
 }
@@ -125,7 +112,6 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		sceneManager.Update(deltaTime);
 		renderer.Render();
 		sceneManager.DestroyObjects();
-		SteamAPI_RunCallbacks();
 
 		const auto sleepTime{ currentTime + timeBetweenFrames - high_resolution_clock::now()};
 

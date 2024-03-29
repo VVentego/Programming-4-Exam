@@ -22,3 +22,14 @@ dae::Texture2D::Texture2D(SDL_Texture* texture)
 {
 	m_texture = texture;
 }
+
+dae::SpriteSheet::SpriteSheet(SDL_Texture* texture, const int rows, const int columns) :
+	m_Rows{ rows }, m_Columns{ columns }
+{
+	m_SpriteSheet = std::make_unique<Texture2D>(texture);
+}
+
+SDL_Texture* dae::SpriteSheet::GetSDLTexture() const
+{
+	return m_SpriteSheet->GetSDLTexture();
+}

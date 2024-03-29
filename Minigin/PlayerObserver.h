@@ -1,7 +1,6 @@
 #ifndef PLAYEROBSERVER
 #define PLAYEROBSERVER
 #include <vector>
-#include "CSteamAchievements.h"
 #include <memory>
 
 namespace dae
@@ -53,16 +52,12 @@ namespace dae
         virtual void RemoveSubject(Component* subject);
         virtual void BroadcastToHandlers(const Event& event);
         virtual void AddHandler(EventHandler* eventHandler) { m_pEventHandlers.emplace_back(eventHandler); }
-        void SetSteamAchievementsHandler(CSteamAchievements* steamAchievements);
 
     private:
-        void UnlockAchievement();
-
         const int m_WinnerScore{ 500 };
         float m_TotalScore{};
         std::vector<Component*> m_pSubjects;
         std::vector<EventHandler*> m_pEventHandlers;
-        CSteamAchievements* m_SteamAchievements{};
     };
 }
 
