@@ -29,19 +29,21 @@ namespace dae
 	class SpriteSheet final
 	{
 	public:
-		SDL_Texture* GetSDLTexture() const;
-		explicit SpriteSheet(SDL_Texture* spriteSheet, const int rows, const int columns);
+		Texture2D& GetTexture() const;
+		explicit SpriteSheet(std::unique_ptr<Texture2D> spriteSheet, const int rows, const int columns);
+		explicit SpriteSheet(SpriteSheet* spriteSheet);
 		~SpriteSheet() = default;
 
 		SpriteSheet(const SpriteSheet&) = delete;
 		SpriteSheet(SpriteSheet&&) = delete;
 		SpriteSheet& operator= (const SpriteSheet&) = delete;
 		SpriteSheet& operator= (const SpriteSheet&&) = delete;
-
+		const int GetWidth() { return m_SpriteSheet->GetSize().x; }
+		const int GetHeight() { return m_SpriteSheet->GetSize().y; }
 		const int m_Rows{ 1 };
 		const int m_Columns{ 1 };
 	private:
-		std::unique_ptr<Texture2D> m_SpriteSheet;
+		std::shared_ptr<Texture2D> m_SpriteSheet;
 	};
 }
 #endif // !TEXTURE2D

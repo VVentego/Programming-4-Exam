@@ -11,6 +11,7 @@
 #include "PlayerController.h"
 #include "ScoreDisplayComponent.h"
 #include "LivesDisplayComponent.h"
+#include "SpriteAnimatorComponent.h"
 
 const int gWindowWidth{ 640 };
 const int gWindowHeight{ 480 };

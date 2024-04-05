@@ -1,7 +1,5 @@
 #ifndef TEXTURECOMPONENT
 #define TEXTURECOMPONENT
-
-#include "Transform.h"
 #include "ResourceManager.h"
 #include "Component.h"
 #include "Texture2D.h"

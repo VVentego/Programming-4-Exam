@@ -123,6 +123,9 @@
     <ClInclude Include="LivesDisplayComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\2DAE09_Programming4_06_ChaiLeng_TanLim\2DAE09_Programming4_06_ChaiLeng_TanLim\Minigin\SpriteAnimatorComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">
@@ -207,6 +210,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LivesDisplayComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\2DAE09_Programming4_06_ChaiLeng_TanLim\2DAE09_Programming4_06_ChaiLeng_TanLim\Minigin\SpriteAnimatorComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

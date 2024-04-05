@@ -36,7 +36,6 @@ void dae::TextureComponent::Render() const
 	
 		else
 	Renderer::GetInstance().RenderTexture(*m_texture, pos.x, pos.y);
-
 }
 
 void dae::TextureComponent::SetTexture(const std::string& filename)

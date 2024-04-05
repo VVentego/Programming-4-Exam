@@ -3,7 +3,7 @@
 #include "GameObject.h"
 
 dae::Component::Component(GameObject* owner) : 
-	m_pOwner{ owner }, m_Position{ owner->GetWorldPosition() }
+	m_pOwner{ owner }
 {
 }
 

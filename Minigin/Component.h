@@ -35,7 +35,6 @@ namespace dae
 
 		virtual void RemoveAllObservers();
 
-		glm::vec3 m_Position{};
 		GameObject* m_pOwner{};
 		std::vector<std::weak_ptr<PlayerObserver>> m_pObservers;
 	};
