@@ -37,10 +37,9 @@ void dae::PlayerController::Move(const float x, const float y)
 void dae::PlayerController::OnKillEnemy()
 {
 	Event increaseScoreEvent;
-	increaseScoreEvent.m_type = EventType::SCORE_INCREASED;
-	increaseScoreEvent.m_numArgs = 2;
-	increaseScoreEvent.m_args[0].intValue = 50;
-	increaseScoreEvent.m_args[1].stringValue = m_PlayerName.c_str();
+	increaseScoreEvent.type = EventType::SCORE_INCREASED;
+	increaseScoreEvent.intValue = 50;
+	increaseScoreEvent.stringValue = m_PlayerName.c_str();
 
 	NotifyObservers(increaseScoreEvent);
 }
@@ -48,9 +47,8 @@ void dae::PlayerController::OnKillEnemy()
 void dae::PlayerController::OnPlayerDeath()
 {
 	Event playerDiedEvent;
-	playerDiedEvent.m_type = EventType::PLAYER_DIED;
-	playerDiedEvent.m_numArgs = 1;
-	playerDiedEvent.m_args[0].stringValue = m_PlayerName.c_str();
+	playerDiedEvent.type = EventType::PLAYER_DIED;
+	playerDiedEvent.stringValue = m_PlayerName.c_str();
 
 	NotifyObservers(playerDiedEvent);
 }

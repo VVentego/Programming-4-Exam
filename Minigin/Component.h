@@ -6,6 +6,13 @@
 
 namespace dae
 {
+	class EventListener 
+	{
+	public:
+		virtual ~EventListener() = default;
+		virtual void HandleEvent(const Event& event) = 0;
+	};
+
 	class Renderer;
 	class PlayerObserver;
 	class GameObject;

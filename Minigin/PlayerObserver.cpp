@@ -4,7 +4,7 @@
 
 void dae::PlayerObserver::OnNotify(const Event& event)
 {
-	BroadcastToHandlers(event);
+	BroadcastToListeners(event);
 }
 
 void dae::PlayerObserver::AddSubject(Component* subject)
@@ -17,9 +17,9 @@ void dae::PlayerObserver::RemoveSubject(Component* subject)
 	m_pSubjects.erase(remove(m_pSubjects.begin(), m_pSubjects.end(), subject), m_pSubjects.end());
 }
 
-void dae::PlayerObserver::BroadcastToHandlers(const Event& event)
+void dae::PlayerObserver::BroadcastToListeners(const Event& event)
 {
-	for (EventHandler* handler : m_pEventHandlers)
+	for (EventListener* handler : m_pListeners)
 	{
 		handler->HandleEvent(event);
 	}

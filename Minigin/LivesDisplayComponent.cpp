@@ -2,18 +2,18 @@
 #include "TextComponent.h"
 #include <iostream>
 dae::LivesDisplayComponent::LivesDisplayComponent(GameObject* pOwner, const std::string& playerName) :
-	EventHandler::EventHandler(pOwner), m_PlayerName{ playerName }
+	Component::Component(pOwner), m_PlayerName{ playerName }
 {
 	m_pTextComponent = m_pOwner->GetComponent<TextComponent>();
 }
 
 void dae::LivesDisplayComponent::HandleEvent(const Event& event)
 {
-	if (event.m_type != EventType::PLAYER_DIED)
+	if (event.type != EventType::PLAYER_DIED)
 	{
 		return;
 	}
-	if (event.m_args[0].stringValue == m_PlayerName)
+	if (event.stringValue == m_PlayerName)
 	{
 		--m_Lives;
 		m_NeedsUpdate = true;
@@ -22,7 +22,7 @@ void dae::LivesDisplayComponent::HandleEvent(const Event& event)
 
 void dae::LivesDisplayComponent::Update(const double deltaTime)
 {
-	EventHandler::Update(deltaTime);
+	Component::Update(deltaTime);
 
 	if (m_pTextComponent != nullptr && m_NeedsUpdate)
 	{

@@ -6,7 +6,7 @@ namespace dae
 {
 	class TextComponent;
 	class ScoreDisplayComponent :
-		public EventHandler
+		public Component, public EventListener
 	{
 	public:
 		void Update(const double deltaTime) override;
