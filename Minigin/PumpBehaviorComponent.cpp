@@ -57,7 +57,7 @@ void dae::PumpBehaviorComponent::Fire(const Facing direction)
 	m_TextureComponent->m_ShouldRender = true;
 
 	m_FacingDirection = direction;
-	if (static_cast<int>(m_FacingDirection) <= m_Textures.size())
+	if (static_cast<unsigned int>(m_FacingDirection) <= m_Textures.size())
 	{
 		m_TextureComponent->SetTexture(m_Textures[static_cast<int>(m_FacingDirection)]);
 	}
