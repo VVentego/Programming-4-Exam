@@ -8,24 +8,58 @@
 dae::InputManager::InputManager() :
 	m_InputImpl{ std::make_unique<InputManagerImpl>() }
 {
-	BindButtonMove(std::make_unique<Move>());
+	BindButtonMoveRight(std::make_unique<MoveRight>());
+	BindButtonMoveDown(std::make_unique<MoveDown>());
+	BindButtonMoveLeft(std::make_unique<MoveLeft>());
+	BindButtonMoveUp(std::make_unique<MoveUp>());
 
-	BindXMovement(std::make_unique<Move>());
+	BindXButtonMoveRight(std::make_unique<MoveRight>());
+	BindXButtonMoveDown(std::make_unique<MoveDown>());
+	BindXButtonMoveLeft(std::make_unique<MoveLeft>());
+	BindXButtonMoveUp(std::make_unique<MoveUp>());
 
 	BindAttack(std::make_unique<Attack>());
 	BindXAttack(std::make_unique<Attack>());
-	BindDeath(std::make_unique<KillPlayer>());
-	BindXDeath(std::make_unique<KillPlayer>());
 }
 
-void dae::InputManager::BindXMovement(std::unique_ptr<Command> command)
+void dae::InputManager::BindXButtonMoveRight(std::unique_ptr<Command> command)
 {
-	m_InputImpl->BindXMovement(std::move(command));
+	m_InputImpl->BindXButtonMoveRight(std::move(command));
 }
 
-void dae::InputManager::BindButtonMove(std::unique_ptr<Command> command) 
+void dae::InputManager::BindXButtonMoveDown(std::unique_ptr<Command> command)
 {
-	m_InputImpl->BindButtonMove(std::move(command)); 
+	m_InputImpl->BindXButtonMoveDown(std::move(command));
+}
+
+void dae::InputManager::BindXButtonMoveLeft(std::unique_ptr<Command> command)
+{
+	m_InputImpl->BindXButtonMoveLeft(std::move(command));
+}
+
+void dae::InputManager::BindXButtonMoveUp(std::unique_ptr<Command> command)
+{
+	m_InputImpl->BindButtonMoveUp(std::move(command));
+}
+
+void dae::InputManager::BindButtonMoveRight(std::unique_ptr<Command> command)
+{
+	m_InputImpl->BindButtonMoveRight(std::move(command));
+}
+
+void dae::InputManager::BindButtonMoveDown(std::unique_ptr<Command> command)
+{
+	m_InputImpl->BindButtonMoveDown(std::move(command));
+}
+
+void dae::InputManager::BindButtonMoveLeft(std::unique_ptr<Command> command)
+{
+	m_InputImpl->BindButtonMoveLeft(std::move(command));
+}
+
+void dae::InputManager::BindButtonMoveUp(std::unique_ptr<Command> command)
+{
+	m_InputImpl->BindButtonMoveUp(std::move(command));
 }
 
 void dae::InputManager::BindXAttack(std::unique_ptr<Command> command)
@@ -86,21 +120,22 @@ dae::Command* dae::InputManager::InputManagerImpl::DoProcessXInput()
 	}
 
 
-	if (m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN)
-		m_Y = -1;
-	if (m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP)
-		m_Y = 1;
-	if (m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT)
-		m_X = -1;
 	if (m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT)
-		m_X = 1;
-
-	if (m_X != 0 or m_Y != 0)
 	{
-		m_XMove->Update(m_X, m_Y);
-		return m_XMove.get();
+		return m_XMoveRight.get();
 	}
-
+	if (m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN)
+	{ 
+		return m_XMoveDown.get();
+	}
+	if (m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT)
+	{
+		return m_XMoveRight.get();
+	}
+	if (m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP)
+	{
+		return m_XMoveUp.get();
+	}
 	/*
 	const bool invertY{ true };
 
@@ -147,20 +182,28 @@ dae::Command* dae::InputManager::InputManagerImpl::DoProcessXInput()
 dae::Command* dae::InputManager::InputManagerImpl::DoProcessInput()
 {
 	SDL_Event e;
-
-	m_X = 0.0f;
-	m_Y = 0.0f;
-
 	while (SDL_PollEvent(&e))
 	{
 		if (e.type == SDL_QUIT) {
 			m_ShouldQuit = true;
 		}
-		
+
 		if (e.type == SDL_KEYUP)
 		{
 			switch (e.key.keysym.scancode)
 			{
+			case SDL_SCANCODE_D:
+				return m_MoveRight.get();
+				break;
+			case SDL_SCANCODE_S:
+				return m_MoveDown.get();
+				break;
+			case SDL_SCANCODE_A:
+				return m_MoveLeft.get();
+				break;
+			case SDL_SCANCODE_W:
+				return m_MoveUp.get();
+				break;
 			case SDL_SCANCODE_C:
 				return m_Death.get();
 				break;
@@ -170,29 +213,10 @@ dae::Command* dae::InputManager::InputManagerImpl::DoProcessInput()
 				break;
 			}
 		}
-
-		if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP)
-		{
-			const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
-
-			if (currentKeyStates[SDL_SCANCODE_S])
-				m_Y = -1;
-			if (currentKeyStates[SDL_SCANCODE_W])
-				m_Y = 1;
-			if (currentKeyStates[SDL_SCANCODE_A])
-				m_X = -1;
-			if (currentKeyStates[SDL_SCANCODE_D])
-				m_X = 1;
-		}
-	}
-	if (m_X != 0 or m_Y != 0)
-	{
-		m_Move->Update(m_X, m_Y);
-		return m_Move.get();
-	}
 		//if (e.type == SDL_MOUSEBUTTONDOWN) {
 		//}
 		//ImGui_ImplSDL2_ProcessEvent(&e);
 		// etc...
-		return nullptr;
+	}
+	return nullptr;
 }

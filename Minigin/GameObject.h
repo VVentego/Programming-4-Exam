@@ -93,4 +93,12 @@ namespace dae
 		void RecalculateTransform();
 	};
 }
+
+enum class Facing
+{
+	right,
+	down,
+	left,
+	up
+};
 #endif

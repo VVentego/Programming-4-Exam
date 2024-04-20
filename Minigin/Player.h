@@ -1,6 +1,6 @@
 #ifndef PLAYER
 #define PLAYER
 //This file only contains headers
-#include "PlayerController.h"
+#include "DigDugController.h"
 
 #endif // !PLAYER

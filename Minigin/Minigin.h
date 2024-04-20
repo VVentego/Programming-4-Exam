@@ -8,10 +8,11 @@
 #include "FpsCounterComponent.h"
 #include "RotatorComponent.h"
 #include "TextureComponent.h"
-#include "PlayerController.h"
+#include "DigDugController.h"
 #include "ScoreDisplayComponent.h"
 #include "LivesDisplayComponent.h"
 #include "SpriteAnimatorComponent.h"
+#include "TunnelManagerComponent.h"
 
 const int gWindowWidth{ 640 };
 const int gWindowHeight{ 480 };

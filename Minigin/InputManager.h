@@ -20,8 +20,14 @@ namespace dae
 		InputManager& operator=(const InputManager& other) = delete;
 		InputManager& operator=(InputManager&& other) = delete;
 
-		void BindXMovement(std::unique_ptr<Command> command);
-		void BindButtonMove(std::unique_ptr<Command> command);
+		void BindButtonMoveRight(std::unique_ptr<Command> command);
+		void BindButtonMoveDown(std::unique_ptr<Command> command);
+		void BindButtonMoveLeft(std::unique_ptr<Command> command);
+		void BindButtonMoveUp(std::unique_ptr<Command> command);
+		void BindXButtonMoveRight(std::unique_ptr<Command> command);
+		void BindXButtonMoveDown(std::unique_ptr<Command> command);
+		void BindXButtonMoveLeft(std::unique_ptr<Command> command);
+		void BindXButtonMoveUp(std::unique_ptr<Command> command);
 		void BindXAttack(std::unique_ptr<Command> command);
 		void BindAttack(std::unique_ptr<Command> command);
 		void BindDeath(std::unique_ptr<Command> command);
@@ -51,9 +57,14 @@ namespace dae
 
 		Command* DoProcessXInput();
 		Command* DoProcessInput();
-
-		void BindXMovement(std::unique_ptr<Command> command) { m_XMove = std::move(command); }
-		void BindButtonMove(std::unique_ptr<Command> command) { m_Move = std::move(command); }
+		void BindButtonMoveLeft(std::unique_ptr<Command> command) { m_MoveLeft = std::move(command); }
+		void BindButtonMoveDown(std::unique_ptr<Command> command) { m_MoveDown = std::move(command); }
+		void BindButtonMoveRight(std::unique_ptr<Command> command) { m_MoveRight = std::move(command); }
+		void BindButtonMoveUp(std::unique_ptr<Command> command) { m_MoveUp = std::move(command); }
+		void BindXButtonMoveRight(std::unique_ptr<Command> command) { m_XMoveRight = std::move(command); }
+		void BindXButtonMoveDown(std::unique_ptr<Command> command) { m_XMoveDown = std::move(command); }
+		void BindXButtonMoveLeft(std::unique_ptr<Command> command) { m_XMoveLeft = std::move(command); }
+		void BindXButtonMoveUp(std::unique_ptr<Command> command) { m_XMoveUp = std::move(command); }
 		void BindXAttack(std::unique_ptr<Command> command) { m_XAttack = std::move(command); }
 		void BindAttack(std::unique_ptr<Command> command) { m_Attack = std::move(command); }
 		void BindDeath(std::unique_ptr<Command> command) { m_Death = std::move(command); }
@@ -61,8 +72,14 @@ namespace dae
 
 		bool ShouldQuit() const { return m_ShouldQuit; }
 	private:
-		std::unique_ptr<Command> m_XMove{};
-		std::unique_ptr<Command> m_Move{};
+		std::unique_ptr<Command> m_XMoveRight{};
+		std::unique_ptr<Command> m_XMoveDown{};
+		std::unique_ptr<Command> m_XMoveLeft{};
+		std::unique_ptr<Command> m_XMoveUp{};
+		std::unique_ptr<Command> m_MoveRight{};
+		std::unique_ptr<Command> m_MoveDown{};
+		std::unique_ptr<Command> m_MoveLeft{};
+		std::unique_ptr<Command> m_MoveUp{};
 		std::unique_ptr<Command> m_XAttack{};
 		std::unique_ptr<Command> m_Attack{};
 		std::unique_ptr<Command> m_XDeath{};

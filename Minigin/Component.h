@@ -13,8 +13,15 @@ namespace dae
 		virtual void HandleEvent(const Event& event) = 0;
 	};
 
+	struct Rectf
+	{
+		float x{};
+		float y{};
+		float w{};
+		float h{};
+	};
+
 	class Renderer;
-	class PlayerObserver;
 	class GameObject;
 	class Component
 	{

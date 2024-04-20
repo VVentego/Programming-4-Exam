@@ -27,7 +27,7 @@ void dae::TextureComponent::Start()
 
 void dae::TextureComponent::Render() const
 {
-	if (m_IsDestroyed) return;
+	if (m_IsDestroyed || !m_ShouldRender) return;
 
 	const auto& pos = m_pOwner->GetWorldPosition();
 	
@@ -45,5 +45,6 @@ void dae::TextureComponent::SetTexture(const std::string& filename)
 
 void dae::TextureComponent::SetTexture(std::shared_ptr<Texture2D> texture)
 {
+	m_texture.reset();
 	m_texture = texture;
 }
