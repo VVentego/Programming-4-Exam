@@ -5,12 +5,18 @@
 #include "PumpBehaviorComponent.h"
 namespace dae
 {
+    struct ControllerInfo
+    {
+        bool usingController{ false };
+        int playerControllerIdx{};
+    };
+
     class TunnelManagerComponent;
     class DigDugController :
         public Component
     {
     public:
-        DigDugController(GameObject* pOwner, const std::string& playerName, bool usingController, GameObject* pPump);
+        DigDugController(GameObject* pOwner, const std::string& playerName, ControllerInfo controllerInfo, GameObject* pPump);
         virtual ~DigDugController() = default;
         DigDugController (const DigDugController& other) = delete;
         DigDugController(DigDugController&& other) = delete;
@@ -35,7 +41,7 @@ namespace dae
         float m_DistanceMoved{};
         const float m_MoveStepDistance{ 20.f };
         glm::vec2 m_Velocity{};
-        bool m_UsingController{};
+        ControllerInfo m_ControllerInfo{};
         Facing m_FacingDirection{ Facing::right };
         GameObject* m_pPumpObject{};
         PumpBehaviorComponent* m_Pump{};

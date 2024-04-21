@@ -89,16 +89,16 @@ dae::Command* dae::InputManager::ProcessInput()
 	return m_InputImpl->DoProcessInput();
 }
 
-dae::Command* dae::InputManager::ProcessXInput()
+dae::Command* dae::InputManager::ProcessXInput(const int playerIdx)
 {
-	return m_InputImpl->DoProcessXInput();
+	return m_InputImpl->DoProcessXInput(playerIdx);
 }
 
-dae::Command* dae::InputManager::InputManagerImpl::DoProcessXInput()
+dae::Command* dae::InputManager::InputManagerImpl::DoProcessXInput(const int playerIdx)
 {
 	m_Y = 0;
 	m_X = 0;
-	int controllerIndex{};
+	int controllerIndex{ playerIdx };
 	static XINPUT_STATE m_CurrentState;
 	static XINPUT_STATE m_PrevState;
 

@@ -34,10 +34,10 @@ namespace dae
 		void BindXDeath(std::unique_ptr<Command> command);
 
 		Command* ProcessInput();
-		Command* ProcessXInput();
+		Command* ProcessXInput(const int playerIdx);
 
 		bool HasQuit() const { return m_Quit; }
-
+		
 	private:
 		InputManager();
 		class InputManagerImpl;
@@ -55,7 +55,7 @@ namespace dae
 		InputManagerImpl& operator=(const InputManagerImpl& other) = delete;
 		InputManagerImpl& operator=(InputManagerImpl&& other) = delete;
 
-		Command* DoProcessXInput();
+		Command* DoProcessXInput(const int playerIdx);
 		Command* DoProcessInput();
 		void BindButtonMoveLeft(std::unique_ptr<Command> command) { m_MoveLeft = std::move(command); }
 		void BindButtonMoveDown(std::unique_ptr<Command> command) { m_MoveDown = std::move(command); }

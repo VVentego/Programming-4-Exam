@@ -1,9 +1,8 @@
 #include "DigDugController.h"
 #include "InputManager.h"
-#include "TunnelManagerComponent.h"
 
-dae::DigDugController::DigDugController(GameObject* pOwner, const std::string& playerName, bool usingController, GameObject* pPump) :
-	Component(pOwner), m_PlayerName{ playerName }, m_UsingController{ usingController }, m_pPumpObject{ pPump }
+dae::DigDugController::DigDugController(GameObject* pOwner, const std::string& playerName, ControllerInfo controllerInfo, GameObject* pPump) :
+	Component(pOwner), m_PlayerName{ playerName }, m_ControllerInfo{ controllerInfo }, m_pPumpObject{ pPump }
 {
 	assert(m_pPumpObject != nullptr);
 	m_pPumpObject->SetParent(pOwner, false);
@@ -37,7 +36,7 @@ void dae::DigDugController::HandleInput()
 {
 	auto& input = InputManager::GetInstance();
 
-	Command* command = m_UsingController ? input.ProcessXInput() : input.ProcessInput();
+	Command* command = m_ControllerInfo.usingController ? input.ProcessXInput(m_ControllerInfo.playerControllerIdx) : input.ProcessInput();
 
 	if (command != nullptr)
 	{
