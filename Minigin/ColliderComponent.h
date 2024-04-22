@@ -2,7 +2,7 @@
 #include "Component.h"
 namespace dae
 {
-    class ColliderComponent :
+    class ColliderComponent final :
         public Component
     {
 	public:

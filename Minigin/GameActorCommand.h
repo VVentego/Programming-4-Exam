@@ -10,14 +10,14 @@ namespace dae
     public:
         GameActorCommand() = default;
         virtual ~GameActorCommand() = default;
-        virtual void Execute(DigDugController* actor) = 0;
+        virtual void Execute(Player* actor) = 0;
     };
 
     class MoveRight :
         public GameActorCommand
     {
     public:
-        void Execute(DigDugController* actor) override
+        void Execute(Player* actor) override
         {
             actor->MoveRight();
         }
@@ -27,7 +27,7 @@ namespace dae
         public GameActorCommand
     {
     public:
-        void Execute(DigDugController* actor) override
+        void Execute(Player* actor) override
         {
             actor->MoveDown();
         }
@@ -37,7 +37,7 @@ namespace dae
         public GameActorCommand
     {
     public:
-        void Execute(DigDugController* actor) override
+        void Execute(Player* actor) override
         {
             actor->MoveLeft();
         }
@@ -47,7 +47,7 @@ namespace dae
         public GameActorCommand
     {
     public:
-        void Execute(DigDugController* actor) override
+        void Execute(Player* actor) override
         {
             actor->MoveUp();
         }
@@ -56,7 +56,7 @@ namespace dae
         public GameActorCommand
     {
     public:
-        void Execute(DigDugController* actor) override
+        void Execute(Player* actor) override
         {
             actor->Shoot();
         }
@@ -66,7 +66,7 @@ namespace dae
         public GameActorCommand
     {
     public:
-        void Execute(DigDugController* actor) override
+        void Execute(Player* actor) override
         {
             actor->OnPlayerDeath();
         }

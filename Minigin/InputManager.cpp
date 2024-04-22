@@ -128,9 +128,9 @@ dae::Command* dae::InputManager::InputManagerImpl::DoProcessXInput(const int pla
 	{ 
 		return m_XMoveDown.get();
 	}
-	if (m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT)
+	if (m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT)
 	{
-		return m_XMoveRight.get();
+		return m_XMoveLeft.get();
 	}
 	if (m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP)
 	{

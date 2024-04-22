@@ -1,5 +1,5 @@
 #include "PumpBehaviorComponent.h"
-#include "TextureComponent.h"
+#include "../Minigin/TextComponent.h"
 
 dae::PumpBehaviorComponent::PumpBehaviorComponent(GameObject* pOwner, std::vector<std::shared_ptr<Texture2D>> textures) :
 	Component::Component(pOwner), m_Textures{ textures }

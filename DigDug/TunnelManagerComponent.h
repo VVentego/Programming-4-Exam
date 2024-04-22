@@ -1,6 +1,6 @@
 #ifndef TUNNELMANAGER
 #define TUNNELMANAGER
-#include "Component.h"
+#include "../Minigin/Component.h"
 
 namespace dae
 {

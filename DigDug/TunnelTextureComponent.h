@@ -1,7 +1,7 @@
 #ifndef TUNNELTEXTURECOMPONENT
 #define TUNNELTEXTURECOMPONENT
 
-#include "TextureComponent.h"
+#include "../Minigin/TextureComponent.h"
 namespace dae
 {
     class TunnelTextureComponent :

@@ -1,6 +1,6 @@
 #ifndef SCOREDISPLAYCOMPONENT
 #define SCOREDISPLAYCOMPONENT
-#include "EventHandler.h"
+#include "../Minigin/EventHandler.h"
 
 namespace dae
 {

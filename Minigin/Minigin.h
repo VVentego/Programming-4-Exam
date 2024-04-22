@@ -5,14 +5,9 @@
 #include <functional>
 #include "GameObject.h"
 #include "TextComponent.h"
-#include "FpsCounterComponent.h"
-#include "RotatorComponent.h"
 #include "TextureComponent.h"
-#include "DigDugController.h"
-#include "ScoreDisplayComponent.h"
-#include "LivesDisplayComponent.h"
 #include "SpriteAnimatorComponent.h"
-#include "TunnelManagerComponent.h"
+#include "ColliderComponent.h"
 
 const int gWindowWidth{ 640 };
 const int gWindowHeight{ 480 };

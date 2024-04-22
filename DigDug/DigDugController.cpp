@@ -1,5 +1,5 @@
 #include "DigDugController.h"
-#include "InputManager.h"
+#include "../Minigin/InputManager.h"
 
 dae::DigDugController::DigDugController(GameObject* pOwner, const std::string& playerName, ControllerInfo controllerInfo, GameObject* pPump) :
 	Component(pOwner), m_PlayerName{ playerName }, m_ControllerInfo{ controllerInfo }, m_pPumpObject{ pPump }

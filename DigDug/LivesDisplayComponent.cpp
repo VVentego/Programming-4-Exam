@@ -1,5 +1,5 @@
 #include "LivesDisplayComponent.h"
-#include "TextComponent.h"
+#include "../Minigin/TextComponent.h"
 #include <iostream>
 dae::LivesDisplayComponent::LivesDisplayComponent(GameObject* pOwner, const std::string& playerName) :
 	Component::Component(pOwner), m_PlayerName{ playerName }

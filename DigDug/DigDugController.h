@@ -1,7 +1,8 @@
 #ifndef DIGDUG
 #define DIGDUG
 
-#include "Component.h"
+#include "../Minigin/Component.h"
+#include "../Minigin/Player.h"
 #include "PumpBehaviorComponent.h"
 namespace dae
 {
@@ -13,7 +14,7 @@ namespace dae
 
     class TunnelManagerComponent;
     class DigDugController :
-        public Component
+        public Component, public Player
     {
     public:
         DigDugController(GameObject* pOwner, const std::string& playerName, ControllerInfo controllerInfo, GameObject* pPump);
@@ -26,12 +27,12 @@ namespace dae
         void Update(const double deltaTime) override;
         void HandleInput();
 
-        void MoveRight();
-        void MoveDown();
-        void MoveLeft();
-        void MoveUp();
-        void Shoot();
-        void OnPlayerDeath();
+        void MoveRight() override;
+        void MoveDown() override;
+        void MoveLeft() override;
+        void MoveUp() override;
+        void Shoot() override;
+        void OnPlayerDeath() override;
 
         void SetTunnelManager(TunnelManagerComponent* pTunnelManager);
 

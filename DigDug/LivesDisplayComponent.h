@@ -1,6 +1,6 @@
 #ifndef LIVESDISPLAY
 #define LIVESDISPLAY
-#include "EventHandler.h"
+#include "../Minigin/EventHandler.h"
 
 namespace dae
 {

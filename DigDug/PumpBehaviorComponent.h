@@ -1,6 +1,6 @@
 #ifndef PUMPBEHAVIOR
 #define PUMPBEHAVIOR
-#include "Component.h"
+#include "../Minigin/Component.h"
 
 namespace dae
 {
