@@ -6,6 +6,7 @@ void dae::SceneManager::Update(const double deltaTime)
 	for(auto& scene : m_scenes)
 	{
 		scene->Update(deltaTime);
+		scene->UpdateCollisions();
 	}
 }
 

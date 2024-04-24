@@ -18,15 +18,16 @@ namespace dae
 		void Update(const double deltaTime);
 		void FixedUpdate(const double fixedTimeStep);
 		void Render() const;
-		void SetLocalPosition(const float x, const float y, const float z);
-		void SetLocalPosition(const glm::vec3& localPosition);
+		void SetLocalPosition(const float x, const float y);
+		void SetLocalPosition(const glm::vec2 localPosition);
 		void SetPositionDirty();
 		void Start();
 
-		void SetWorldPosition(const float x, const float y, const float z);
-		void SetWorldPosition(const glm::vec3& worldPosition);
-		const glm::vec3 GetLocalPosition() const;
-		const glm::vec3 GetWorldPosition() const;
+		void SetWorldPosition(const float x, const float y);
+		void SetWorldPosition(const glm::vec2 worldPosition);
+		const glm::vec2 GetLocalPosition() const;
+		const glm::vec2 GetWorldPosition() const;
+		void CollisionEvent(GameObject* other);
 
 		void AddComponent(std::unique_ptr<dae::Component> ComponentPtr);
 		template <typename T>

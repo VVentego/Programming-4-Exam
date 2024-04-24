@@ -34,6 +34,7 @@ namespace dae
         void MoveUp() override;
         void Shoot() override;
         void OnPlayerDeath() override;
+        virtual void CollisionEvent(GameObject* other) override;
 
         void SetTunnelManager(TunnelManagerComponent* pTunnelManager);
 

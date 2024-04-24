@@ -42,6 +42,7 @@ namespace dae
 		bool m_IsDestroyed{};
 
 		virtual void AddObserver(std::shared_ptr<PlayerObserver> observer);
+		virtual void CollisionEvent(GameObject*) {};
 
 	protected:
 		virtual void NotifyObservers(Event event);

@@ -37,7 +37,7 @@ void dae::PumpBehaviorComponent::Update(const double deltaTime)
 		if (m_DistanceMoved < m_ShootDistance)
 		{
 			m_pOwner->SetLocalPosition(currentPos.x + velocity.x * static_cast<float>(deltaTime),
-				currentPos.y + velocity.y * static_cast<float>(deltaTime), 0);
+				currentPos.y + velocity.y * static_cast<float>(deltaTime));
 
 			m_DistanceMoved += m_Speed * static_cast<float>(deltaTime);
 		}
@@ -46,7 +46,7 @@ void dae::PumpBehaviorComponent::Update(const double deltaTime)
 			m_Active = false;
 			m_DistanceMoved = 0;
 			m_TextureComponent->m_ShouldRender = false;
-			m_pOwner->SetLocalPosition(0, 0, 0);
+			m_pOwner->SetLocalPosition(0, 0);
 		}
 	}
 }

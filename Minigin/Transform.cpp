@@ -1,26 +1,27 @@
 #include "Transform.h"
 
-void dae::Transform::SetWorldPosition(const float x, const float y, const float z)
+void dae::Transform::SetWorldPosition(const float x, const float y)
 {
 	m_WorldPosition.x = x;
 	m_WorldPosition.y = y;
-	m_WorldPosition.z = z;
 
 	if (m_pParent != nullptr)
 	{
-		glm::vec3 parentWorldPosition = m_pParent->GetWorldPosition();
-		glm::vec3 newLocalPosition = m_WorldPosition - parentWorldPosition;
+		glm::vec2 parentWorldPosition = m_pParent->GetWorldPosition();
+		glm::vec2 newLocalPosition = m_WorldPosition - parentWorldPosition;
 
-		SetLocalPosition(newLocalPosition.x, newLocalPosition.y, newLocalPosition.z);
+		SetLocalPosition(newLocalPosition.x, newLocalPosition.y);
 	}
 
 	else
-		SetLocalPosition(x, y, z);
+	{
+		SetLocalPosition(x, y);
+	}
 }
 
-void dae::Transform::SetWorldPosition(const glm::vec3& position)
+void dae::Transform::SetWorldPosition(const glm::vec2& position)
 {
-	SetWorldPosition(position.x, position.y, position.z);
+	SetWorldPosition(position.x, position.y);
 }
 
 void dae::Transform::UpdateWorldPosition()
@@ -28,24 +29,23 @@ void dae::Transform::UpdateWorldPosition()
 	m_WorldPosition = m_pParent->GetWorldPosition() + m_LocalPosition;
 }
 
-void dae::Transform::SetLocalPosition(const float x, const float y, const float z)
+void dae::Transform::SetLocalPosition(const float x, const float y)
 {
 	m_LocalPosition.x = x; 
 	m_LocalPosition.y = y;
-	m_LocalPosition.z = z;
 }
 
-void dae::Transform::SetLocalPosition(const glm::vec3& position)
+void dae::Transform::SetLocalPosition(const glm::vec2& position)
 {
-	SetLocalPosition(position.x, position.y, position.z);
+	SetLocalPosition(position.x, position.y);
 }
 
-const glm::vec3 dae::Transform::GetWorldPosition() const
+const glm::vec2 dae::Transform::GetWorldPosition() const
 {
 	return m_WorldPosition;
 }
 
-const glm::vec3 dae::Transform::GetLocalPosition() const
+const glm::vec2 dae::Transform::GetLocalPosition() const
 {
 	return m_LocalPosition;
 }

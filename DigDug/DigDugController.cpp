@@ -18,10 +18,10 @@ void dae::DigDugController::Update(const double deltaTime)
 
 	if (m_DistanceMoved < m_MoveStepDistance)
 	{
-		glm::vec3 currentPos = m_pOwner->GetLocalPosition();
+		glm::vec2 currentPos = m_pOwner->GetLocalPosition();
 
 		m_pOwner->SetLocalPosition(currentPos.x + m_Velocity.x * static_cast<float>(deltaTime),
-			currentPos.y + m_Velocity.y * static_cast<float>(deltaTime), 0);
+			currentPos.y + m_Velocity.y * static_cast<float>(deltaTime));
 
 		m_DistanceMoved += m_MoveSpeed * static_cast<float>(deltaTime);
 	}
@@ -88,6 +88,37 @@ void dae::DigDugController::OnPlayerDeath()
 	playerDiedEvent.stringValue = m_PlayerName.c_str();
 
 	NotifyObservers(playerDiedEvent);
+}
+
+void dae::DigDugController::CollisionEvent(GameObject* other)
+{
+	DigDugController* otherController{ other->GetComponent<DigDugController>() };
+	if (other != nullptr)
+	{
+		const glm::vec2 otherPosition{ other->GetWorldPosition() };
+		const glm::vec2 position{ m_pOwner->GetWorldPosition() };
+
+		if (position.x < otherPosition.x)
+		{
+			MoveLeft();
+			return;
+		}
+		if (position.x > otherPosition.x)
+		{
+			MoveRight();
+			return;
+		}
+		if (position.y > otherPosition.y)
+		{
+			MoveUp();
+			return;
+		}
+		if (position.y < otherPosition.y)
+		{
+			MoveDown();
+			return;
+		}
+	}
 }
 
 void dae::DigDugController::SetTunnelManager(TunnelManagerComponent* pTunnelManager)

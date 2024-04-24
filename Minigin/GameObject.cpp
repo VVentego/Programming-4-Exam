@@ -40,13 +40,13 @@ void dae::GameObject::Render() const
 	}
 }
 
-void dae::GameObject::SetLocalPosition(const float x, const float y, const float z)
+void dae::GameObject::SetLocalPosition(const float x, const float y)
 {
-	m_Transform.SetLocalPosition(x, y, z);
+	m_Transform.SetLocalPosition(x, y);
 	SetPositionDirty();
 }
 
-void dae::GameObject::SetLocalPosition(const glm::vec3& pos)
+void dae::GameObject::SetLocalPosition(const glm::vec2 pos)
 {
 	m_Transform.SetLocalPosition(pos);
 	SetPositionDirty();
@@ -57,27 +57,35 @@ void dae::GameObject::SetPositionDirty()
 	m_TransformNeedsUpdate = true;
 }
 
-void dae::GameObject::SetWorldPosition(const float x, const float y, const float z)
+void dae::GameObject::SetWorldPosition(const float x, const float y)
 {
-	m_Transform.SetWorldPosition(x, y, z);
+	m_Transform.SetWorldPosition(x, y);
 	SetPositionDirty();
 }
 
-void dae::GameObject::SetWorldPosition(const glm::vec3& worldPosition)
+void dae::GameObject::SetWorldPosition(const glm::vec2 worldPosition)
 {
-	SetWorldPosition(worldPosition.x, worldPosition.y, worldPosition.z);
+	SetWorldPosition(worldPosition.x, worldPosition.y);
 }
 
-const glm::vec3 dae::GameObject::GetLocalPosition() const
+const glm::vec2 dae::GameObject::GetLocalPosition() const
 {
 	return m_Transform.GetLocalPosition();
 }
 
-const glm::vec3 dae::GameObject::GetWorldPosition() const
+const glm::vec2 dae::GameObject::GetWorldPosition() const
 {
 	if (m_pParent != nullptr)
 		return m_pParent->GetWorldPosition() + m_Transform.GetLocalPosition();
 	return m_Transform.GetLocalPosition();
+}
+
+void dae::GameObject::CollisionEvent(GameObject* other)
+{
+	for (auto& component : m_pComponents)
+	{
+		component->CollisionEvent(other);
+	}
 }
 
 void dae::GameObject::AddComponent(std::unique_ptr<Component> component)
@@ -115,7 +123,7 @@ void dae::GameObject::SetParent(GameObject* pParentObject, const bool worldPosit
 	else
 	{
 		if (worldPositionStays) SetLocalPosition(GetWorldPosition() - pParentObject->GetWorldPosition());
-		else SetLocalPosition({ 0, 0,0 });
+		else SetLocalPosition({ 0, 0 });
 		SetPositionDirty();
 	}
 	if (m_pParent) m_pParent->RemoveChild(this);

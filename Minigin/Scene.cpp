@@ -1,6 +1,4 @@
 #include "Scene.h"
-#include "GameObject.h"
-
 #include <algorithm>
 
 using namespace dae;
@@ -71,6 +69,47 @@ void dae::Scene::Destroy()
 		}
 
 		object->RemoveComponent();
+	}
+}
+
+void dae::Scene::AddCollider(ColliderComponent* pCollider) 
+{
+	m_pColliders.emplace_back(pCollider);
+}
+
+void dae::Scene::UpdateCollisions() const
+{
+	for (ColliderComponent* collider : m_pColliders)
+	{
+		for (ColliderComponent* otherCollider : m_pColliders)
+		{
+			if (collider == otherCollider)
+			{
+				continue;
+			}
+
+			const glm::vec2 colliderPosition{ collider->GetPosition() };
+			const glm::vec2 otherColliderPosition{ collider->GetPosition() };
+
+			if (colliderPosition.x > otherColliderPosition.x + otherCollider->m_SizeOfCollider.x)
+			{
+				continue;
+			}
+			if (colliderPosition.x + collider->m_SizeOfCollider.x < otherColliderPosition.x)
+			{
+				continue;
+			}
+			if (colliderPosition.y > otherColliderPosition.y + otherCollider->m_SizeOfCollider.y)
+			{
+				continue;
+			}
+			if (colliderPosition.y + collider->m_SizeOfCollider.y < otherColliderPosition.y)
+			{
+				continue;
+			}
+
+			collider->CollisionCallback(otherCollider->GetOwner());
+		}
 	}
 }
 
