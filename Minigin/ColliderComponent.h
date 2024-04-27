@@ -7,8 +7,6 @@ namespace dae
         public Component
     {
 	public:
-		void FixedUpdate(const double fixedTimeStep) override;
-
 		ColliderComponent(GameObject* pOwner, Scene& scene);
 		ColliderComponent(GameObject* pOwner, Scene& scene, const float width, const float height);
 		virtual ~ColliderComponent() = default;

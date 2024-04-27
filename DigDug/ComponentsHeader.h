@@ -8,5 +8,7 @@
 #include "ScoreDisplayComponent.h"
 #include "TunnelManagerComponent.h"
 #include "TunnelTextureComponent.h"
+#include "PookaBehavior.h"
+
 #endif // !COMPONENTSHEADER
 

@@ -89,21 +89,16 @@ void dae::Scene::UpdateCollisions() const
 			}
 
 			const glm::vec2 colliderPosition{ collider->GetPosition() };
-			const glm::vec2 otherColliderPosition{ collider->GetPosition() };
+			const glm::vec2 otherColliderPosition{ otherCollider->GetPosition() };
 
-			if (colliderPosition.x > otherColliderPosition.x + otherCollider->m_SizeOfCollider.x)
+			// If one rectangle is on left side of the other
+			if ((colliderPosition.x + collider->m_SizeOfCollider.x) < otherColliderPosition.x || (otherColliderPosition.x + otherCollider->m_SizeOfCollider.x) < colliderPosition.x)
 			{
 				continue;
 			}
-			if (colliderPosition.x + collider->m_SizeOfCollider.x < otherColliderPosition.x)
-			{
-				continue;
-			}
-			if (colliderPosition.y > otherColliderPosition.y + otherCollider->m_SizeOfCollider.y)
-			{
-				continue;
-			}
-			if (colliderPosition.y + collider->m_SizeOfCollider.y < otherColliderPosition.y)
+
+			// If one rectangle is under the other
+			if (colliderPosition.y > (otherColliderPosition.y + otherCollider->m_SizeOfCollider.y) || otherColliderPosition.y > (colliderPosition.y + collider->m_SizeOfCollider.y))
 			{
 				continue;
 			}

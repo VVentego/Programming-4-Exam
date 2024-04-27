@@ -23,6 +23,7 @@
     <ClCompile Include="FpsCounterComponent.cpp" />
     <ClCompile Include="LivesDisplayComponent.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="PookaBehavior.cpp" />
     <ClCompile Include="PumpBehaviorComponent.cpp" />
     <ClCompile Include="ScoreDisplayComponent.cpp" />
     <ClCompile Include="TunnelManagerComponent.cpp" />
@@ -33,6 +34,7 @@
     <ClInclude Include="DigDugController.h" />
     <ClInclude Include="FpsCounterComponent.h" />
     <ClInclude Include="LivesDisplayComponent.h" />
+    <ClInclude Include="PookaBehavior.h" />
     <ClInclude Include="PumpBehaviorComponent.h" />
     <ClInclude Include="ScoreDisplayComponent.h" />
     <ClInclude Include="TunnelManagerComponent.h" />

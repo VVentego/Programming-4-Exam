@@ -4,10 +4,6 @@
 #include <iostream>
 #include "Scene.h"
 
-void dae::ColliderComponent::FixedUpdate(const double)
-{
-}
-
 dae::ColliderComponent::ColliderComponent(GameObject* pOwner, Scene& scene) :
 	Component::Component(pOwner)
 {
@@ -24,7 +20,7 @@ dae::ColliderComponent::ColliderComponent(GameObject* pOwner, Scene& scene) :
 		m_SizeOfCollider = spriteComponent->GetSize();
 	}
 
-	else std::cerr << type_name<decltype(pOwner)>() << "No texture to inherit size from! Collider set to default of 0!" << std::endl;
+	else std::cerr << "No texture to inherit size from! Collider set to default of 0!" << std::endl;
 }
 
 dae::ColliderComponent::ColliderComponent(GameObject* pOwner, Scene& scene, const float width, const float height) : 

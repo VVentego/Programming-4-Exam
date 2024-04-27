@@ -52,6 +52,9 @@ void dae::SpriteAnimatorComponent::AddSpriteSheet(const std::string& fileName, c
 	std::unique_ptr<SpriteSheet> spriteSheet = std::make_unique<SpriteSheet>(std::move(texture), rows, columns);
 
 	m_SpriteSheets.emplace_back(std::move(spriteSheet));
+
+	m_Width = static_cast<float>(m_SpriteSheets[m_CurrentSpriteSheet]->GetWidth() / m_SpriteSheets[m_CurrentSpriteSheet]->m_Columns);
+	m_Height = static_cast<float>(m_SpriteSheets[m_CurrentSpriteSheet]->GetHeight() / m_SpriteSheets[m_CurrentSpriteSheet]->m_Rows);
 }
 
 void dae::SpriteAnimatorComponent::AddSpriteSheet(SpriteSheet* spriteSheet)

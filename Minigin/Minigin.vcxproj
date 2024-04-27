@@ -236,8 +236,10 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\$(PlatformTarget)\*.dll" "$(OutputPat
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="ServiceLocator.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SoundManager.h" />
+    <ClInclude Include="SoundSystem.h" />
     <ClInclude Include="SpriteAnimatorComponent.h" />
     <ClInclude Include="TextComponent.h" />
     <ClInclude Include="Texture2D.h" />
@@ -266,6 +268,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\$(PlatformTarget)\*.dll" "$(OutputPat
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="SoundSystemImpl.cpp" />
     <ClCompile Include="SpriteAnimatorComponent.cpp" />
     <ClCompile Include="TextComponent.cpp" />
     <ClCompile Include="Texture2D.cpp" />

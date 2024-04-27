@@ -6,12 +6,13 @@
 #include <SDL_ttf.h>
 #include "Minigin.h"
 #include "InputManager.h"
-#include "SceneManager.h"
 #include "Renderer.h"
-#include "ResourceManager.h"
+#include "SceneManager.h"
 #include <chrono>
 #include <thread>
 #include <math.h>
+#include "ServiceLocator.h"
+#include "SoundManager.h"
 
 SDL_Window* g_window{};
 using namespace std::chrono;
@@ -44,7 +45,7 @@ void PrintSDLVersion()
 		version.major, version.minor, version.patch);
 }
 
-dae::Minigin::Minigin(const std::string &dataPath) : 
+dae::Minigin::Minigin(const char* dataPath) : 
 	m_RefreshRate{ GetMonitorRefreshRate() }
 {
 	PrintSDLVersion();
@@ -70,6 +71,12 @@ dae::Minigin::Minigin(const std::string &dataPath) :
 	Renderer::GetInstance().Init(g_window);
 
 	ResourceManager::GetInstance().Init(dataPath);
+
+	ResourceManager::GetInstance().Init(dataPath);
+
+	ServiceLocator::GetInstance().RegisterSoundManager(std::make_unique<SoundManager>());
+	ServiceLocator::GetInstance().GetSoundManager().Init(dataPath);
+	//SoundManager::GetInstance().Init(dataPath);
 }
 
 dae::Minigin::~Minigin()
@@ -77,6 +84,8 @@ dae::Minigin::~Minigin()
 	Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow(g_window);
 	
+	ServiceLocator::GetInstance().GetSoundManager().Destroy();
+
 	g_window = nullptr;
 
 	SDL_Quit();

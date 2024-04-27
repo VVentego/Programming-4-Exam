@@ -1,5 +1,5 @@
 #include "PumpBehaviorComponent.h"
-#include "../Minigin/TextComponent.h"
+#include "../Minigin/TextureComponent.h"
 
 dae::PumpBehaviorComponent::PumpBehaviorComponent(GameObject* pOwner, std::vector<std::shared_ptr<Texture2D>> textures) :
 	Component::Component(pOwner), m_Textures{ textures }
@@ -61,5 +61,7 @@ void dae::PumpBehaviorComponent::Fire(const Facing direction)
 	{
 		m_TextureComponent->SetTexture(m_Textures[static_cast<int>(m_FacingDirection)]);
 	}
+	auto& soundManager = ServiceLocator::GetInstance().GetSoundManager();
 
+	soundManager.Play(0, 100);
 }

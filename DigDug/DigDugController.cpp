@@ -34,7 +34,7 @@ void dae::DigDugController::Update(const double deltaTime)
 
 void dae::DigDugController::HandleInput()
 {
-	auto& input = InputManager::GetInstance();
+	auto& input = dae::InputManager::GetInstance();
 
 	Command* command = m_ControllerInfo.usingController ? input.ProcessXInput(m_ControllerInfo.playerControllerIdx) : input.ProcessInput();
 
@@ -92,33 +92,6 @@ void dae::DigDugController::OnPlayerDeath()
 
 void dae::DigDugController::CollisionEvent(GameObject* other)
 {
-	DigDugController* otherController{ other->GetComponent<DigDugController>() };
-	if (other != nullptr)
-	{
-		const glm::vec2 otherPosition{ other->GetWorldPosition() };
-		const glm::vec2 position{ m_pOwner->GetWorldPosition() };
-
-		if (position.x < otherPosition.x)
-		{
-			MoveLeft();
-			return;
-		}
-		if (position.x > otherPosition.x)
-		{
-			MoveRight();
-			return;
-		}
-		if (position.y > otherPosition.y)
-		{
-			MoveUp();
-			return;
-		}
-		if (position.y < otherPosition.y)
-		{
-			MoveDown();
-			return;
-		}
-	}
 }
 
 void dae::DigDugController::SetTunnelManager(TunnelManagerComponent* pTunnelManager)
