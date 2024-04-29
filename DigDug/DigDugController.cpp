@@ -1,5 +1,4 @@
 #include "DigDugController.h"
-#include "../Minigin/InputManager.h"
 
 dae::DigDugController::DigDugController(GameObject* pOwner, const std::string& playerName, ControllerInfo controllerInfo, GameObject* pPump) :
 	Component(pOwner), m_PlayerName{ playerName }, m_ControllerInfo{ controllerInfo }, m_pPumpObject{ pPump }
@@ -34,7 +33,7 @@ void dae::DigDugController::Update(const double deltaTime)
 
 void dae::DigDugController::HandleInput()
 {
-	auto& input = dae::InputManager::GetInstance();
+	auto& input = ServiceLocator::GetInstance().GetInputManager();
 
 	Command* command = m_ControllerInfo.usingController ? input.ProcessXInput(m_ControllerInfo.playerControllerIdx) : input.ProcessInput();
 

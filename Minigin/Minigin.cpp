@@ -74,7 +74,13 @@ dae::Minigin::Minigin(const char* dataPath) :
 
 	ResourceManager::GetInstance().Init(dataPath);
 
+	ServiceLocator::GetInstance().RegisterInputManager(std::make_unique<InputManager>());
+
+#if _DEBUG
+	ServiceLocator::GetInstance().RegisterSoundManager(std::make_unique<SoundManagerDebug>());
+#else
 	ServiceLocator::GetInstance().RegisterSoundManager(std::make_unique<SoundManager>());
+#endif
 	ServiceLocator::GetInstance().GetSoundManager().Init(dataPath);
 	//SoundManager::GetInstance().Init(dataPath);
 }
@@ -97,7 +103,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
-	auto& input = InputManager::GetInstance();
+	auto& input = ServiceLocator::GetInstance().GetInputManager();
 
 	bool doContinue = true;
 	auto lastTime = high_resolution_clock::now();

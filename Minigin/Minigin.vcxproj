@@ -229,6 +229,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\$(PlatformTarget)\*.dll" "$(OutputPat
     <ClInclude Include="GameActorCommand.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="InputSystem.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerObserver.h" />

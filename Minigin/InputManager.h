@@ -1,19 +1,15 @@
 #ifndef INPUTMANAGER
 #define INPUTMANAGER
-#include "Singleton.h"
 #include <vector>
 #include <memory>
-#include "GameActorCommand.h"
+#include "InputSystem.h"
 
 namespace dae
 {
-	class InputManager final : public Singleton<InputManager>
+	class InputManager final : public InputSystem
 	{
 	public:
-		static InputManager& GetInstance() {
-			static InputManager instance;
-			return instance;
-		}
+		InputManager();
 		virtual ~InputManager() = default;
 		InputManager(const InputManager& other) = delete;
 		InputManager(InputManager&& other) = delete;
@@ -39,7 +35,6 @@ namespace dae
 		bool HasQuit() const { return m_Quit; }
 		
 	private:
-		InputManager();
 		class InputManagerImpl;
 		std::unique_ptr<InputManagerImpl> m_InputImpl;
 		bool m_Quit{ false };

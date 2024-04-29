@@ -10,7 +10,7 @@ struct Mix_Chunk;
 
 namespace dae
 {
-    class SoundManager final : public SoundSystem
+    class SoundManager : public SoundSystem
     {
 	public:
 		SoundManager();
@@ -29,17 +29,41 @@ namespace dae
 			return *this;
 		}
 
-		void Init(const std::string& dataPath) override;
-		void Play(const sound_id id, const int volume) override;
-		void Destroy() override;
-		void AddTrack(const std::string& fileName, sound_id id);
-	private:
+		virtual void Init(const std::string& dataPath) override;
+		virtual void Play(const sound_id id, const int volume) override;
+		virtual void Destroy() override;
+		virtual void AddTrack(const std::string& fileName, sound_id id);
+	protected:
 		std::string m_dataPath{};
 
 		class SoundSystemImpl;
 		std::unique_ptr<SoundSystemImpl> m_SoundSystemImpl;
     };
 #endif // !SOUNDMANAGER
+
+	class SoundManagerDebug final : public SoundManager
+	{
+	public:
+		SoundManagerDebug() = default;
+		virtual ~SoundManagerDebug() = default;
+		SoundManagerDebug(const SoundManagerDebug& other) = delete;
+		SoundManagerDebug(SoundManagerDebug&& other) noexcept
+		{
+			m_dataPath = other.m_dataPath;
+			m_SoundSystemImpl = std::move(other.m_SoundSystemImpl);
+		}
+		virtual SoundManagerDebug& operator=(const SoundManagerDebug& other) = delete;
+		virtual SoundManagerDebug& operator=(SoundManagerDebug&& other) noexcept
+		{
+			m_dataPath = other.m_dataPath;
+			m_SoundSystemImpl = std::move(other.m_SoundSystemImpl);
+			return *this;
+		}
+
+		void Init(const std::string& dataPath) override;
+		void Play(const sound_id id, const int volume) override;
+		void AddTrack(const std::string& fileName, sound_id id) override;
+	};
 
 #ifndef SOUNDSYSTEMIMPL
 #define SOUNDSYSTEMIMPL
