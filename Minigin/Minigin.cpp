@@ -79,7 +79,7 @@ dae::Minigin::Minigin(const char* dataPath) :
 #if _DEBUG
 	ServiceLocator::RegisterSoundManager(std::make_unique<SoundManagerDebug>());
 #else
-	ServiceLocator::GetInstance().RegisterSoundManager(std::make_unique<SoundManager>());
+	ServiceLocator::RegisterSoundManager(std::make_unique<SoundManager>());
 #endif
 	ServiceLocator::GetSoundManager().Init(dataPath);
 }
