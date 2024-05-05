@@ -83,6 +83,7 @@ namespace dae
 		SoundSystemImpl& operator=(SoundSystemImpl&& other) = delete;
 		void Play(const sound_id id, const int volume);
 		bool Init();
+		void LoadTrack(const std::string& fileName, sound_id id);
 		void AddTrack(const std::string& fileName, sound_id id);
 		void Destroy();
 
@@ -93,6 +94,7 @@ namespace dae
 		int tail_{};
 ;		std::mutex mutex;
 		std::map<sound_id, Mix_Chunk*> m_AudioTracks;
+		std::map<sound_id, std::string> m_TracksToLoad;
 		std::jthread m_SoundThread;
 		std::condition_variable cv{};
 		bool m_Running{ true };

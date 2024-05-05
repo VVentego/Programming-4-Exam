@@ -2,36 +2,41 @@
 #define SERVICELOCATOR
 #include "SoundSystem.h"
 #include "InputSystem.h"
-#include "Singleton.h"
+#include <memory>
 
-class ServiceLocator final : public dae::Singleton<ServiceLocator>
+class ServiceLocator final
 {
 public:
-	static ServiceLocator& GetInstance()
-	{
-			static ServiceLocator instance;
-			return instance;
-	}
 	~ServiceLocator() = default;
 	ServiceLocator(const ServiceLocator& other) = delete;
 	ServiceLocator(ServiceLocator&& other) = delete;
 	ServiceLocator& operator=(const ServiceLocator& other) = delete;
 	ServiceLocator& operator=(ServiceLocator&& other) = delete;
 
-	SoundSystem& GetSoundManager() { return *_sm_instance; }
-	dae::InputSystem& GetInputManager() { return *_im_instance; }
+	static dae::SoundSystem& GetSoundManager() { return *_sm_instance; }
+	static dae::InputSystem& GetInputManager() { return *_im_instance; }
 
-	void RegisterSoundManager(std::unique_ptr<SoundSystem> pSoundManager) 
+	static void RegisterSoundManager(std::unique_ptr<dae::SoundSystem> pSoundManager) 
 	{ 
-		if (_sm_instance != nullptr)
+		if (pSoundManager == NULL)
+		{
+			_sm_instance = std::make_unique<dae::NullSoundSystem>();
+		}
+
+		else if (_sm_instance != nullptr)
 		{
 			_sm_instance->Destroy();
 			_sm_instance.reset();
 		}
 		_sm_instance = std::move(pSoundManager);
 	}
-	void RegisterInputManager(std::unique_ptr<dae::InputSystem> pInputManager) 
+	static void RegisterInputManager(std::unique_ptr<dae::InputSystem> pInputManager) 
 	{
+		if (pInputManager == NULL)
+		{
+			_im_instance = std::make_unique<dae::NullInputSystem>();
+		}
+
 		if (_im_instance != nullptr)
 		{
 			_im_instance.reset();
@@ -40,7 +45,7 @@ public:
 	}
 private:
 	ServiceLocator() = default;
-	std::unique_ptr<SoundSystem> _sm_instance;
-	std::unique_ptr<dae::InputSystem> _im_instance;
+	static std::unique_ptr<dae::SoundSystem> _sm_instance;
+	static std::unique_ptr<dae::InputSystem> _im_instance;
 };
 #endif // SERVICELOCATOR

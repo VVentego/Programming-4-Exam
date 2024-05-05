@@ -1,6 +1,7 @@
 #ifndef INPUTSYSTEM
 #define INPUTSYSTEM
 #include "GameActorCommand.h"
+#include <memory>
 
 namespace dae
 {
@@ -34,6 +35,35 @@ namespace dae
 
 	protected:
 		bool m_Quit{ false };
+	};
+
+	class NullInputSystem : public InputSystem
+	{
+	public:
+		NullInputSystem() = default;
+		virtual ~NullInputSystem() = default;
+		NullInputSystem(const NullInputSystem& other) = delete;
+		NullInputSystem(NullInputSystem&& other) = delete;
+		NullInputSystem& operator=(const NullInputSystem& other) = delete;
+		NullInputSystem& operator=(NullInputSystem&& other) = delete;
+
+		void BindButtonMoveRight(std::unique_ptr<Command>) override {};
+		void BindButtonMoveDown(std::unique_ptr<Command>) override {};
+		void BindButtonMoveLeft(std::unique_ptr<Command>) override {};
+		void BindButtonMoveUp(std::unique_ptr<Command>) override {};
+		void BindXButtonMoveRight(std::unique_ptr<Command>) override {};
+		void BindXButtonMoveDown(std::unique_ptr<Command>) override {};
+		void BindXButtonMoveLeft(std::unique_ptr<Command>) override {};
+		void BindXButtonMoveUp(std::unique_ptr<Command>) override {};
+		void BindXAttack(std::unique_ptr<Command>) override {};
+		void BindAttack(std::unique_ptr<Command>) override {};
+		void BindDeath(std::unique_ptr<Command>) override {};
+		void BindXDeath(std::unique_ptr<Command>) override {};
+
+		Command* ProcessInput() override { return nullptr; }
+		Command* ProcessXInput(const int) override { return nullptr; }
+
+		bool HasQuit() const { return m_Quit; }
 	};
 }
 #endif // !INPUTSYSTEM

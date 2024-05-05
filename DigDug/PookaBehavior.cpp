@@ -11,6 +11,6 @@ void dae::PookaBehavior::CollisionEvent(GameObject* other)
 	auto collidedObject = other->GetComponent<PumpBehaviorComponent>();
 	if (collidedObject != nullptr && collidedObject->IsActive())
 	{
-		ServiceLocator::GetInstance().GetSoundManager().Play(1, 50);
+		ServiceLocator::GetSoundManager().Play(1, 50);
 	}
 }

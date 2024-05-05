@@ -74,15 +74,14 @@ dae::Minigin::Minigin(const char* dataPath) :
 
 	ResourceManager::GetInstance().Init(dataPath);
 
-	ServiceLocator::GetInstance().RegisterInputManager(std::make_unique<InputManager>());
+	ServiceLocator::RegisterInputManager(std::make_unique<InputManager>());
 
 #if _DEBUG
-	ServiceLocator::GetInstance().RegisterSoundManager(std::make_unique<SoundManagerDebug>());
+	ServiceLocator::RegisterSoundManager(std::make_unique<SoundManagerDebug>());
 #else
 	ServiceLocator::GetInstance().RegisterSoundManager(std::make_unique<SoundManager>());
 #endif
-	ServiceLocator::GetInstance().GetSoundManager().Init(dataPath);
-	//SoundManager::GetInstance().Init(dataPath);
+	ServiceLocator::GetSoundManager().Init(dataPath);
 }
 
 dae::Minigin::~Minigin()
@@ -90,7 +89,7 @@ dae::Minigin::~Minigin()
 	Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow(g_window);
 	
-	ServiceLocator::GetInstance().GetSoundManager().Destroy();
+	ServiceLocator::GetSoundManager().Destroy();
 
 	g_window = nullptr;
 
@@ -103,7 +102,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
-	auto& input = ServiceLocator::GetInstance().GetInputManager();
+	auto& input = ServiceLocator::GetInputManager();
 
 	bool doContinue = true;
 	auto lastTime = high_resolution_clock::now();

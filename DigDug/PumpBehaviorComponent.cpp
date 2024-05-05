@@ -61,7 +61,7 @@ void dae::PumpBehaviorComponent::Fire(const Facing direction)
 	{
 		m_TextureComponent->SetTexture(m_Textures[static_cast<int>(m_FacingDirection)]);
 	}
-	auto& soundManager = ServiceLocator::GetInstance().GetSoundManager();
+	auto& soundManager = ServiceLocator::GetSoundManager();
 
 	soundManager.Play(0, 100);
 }

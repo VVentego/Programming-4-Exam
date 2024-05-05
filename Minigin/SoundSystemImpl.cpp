@@ -54,14 +54,19 @@ bool dae::SoundManager::SoundSystemImpl::Init()
     return true;
 }
 
-void dae::SoundManager::SoundSystemImpl::AddTrack(const std::string& fileName, sound_id id)
+void dae::SoundManager::SoundSystemImpl::LoadTrack(const std::string& fileName, sound_id id)
 {
-    
     Mix_Chunk* track = Mix_LoadWAV(fileName.c_str()); 
 
     assert(track != nullptr);
 
     m_AudioTracks.insert(std::pair<sound_id, Mix_Chunk*>(id, track));
+}
+
+void dae::SoundManager::SoundSystemImpl::AddTrack(const std::string& fileName, sound_id id)
+{
+    m_TracksToLoad.insert(std::pair<sound_id, std::string>(id, fileName));
+    cv.notify_one();
 }
 
 void dae::SoundManager::SoundSystemImpl::Destroy()
@@ -86,13 +91,21 @@ void dae::SoundManager::SoundSystemImpl::Update()
     while (m_Running)
     {
         std::unique_lock<std::mutex> lock(mutex);
+
+        if (!m_TracksToLoad.empty())
+        {
+            for (auto& track : m_TracksToLoad)
+            {
+                LoadTrack(track.second, track.first);
+            }
+            m_TracksToLoad.clear();
+        }
         cv.wait(lock, [this] { return !(head_ == tail_) || !m_Running; });
 
         auto trackIt = m_AudioTracks.find(m_Pending[head_].id);
         if (trackIt != m_AudioTracks.end())
         {
             Mix_Chunk* track = trackIt->second;
-            lock.unlock();
             Mix_VolumeChunk(track, m_Pending[head_].volume);
             Mix_PlayChannel(-1, track, 0);
         }

@@ -33,7 +33,7 @@ void dae::DigDugController::Update(const double deltaTime)
 
 void dae::DigDugController::HandleInput()
 {
-	auto& input = ServiceLocator::GetInstance().GetInputManager();
+	auto& input = ServiceLocator::GetInputManager();
 
 	Command* command = m_ControllerInfo.usingController ? input.ProcessXInput(m_ControllerInfo.playerControllerIdx) : input.ProcessInput();
 
