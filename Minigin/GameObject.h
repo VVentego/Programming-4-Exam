@@ -79,9 +79,10 @@ namespace dae
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
 
+		const Transform* GetTransform() const { return &m_Transform; }
+
 		bool m_IsDestroyed{};
 	private:
-
 		Transform m_Transform{};
 
 		std::vector<std::unique_ptr<Component>> m_pComponents;

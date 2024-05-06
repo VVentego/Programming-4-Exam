@@ -11,7 +11,6 @@
 #include <chrono>
 #include <thread>
 #include <math.h>
-#include "ServiceLocator.h"
 #include "SoundManager.h"
 
 SDL_Window* g_window{};
