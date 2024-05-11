@@ -1,4 +1,5 @@
 #include "DigDugController.h"
+#include "TunnelManager.h"
 
 dae::DigDugController::DigDugController(GameObject* pOwner, const std::string& playerName, ControllerInfo controllerInfo, GameObject* pPump) :
 	Component(pOwner), m_PlayerName{ playerName }, m_ControllerInfo{ controllerInfo }, m_pPumpObject{ pPump }
@@ -28,6 +29,12 @@ void dae::DigDugController::Update(const double deltaTime)
 	else
 	{
 		m_Velocity = {};
+		auto& tunnelManager = TunnelManager::GetInstance();
+		auto ownerPos = m_pOwner->GetWorldPosition();
+		if(!tunnelManager.InTunnel(ownerPos))
+		{
+			tunnelManager.DigTunnel(ownerPos);
+		}
 	}
 }
 
@@ -75,6 +82,7 @@ void dae::DigDugController::MoveUp()
 	m_FacingDirection = Facing::up;
 	m_DistanceMoved = 0;
 }
+
 void dae::DigDugController::Shoot()
 {
 	m_Pump->Fire(m_FacingDirection);

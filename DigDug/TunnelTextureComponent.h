@@ -10,7 +10,7 @@ namespace dae
 	public:
 		void Render() const override;
 
-		TunnelTextureComponent(GameObject* pOwner, std::vector<Rectf>* pTunnelVector);
+		TunnelTextureComponent(GameObject* pOwner, std::vector<glm::vec2>* pTunnelVector);
 		TunnelTextureComponent(GameObject* pOwner, const float width, const float height) = delete;
 		virtual ~TunnelTextureComponent() = default;
 		TunnelTextureComponent(const TunnelTextureComponent& other) = delete;
@@ -19,7 +19,7 @@ namespace dae
 		TunnelTextureComponent& operator=(TunnelTextureComponent&& other) = delete;
 
 	private:
-		std::vector<Rectf>* m_pTunnels{};
+		std::vector<glm::vec2>* m_pTunnels{};
     };
 }
 #endif // !TUNNELTEXTURECOMPONENT

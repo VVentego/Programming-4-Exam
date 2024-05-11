@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include "Texture2D.h"
+#include "ResourceManager.h"
 
 dae::Texture2D::~Texture2D()
 {
@@ -21,6 +22,12 @@ SDL_Texture* dae::Texture2D::GetSDLTexture() const
 dae::Texture2D::Texture2D(SDL_Texture* texture)
 {
 	m_texture = texture;
+}
+
+dae::SpriteSheet::SpriteSheet(const std::string& filename, const int rows, const int columns) :
+	m_Rows{ rows }, m_Columns{ columns }
+{
+	m_SpriteSheet = std::move(ResourceManager::GetInstance().LoadTexture(filename));
 }
 
 dae::SpriteSheet::SpriteSheet(std::unique_ptr<Texture2D> texture, const int rows, const int columns) :

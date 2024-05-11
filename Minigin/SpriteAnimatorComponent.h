@@ -9,7 +9,7 @@ namespace dae
     {
 	public:
 		SpriteAnimatorComponent(GameObject* owner);
-		virtual ~SpriteAnimatorComponent() = default;
+		virtual ~SpriteAnimatorComponent();
 		SpriteAnimatorComponent(const SpriteAnimatorComponent& other) = delete;
 		SpriteAnimatorComponent(SpriteAnimatorComponent&& other) = delete;
 		SpriteAnimatorComponent& operator=(const SpriteAnimatorComponent& other) = delete;
@@ -20,7 +20,7 @@ namespace dae
 		//void FlipSprite(const bool left) const;
 
 		void AddSpriteSheet(const std::string& fileName, const int rows, const int columns);
-		void AddSpriteSheet(SpriteSheet* spriteSheet);
+		void AddSpriteSheet(std::shared_ptr<SpriteSheet> spriteSheet);
 
 		void Render() const override;
 		const glm::vec2 GetSize() const;
@@ -30,7 +30,7 @@ namespace dae
 		int m_EndFrame{ 1 };
 		double m_FrameTime{ 0.2 };
 		double m_SpriteTimer{};
-		std::vector<std::shared_ptr<SpriteSheet>> m_SpriteSheets;
+		std::shared_ptr<SpriteSheet> m_SpriteSheet;
 		int m_CurrentSpriteSheet{};
 		float m_Width{};
 		float m_Height{};

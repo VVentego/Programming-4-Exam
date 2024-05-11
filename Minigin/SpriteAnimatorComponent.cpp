@@ -5,6 +5,11 @@ dae::SpriteAnimatorComponent::SpriteAnimatorComponent(GameObject* owner) :
 {
 }
 
+dae::SpriteAnimatorComponent::~SpriteAnimatorComponent()
+{
+	m_SpriteSheet.reset();
+}
+
 void dae::SpriteAnimatorComponent::Update(const double elapsedSec)
 {
 	m_SpriteTimer += elapsedSec;
@@ -49,25 +54,28 @@ void dae::SpriteAnimatorComponent::FixedUpdate(const double)
 void dae::SpriteAnimatorComponent::AddSpriteSheet(const std::string& fileName, const int rows, const int columns)
 {
 	auto texture = ResourceManager::GetInstance().LoadTexture(fileName);
-	std::unique_ptr<SpriteSheet> spriteSheet = std::make_unique<SpriteSheet>(std::move(texture), rows, columns);
+	m_SpriteSheet = std::make_shared<SpriteSheet>(std::move(texture), rows, columns);
 
-	m_SpriteSheets.emplace_back(std::move(spriteSheet));
-
-	m_Width = static_cast<float>(m_SpriteSheets[m_CurrentSpriteSheet]->GetWidth() / m_SpriteSheets[m_CurrentSpriteSheet]->m_Columns);
-	m_Height = static_cast<float>(m_SpriteSheets[m_CurrentSpriteSheet]->GetHeight() / m_SpriteSheets[m_CurrentSpriteSheet]->m_Rows);
+	m_Width = static_cast<float>(m_SpriteSheet->GetWidth() / m_SpriteSheet->m_Columns);
+	m_Height = static_cast<float>(m_SpriteSheet->GetHeight() / m_SpriteSheet->m_Rows);
 }
 
-void dae::SpriteAnimatorComponent::AddSpriteSheet(SpriteSheet* spriteSheet)
+void dae::SpriteAnimatorComponent::AddSpriteSheet(std::shared_ptr<SpriteSheet> spriteSheet)
 {
-	m_SpriteSheets.emplace_back(std::make_shared<SpriteSheet>(spriteSheet));
+	if (m_SpriteSheet.get() != nullptr)
+	{
+		m_SpriteSheet.reset();
+	}
+
+	m_SpriteSheet = spriteSheet;
 }
 
 void dae::SpriteAnimatorComponent::Render() const
 {
 	SDL_Rect srcRect{};
-	srcRect.w = m_SpriteSheets[m_CurrentSpriteSheet]->GetWidth() / m_SpriteSheets[m_CurrentSpriteSheet]->m_Columns;
-	srcRect.h = m_SpriteSheets[m_CurrentSpriteSheet]->GetHeight() / m_SpriteSheets[m_CurrentSpriteSheet]->m_Rows;
-	srcRect.x = m_CurrentFrame % m_SpriteSheets[m_CurrentSpriteSheet]->m_Columns * srcRect.w;
+	srcRect.w = m_SpriteSheet->GetWidth() / m_SpriteSheet->m_Columns;
+	srcRect.h = m_SpriteSheet->GetHeight() / m_SpriteSheet->m_Rows;
+	srcRect.x = m_CurrentFrame % m_SpriteSheet->m_Columns * srcRect.w;
 	srcRect.y = 0;
 
 	const auto& pos = m_pOwner->GetWorldPosition();
@@ -78,14 +86,14 @@ void dae::SpriteAnimatorComponent::Render() const
 	destRect.w = srcRect.w;
 	destRect.h = srcRect.h;
 
-	Renderer::GetInstance().RenderTexture(m_SpriteSheets[m_CurrentSpriteSheet]->GetTexture(), &srcRect, &destRect);
+	Renderer::GetInstance().RenderTexture(m_SpriteSheet->GetTexture(), &srcRect, &destRect);
 
 	//if (m_Left == true)
 	//{
 	//	glPushMatrix();
 	//	glScalef(-1, 1, 1);
 
-	//	m_SpriteSheets[m_CurrentSpriteSheet]->Draw(Rectf{ -destRect.left - destRect.width, destRect.bottom, destRect.width, destRect.height }, srcRect);
+	//	m_SpriteSheet->Draw(Rectf{ -destRect.left - destRect.width, destRect.bottom, destRect.width, destRect.height }, srcRect);
 	//	glPopMatrix();
 	//}
 
@@ -93,7 +101,7 @@ void dae::SpriteAnimatorComponent::Render() const
 	//{
 	//	glPushMatrix();
 	//	glScalef(1, 1, 1);
-	//	m_SpriteSheets[m_CurrentSpriteSheet]->Draw(destRect, srcRect);
+	//	m_SpriteSheet->Draw(destRect, srcRect);
 	//	glPopMatrix();
 	//}
 }

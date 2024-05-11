@@ -2,6 +2,7 @@
 #define TEXTURE2D
 #include <glm/vec2.hpp>
 #include <memory>
+#include <string>
 
 struct SDL_Texture;
 namespace dae
@@ -30,6 +31,7 @@ namespace dae
 	{
 	public:
 		Texture2D& GetTexture() const;
+		explicit SpriteSheet(const std::string& filename, const int rows, const int columns);
 		explicit SpriteSheet(std::unique_ptr<Texture2D> spriteSheet, const int rows, const int columns);
 		explicit SpriteSheet(SpriteSheet* spriteSheet);
 		~SpriteSheet() = default;

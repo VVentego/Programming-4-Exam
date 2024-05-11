@@ -42,7 +42,7 @@ namespace dae
     private:
         const float m_MoveSpeed{ 20.f };
         float m_DistanceMoved{};
-        const float m_MoveStepDistance{ 20.f };
+        const float m_MoveStepDistance{ 16.f };
         glm::vec2 m_Velocity{};
         ControllerInfo m_ControllerInfo{};
         Facing m_FacingDirection{ Facing::right };

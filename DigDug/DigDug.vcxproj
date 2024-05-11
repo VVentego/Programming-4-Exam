@@ -27,7 +27,7 @@
     <ClCompile Include="PookaState.cpp" />
     <ClCompile Include="PumpBehaviorComponent.cpp" />
     <ClCompile Include="ScoreDisplayComponent.cpp" />
-    <ClCompile Include="TunnelManagerComponent.cpp" />
+    <ClCompile Include="TunnelManager.cpp" />
     <ClCompile Include="TunnelTextureComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -39,7 +39,8 @@
     <ClInclude Include="PookaState.h" />
     <ClInclude Include="PumpBehaviorComponent.h" />
     <ClInclude Include="ScoreDisplayComponent.h" />
-    <ClInclude Include="TunnelManagerComponent.h" />
+    <ClInclude Include="TunnelDweller.h" />
+    <ClInclude Include="TunnelManager.h" />
     <ClInclude Include="TunnelTextureComponent.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
