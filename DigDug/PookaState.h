@@ -2,19 +2,15 @@
 #include "PookaBehavior.h"
 namespace dae
 {
-	enum class TravelDirection
-	{
-		up,
-		right,
-		left,
-		down
-	};
-
 	class PookaState
 	{
 	public:
 		PookaState() = default;
 		virtual ~PookaState() = default;
+		PookaState(const PookaState& other) = delete;
+		PookaState(PookaState&& other) = delete;
+		PookaState& operator=(const PookaState& other) = delete;
+		PookaState& operator=(PookaState&& other) = delete;
 
 		virtual PookaState* Update(PookaBehavior&, const double deltaTime) { return nullptr; }
 
@@ -30,6 +26,10 @@ namespace dae
 	public:
 		NormalState(){};
 		~NormalState() = default;
+		NormalState(const NormalState& other) = delete;
+		NormalState(NormalState&& other) = delete;
+		NormalState& operator=(const NormalState& other) = delete;
+		NormalState& operator=(NormalState&& other) = delete;
 
 		PookaState* Update(PookaBehavior& pooka, const double deltaTime) override;
 		void OnEnter(PookaBehavior& pooka) override;
@@ -44,6 +44,10 @@ namespace dae
 	public:
 		GhostState() = default;
 		~GhostState() = default;
+		GhostState(const GhostState& other) = delete;
+		GhostState(GhostState&& other) = delete;
+		GhostState& operator=(const GhostState& other) = delete;
+		GhostState& operator=(GhostState&& other) = delete;
 
 		PookaState* Update(PookaBehavior& pooka, const double deltaTime) override;
 		void OnEnter(PookaBehavior& pooka) override;

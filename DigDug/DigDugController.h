@@ -14,7 +14,8 @@ namespace dae
     };
 
     class TunnelManagerComponent;
-    class DigDugController :
+    class DigDugState;
+    class DigDugController final :
         public Component, public Player
     {
     public:
@@ -40,6 +41,8 @@ namespace dae
 
         const std::string m_PlayerName;
     private:
+        friend class NormalState;
+        friend class DigState;
         const float m_MoveSpeed{ 20.f };
         float m_DistanceMoved{};
         const float m_MoveStepDistance{ 16.f };
@@ -49,6 +52,7 @@ namespace dae
         GameObject* m_pPumpObject{};
         PumpBehaviorComponent* m_Pump{};
         TunnelManagerComponent* m_pTunnelManager{};
+        DigDugState* m_CurrentState{};
     };
 }
 #endif // !DIGDUG

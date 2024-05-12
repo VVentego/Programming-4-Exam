@@ -45,6 +45,9 @@
     <ClCompile Include="PookaState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DigDugState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DigDugController.h">
@@ -78,6 +81,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TunnelDweller.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DigDugState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

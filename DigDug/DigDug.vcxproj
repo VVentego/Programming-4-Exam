@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DigDugController.cpp" />
+    <ClCompile Include="DigDugState.cpp" />
     <ClCompile Include="FpsCounterComponent.cpp" />
     <ClCompile Include="LivesDisplayComponent.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -33,6 +34,7 @@
   <ItemGroup>
     <ClInclude Include="ComponentsHeader.h" />
     <ClInclude Include="DigDugController.h" />
+    <ClInclude Include="DigDugState.h" />
     <ClInclude Include="FpsCounterComponent.h" />
     <ClInclude Include="LivesDisplayComponent.h" />
     <ClInclude Include="PookaBehavior.h" />
