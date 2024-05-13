@@ -15,8 +15,25 @@ namespace dae
 
 		virtual DigDugState* Update(DigDugController&, const double deltaTime) { return nullptr; }
 
-		virtual void OnEnter(DigDugController&) {};
-		virtual void OnExit(DigDugController& pooka) {};
+		virtual void OnEnter(DigDugController& digDug) {};
+		virtual void OnExit(DigDugController& digDug) {};
+		virtual void HandleInput(DigDugController& digDug) {};
+	};
+
+	class NormalState : public DigDugState
+	{
+		NormalState() = default;
+		virtual ~NormalState() = default;
+		NormalState(const NormalState& other) = delete;
+		NormalState(NormalState&& other) = delete;
+		NormalState& operator=(const NormalState& other) = delete;
+		NormalState& operator=(NormalState&& other) = delete;
+
+		NormalState* Update(DigDugController&, const double deltaTime);
+
+		void OnEnter(DigDugController&);
+		void OnExit(DigDugController& digDug);
+		void HandleInput(DigDugController& digDug);
 	};
 }
 #endif //DIGDUGSTATE

@@ -14,7 +14,7 @@ namespace dae
 
 		virtual PookaState* Update(PookaBehavior&, const double deltaTime) { return nullptr; }
 
-		virtual void OnEnter(PookaBehavior&) {};
+		virtual void OnEnter(PookaBehavior& pooka) {};
 		virtual void OnExit(PookaBehavior& pooka) {};
 
 	protected:

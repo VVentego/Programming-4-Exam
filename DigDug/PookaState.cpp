@@ -9,31 +9,12 @@ dae::PookaState* dae::NormalState::Update(PookaBehavior& pooka, const double del
 
 	if (pooka.m_PlayersTransform.size() > 1)
 	{
-		pooka.m_ChangeTargetTimer += static_cast<float>(deltaTime);
-
-		if (pooka.m_ChangeTargetTimer > pooka.m_TimeToChangeTarget)
-		{
-			pooka.m_ChangeTargetTimer = 0;
-			pooka.m_TargetIdx = std::rand() % pooka.m_PlayersTransform.size();
-		}
+		pooka.SwapTarget(deltaTime);
 	}
 
 	pooka.CheckForTunnel();
 
-	switch (pooka.m_FacingDirection)
-	{
-	case Facing::right:
-		pooka.m_pOwner->SetLocalPosition(pooka.m_pOwner->GetLocalPosition() + glm::vec2{ pooka.m_Speed, 0 });
-		break;
-	case Facing::down:
-		pooka.m_pOwner->SetLocalPosition(pooka.m_pOwner->GetLocalPosition() + glm::vec2{ 0, -pooka.m_Speed });
-		break;
-	case Facing::left:
-		pooka.m_pOwner->SetLocalPosition(pooka.m_pOwner->GetLocalPosition() + glm::vec2{ -pooka.m_Speed, 0 });
-		break;
-	case Facing::up:
-		pooka.m_pOwner->SetLocalPosition(pooka.m_pOwner->GetLocalPosition() + glm::vec2{ 0, pooka.m_Speed });
-	}
+	pooka.UpdateMovement();
 
 	if (m_StateTimer > m_NormalStateDuration)
 	{
@@ -61,31 +42,12 @@ dae::PookaState* dae::GhostState::Update(PookaBehavior& pooka, const double delt
 
 	if (pooka.m_PlayersTransform.size() > 1)
 	{
-		pooka.m_ChangeTargetTimer += static_cast<float>(deltaTime);
-
-		if (pooka.m_ChangeTargetTimer > pooka.m_TimeToChangeTarget)
-		{
-			pooka.m_ChangeTargetTimer = 0;
-			pooka.m_TargetIdx = std::rand() % pooka.m_PlayersTransform.size();
-		}
+		pooka.SwapTarget(deltaTime);
 	}
 
 	pooka.TrackPlayer();
 
-	switch (pooka.m_FacingDirection)
-	{
-	case Facing::right:
-		pooka.m_pOwner->SetLocalPosition(pooka.m_pOwner->GetLocalPosition() + glm::vec2{ pooka.m_Speed, 0 });
-		break;
-	case Facing::down:
-		pooka.m_pOwner->SetLocalPosition(pooka.m_pOwner->GetLocalPosition() + glm::vec2{ 0, -pooka.m_Speed });
-		break;
-	case Facing::left:
-		pooka.m_pOwner->SetLocalPosition(pooka.m_pOwner->GetLocalPosition() + glm::vec2{ -pooka.m_Speed, 0 });
-		break;
-	case Facing::up:
-		pooka.m_pOwner->SetLocalPosition(pooka.m_pOwner->GetLocalPosition() + glm::vec2{ 0, pooka.m_Speed });
-	}
+	pooka.UpdateMovement();
 
 	if (m_StateTimer > m_GhostStateDuration)
 	{

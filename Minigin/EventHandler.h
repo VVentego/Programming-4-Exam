@@ -1,11 +1,9 @@
-	#ifndef EVENTHANDLER
+#ifndef EVENTHANDLER
 #define EVENTHANDLER
-#include "Component.h"
 namespace dae
 {
-	//Implement an interface. Allow all components to be able to handle events.
-    class EventHandler :
-        public Component
+	struct Event;
+    class EventHandler
     {
 	public:
 		virtual ~EventHandler() = default;
@@ -16,7 +14,7 @@ namespace dae
 
 		virtual void HandleEvent(const Event& event) = 0;
 	protected:
-		EventHandler(GameObject* pOwner) : Component(pOwner) {};
+		EventHandler() = default;
     };
 }
 #endif // !EVENTHANDLER

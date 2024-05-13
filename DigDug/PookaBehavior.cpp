@@ -126,3 +126,32 @@ void dae::PookaBehavior::SetSprite(std::shared_ptr<SpriteSheet> spriteSheet)
 {
 	m_pAnimatorComponent->AddSpriteSheet(spriteSheet);
 }
+
+void dae::PookaBehavior::SwapTarget(const double deltaTime)
+{
+	m_ChangeTargetTimer += static_cast<float>(deltaTime);
+
+	if (m_ChangeTargetTimer > m_TimeToChangeTarget)
+	{
+		m_ChangeTargetTimer = 0;
+		m_TargetIdx = std::rand() % m_PlayersTransform.size();
+	}
+}
+
+void dae::PookaBehavior::UpdateMovement()
+{
+	switch (m_FacingDirection)
+	{
+	case Facing::right:
+		m_pOwner->SetLocalPosition(m_pOwner->GetLocalPosition() + glm::vec2{ m_Speed, 0 });
+		break;
+	case Facing::down:
+		m_pOwner->SetLocalPosition(m_pOwner->GetLocalPosition() + glm::vec2{ 0, -m_Speed });
+		break;
+	case Facing::left:
+		m_pOwner->SetLocalPosition(m_pOwner->GetLocalPosition() + glm::vec2{ -m_Speed, 0 });
+		break;
+	case Facing::up:
+		m_pOwner->SetLocalPosition(m_pOwner->GetLocalPosition() + glm::vec2{ 0, m_Speed });
+	}
+}

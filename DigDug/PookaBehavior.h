@@ -30,6 +30,8 @@ namespace dae
 		void CheckForTunnel();
 		void ReverseDirection();
 		void SetSprite(std::shared_ptr<SpriteSheet> spriteSheet);
+		void SwapTarget(const double deltaTime);
+		void UpdateMovement();
 
 		SpriteAnimatorComponent* m_pAnimatorComponent{};
 		std::shared_ptr<SpriteSheet> m_pWalkSprite;
