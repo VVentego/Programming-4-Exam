@@ -56,6 +56,21 @@ namespace dae
 	private:
 		const float m_GhostStateDuration{ 5.f };
 	};
+
+	class DeathState : public PookaState
+	{
+	public:
+		DeathState() = default;
+		~DeathState() = default;
+		DeathState(const DeathState& other) = delete;
+		DeathState(DeathState&& other) = delete;
+		DeathState& operator=(const DeathState& other) = delete;
+		DeathState& operator=(DeathState&& other) = delete;
+
+		PookaState* Update(PookaBehavior& pooka, const double deltaTime) override;
+		void OnEnter(PookaBehavior& pooka) override;
+		void OnExit(PookaBehavior& pooka) override;
+	};
 }
 #define POOKASTATE
 #endif // !POOKASTATE

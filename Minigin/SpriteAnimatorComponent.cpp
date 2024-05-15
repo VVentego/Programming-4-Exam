@@ -14,7 +14,10 @@ void dae::SpriteAnimatorComponent::Update(const double elapsedSec)
 {
 	m_SpriteTimer += elapsedSec;
 
-	if (m_Looping == false && m_CurrentFrame == m_EndFrame) m_CurrentFrame = m_EndFrame;
+	if (m_Looping == false && m_CurrentFrame == m_EndFrame)
+	{
+		m_CurrentFrame = m_EndFrame;
+	}
 
 	if (m_SpriteTimer > m_FrameTime)
 	{
@@ -68,6 +71,8 @@ void dae::SpriteAnimatorComponent::AddSpriteSheet(std::shared_ptr<SpriteSheet> s
 	}
 
 	m_SpriteSheet = spriteSheet;
+	m_Looping = true;
+	m_LoopFinished = false;
 }
 
 void dae::SpriteAnimatorComponent::Render() const
@@ -105,6 +110,15 @@ void dae::SpriteAnimatorComponent::Render() const
 	//	glPopMatrix();
 	//}
 }
+
+const bool dae::SpriteAnimatorComponent::RenderOnce()
+{
+	m_Looping = false;
+
+	return m_LoopFinished;
+}
+
+
 
 const glm::vec2 dae::SpriteAnimatorComponent::GetSize() const
 {

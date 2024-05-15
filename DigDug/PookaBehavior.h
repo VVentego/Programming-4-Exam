@@ -36,6 +36,8 @@ namespace dae
 		SpriteAnimatorComponent* m_pAnimatorComponent{};
 		std::shared_ptr<SpriteSheet> m_pWalkSprite;
 		std::shared_ptr<SpriteSheet> m_pGhostSheet;
+		std::shared_ptr<SpriteSheet> m_InflatedSheet;
+		std::shared_ptr<SpriteSheet> m_pDeathSheet;
 
 		Facing m_FacingDirection{ Facing::right };
 		float m_Speed{ .1f };

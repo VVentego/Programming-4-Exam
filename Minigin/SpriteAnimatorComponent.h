@@ -23,6 +23,7 @@ namespace dae
 		void AddSpriteSheet(std::shared_ptr<SpriteSheet> spriteSheet);
 
 		void Render() const override;
+		const bool RenderOnce();
 		const glm::vec2 GetSize() const;
 		bool m_Looping{ true };
 	private:
@@ -34,5 +35,6 @@ namespace dae
 		int m_CurrentSpriteSheet{};
 		float m_Width{};
 		float m_Height{};
+		bool m_LoopFinished{};
     };
 }
