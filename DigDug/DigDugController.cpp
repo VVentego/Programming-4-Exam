@@ -1,5 +1,6 @@
 #include "DigDugController.h"
 #include "TunnelManager.h"
+#include "../Minigin/EventHandler.h"
 
 dae::DigDugController::DigDugController(GameObject* pOwner, const std::string& playerName, ControllerInfo controllerInfo, GameObject* pPump) :
 	Component(pOwner), m_PlayerName{ playerName }, m_ControllerInfo{ controllerInfo }, m_pPumpObject{ pPump }
@@ -105,4 +106,38 @@ void dae::DigDugController::SetTunnelManager(TunnelManagerComponent* pTunnelMana
 {
 	assert(pTunnelManager != nullptr);
 	m_pTunnelManager = pTunnelManager;
+}
+
+void dae::DigDugController::HandleEvent(const Event& event)
+{
+	switch (event.type)
+	{
+	case EventType::ENEMY_KILLED:
+		Event scoreEvent;
+		scoreEvent.type = EventType::SCORE_INCREASED;
+		if (event.stringValue == "Pooka")
+		{
+			constexpr int quarterWindowHeight = 480 / 4;
+			const glm::vec2 pos{ m_pOwner->GetWorldPosition() };
+			if (pos.y < quarterWindowHeight && pos.y > 0)
+			{
+				scoreEvent.intValue = 500;
+			}
+			else if (pos.y < quarterWindowHeight * 2 && pos.y > quarterWindowHeight)
+			{
+				scoreEvent.intValue = 400;
+			}
+			else if (pos.y < quarterWindowHeight * 3 && pos.y > quarterWindowHeight * 2)
+			{
+				scoreEvent.intValue = 300;
+			}
+			else if (pos.y < quarterWindowHeight * 4 && pos.y > quarterWindowHeight * 3)
+			{
+				scoreEvent.intValue = 200;
+			}
+		}
+
+		NotifyObservers(scoreEvent);
+		break;
+	}
 }

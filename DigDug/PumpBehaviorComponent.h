@@ -5,10 +5,11 @@
 namespace dae
 {
 	class TextureComponent;
+	class PookaBehavior;
 	class PumpBehaviorComponent : public Component
 	{
 	public:
-		PumpBehaviorComponent(GameObject* pOwner, std::vector<std::shared_ptr<Texture2D>> textures);
+		PumpBehaviorComponent(GameObject* pOwner, const int playerIdx);
 		virtual ~PumpBehaviorComponent() = default;
 		PumpBehaviorComponent(const PumpBehaviorComponent& other) = delete;
 		PumpBehaviorComponent(PumpBehaviorComponent&& other) = delete;
@@ -19,6 +20,10 @@ namespace dae
 		void Fire(const Facing direction);
 
 		bool IsActive() const { return m_Active; }
+		void CollisionEvent(GameObject* other) override;
+		void Reset();
+
+		const int m_PlayerIdx{};
 	private:
 		const float m_ShootDistance{ 20.f };
 		const float m_Speed{ 20.f };
@@ -29,6 +34,7 @@ namespace dae
 		TextureComponent* m_TextureComponent{};
 		bool m_Active{};
 		bool m_Hit{};
+		PookaBehavior* m_AttachedPooka{};
 
 		float m_Timer{};
 	};

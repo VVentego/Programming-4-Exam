@@ -19,7 +19,7 @@ namespace dae
 		void FixedUpdate(const double fixedTimeStep);
 		void Render() const;
 		void Destroy();
-		void AddCollider(ColliderComponent* pCollider);
+		void AddCollider(std::shared_ptr<ColliderComponent> pCollider);
 		void UpdateCollisions() const;
 
 		~Scene();
@@ -34,7 +34,7 @@ namespace dae
 		std::string m_name;
 		std::vector<std::unique_ptr<GameObject>> m_objects{};
 		std::vector<std::shared_ptr<PlayerObserver>> m_observers{};
-		std::vector<ColliderComponent*> m_pColliders{};
+		mutable std::vector<std::weak_ptr<ColliderComponent>> m_pColliders{};
 		static unsigned int m_idCounter; 
 	};
 

@@ -12,7 +12,8 @@ namespace dae
 
     enum class EventType {
         SCORE_INCREASED,
-        PLAYER_DIED
+        PLAYER_DIED,
+        ENEMY_KILLED
     };
 
     struct Event {

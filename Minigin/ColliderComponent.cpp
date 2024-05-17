@@ -4,12 +4,11 @@
 #include <iostream>
 #include "Scene.h"
 
-dae::ColliderComponent::ColliderComponent(GameObject* pOwner, Scene& scene) :
+dae::ColliderComponent::ColliderComponent(GameObject* pOwner) :
 	Component::Component(pOwner)
 {
 	const TextureComponent* textureComponent = pOwner->GetComponent<TextureComponent>();
 	const SpriteAnimatorComponent* spriteComponent = pOwner->GetComponent<SpriteAnimatorComponent>();
-	scene.AddCollider(this);
 	if (textureComponent != nullptr)
 	{
 		m_SizeOfCollider = textureComponent->GetSize();
@@ -23,10 +22,9 @@ dae::ColliderComponent::ColliderComponent(GameObject* pOwner, Scene& scene) :
 	else std::cerr << "No texture to inherit size from! Collider set to default of 0!" << std::endl;
 }
 
-dae::ColliderComponent::ColliderComponent(GameObject* pOwner, Scene& scene, const float width, const float height) : 
+dae::ColliderComponent::ColliderComponent(GameObject* pOwner, const float width, const float height) : 
 	Component::Component(pOwner), m_SizeOfCollider{ width, height }
 {
-	scene.AddCollider(this);
 }
 
 void dae::ColliderComponent::CollisionCallback(GameObject* other)

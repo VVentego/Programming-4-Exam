@@ -30,6 +30,7 @@ namespace dae
         TunnelManager(TunnelManager&& other) = delete;
         TunnelManager& operator=(const TunnelManager& other) = delete;
         TunnelManager& operator=(TunnelManager&& other) = delete;
+        glm::vec2 FindNearestTunnel(const glm::vec2 position) const;
         bool InTunnel(const glm::vec2 position);
         void DigTunnel(const glm::vec2 position);
 

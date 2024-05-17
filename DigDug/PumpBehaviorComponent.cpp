@@ -1,11 +1,19 @@
 #include "PumpBehaviorComponent.h"
 #include "../Minigin/TextureComponent.h"
+#include "PookaBehavior.h"
 
-dae::PumpBehaviorComponent::PumpBehaviorComponent(GameObject* pOwner, std::vector<std::shared_ptr<Texture2D>> textures) :
-	Component::Component(pOwner), m_Textures{ textures }
+dae::PumpBehaviorComponent::PumpBehaviorComponent(GameObject* pOwner, const int playerIdx) :
+	Component::Component(pOwner), m_PlayerIdx{ playerIdx }
 {
-	m_TextureComponent = pOwner->GetComponent<TextureComponent>();
-	assert(m_TextureComponent != nullptr);
+	auto& resourceManager = ResourceManager::GetInstance();
+
+	m_Textures.push_back(resourceManager.LoadTexture("PumpRight.png"));
+	m_Textures.push_back(resourceManager.LoadTexture("PumpDown.png"));
+	m_Textures.push_back(resourceManager.LoadTexture("PumpLeft.png"));
+	m_Textures.push_back(resourceManager.LoadTexture("PumpUp.png"));
+
+	pOwner->AddComponent(std::make_unique<dae::TextureComponent>(pOwner));
+	m_TextureComponent = pOwner->GetComponent <dae::TextureComponent>();
 
 	m_TextureComponent->m_ShouldRender = false;
 	m_TextureComponent->SetTexture(m_Textures[0]);
@@ -15,7 +23,8 @@ dae::PumpBehaviorComponent::PumpBehaviorComponent(GameObject* pOwner, std::vecto
 void dae::PumpBehaviorComponent::Update(const double deltaTime)
 {
 	glm::vec2 velocity{};
-	if (m_Active)
+
+	if (m_Active && m_AttachedPooka == nullptr)
 	{
 		glm::vec2 currentPos{ m_pOwner->GetLocalPosition() };
 		switch (m_FacingDirection)
@@ -43,25 +52,61 @@ void dae::PumpBehaviorComponent::Update(const double deltaTime)
 		}
 		else
 		{
-			m_Active = false;
-			m_DistanceMoved = 0;
-			m_TextureComponent->m_ShouldRender = false;
-			m_pOwner->SetLocalPosition(0, 0);
+			Reset();
 		}
 	}
 }
 
 void dae::PumpBehaviorComponent::Fire(const Facing direction)
 {
-	m_Active = true;
-	m_TextureComponent->m_ShouldRender = true;
-
-	m_FacingDirection = direction;
-	if (static_cast<unsigned int>(m_FacingDirection) <= m_Textures.size())
-	{
-		m_TextureComponent->SetTexture(m_Textures[static_cast<int>(m_FacingDirection)]);
-	}
 	auto& soundManager = ServiceLocator::GetSoundManager();
+	if (!m_Hit)
+	{
+		m_Active = true;
+		m_TextureComponent->m_ShouldRender = true;
 
-	soundManager.Play(0, 100);
+		m_FacingDirection = direction;
+		if (static_cast<unsigned int>(m_FacingDirection) <= m_Textures.size())
+		{
+			m_TextureComponent->SetTexture(m_Textures[static_cast<int>(m_FacingDirection)]);
+		}
+
+		soundManager.Play(0, 100);
+	}
+
+	else
+	{
+		if (m_AttachedPooka != nullptr)
+		{
+			if (m_AttachedPooka->GetHooked() == false)
+			{
+				Reset();
+				m_AttachedPooka = nullptr;
+				return;
+			}
+
+			m_AttachedPooka->Inflate(m_PlayerIdx);
+			
+			soundManager.Play(1, 100);
+		}
+	}
+}
+
+void dae::PumpBehaviorComponent::CollisionEvent(GameObject* other)
+{
+	if (auto pooka = other->GetComponent<PookaBehavior>())
+	{
+		m_Hit = true;
+		m_AttachedPooka = pooka;
+	}
+}
+
+void dae::PumpBehaviorComponent::Reset()
+{
+	m_Active = false;
+	m_DistanceMoved = 0;
+	m_TextureComponent->m_ShouldRender = false;
+	m_Hit = false;
+	m_AttachedPooka = nullptr;
+	m_pOwner->SetLocalPosition(0, 0);
 }

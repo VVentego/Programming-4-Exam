@@ -7,8 +7,8 @@ namespace dae
         public Component
     {
 	public:
-		ColliderComponent(GameObject* pOwner, Scene& scene);
-		ColliderComponent(GameObject* pOwner, Scene& scene, const float width, const float height);
+		ColliderComponent(GameObject* pOwner);
+		ColliderComponent(GameObject* pOwner, const float width, const float height);
 		virtual ~ColliderComponent() = default;
 		ColliderComponent(const ColliderComponent& other) = delete;
 		ColliderComponent(ColliderComponent&& other) = delete;

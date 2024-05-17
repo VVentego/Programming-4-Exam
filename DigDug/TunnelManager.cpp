@@ -8,6 +8,11 @@ void dae::TunnelManager::Init(const std::string& tunnelFileName, std::vector <gl
 	m_TunnelManagerObject->AddComponent(std::move(tunnelComponent));
 }
 
+glm::vec2 dae::TunnelManager::FindNearestTunnel(const glm::vec2 position) const
+{
+	return m_TunnelManagerObject->GetComponent<TunnelComponent>()->FindNearestTunnel(position);
+}
+
 bool dae::TunnelManager::InTunnel(const glm::vec2 position)
 {
 	return m_TunnelManagerObject->GetComponent<TunnelComponent>()->InTunnel(position);

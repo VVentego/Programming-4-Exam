@@ -39,6 +39,8 @@ namespace dae
 
         void SetTunnelManager(TunnelManagerComponent* pTunnelManager);
 
+        void HandleEvent(const Event& event);
+
         const std::string m_PlayerName;
     private:
         friend class NormalState;

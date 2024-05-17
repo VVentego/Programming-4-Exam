@@ -57,19 +57,24 @@ namespace dae
 		const float m_GhostStateDuration{ 5.f };
 	};
 
-	class DeathState : public PookaState
+	class InflatedState : public PookaState
 	{
 	public:
-		DeathState() = default;
-		~DeathState() = default;
-		DeathState(const DeathState& other) = delete;
-		DeathState(DeathState&& other) = delete;
-		DeathState& operator=(const DeathState& other) = delete;
-		DeathState& operator=(DeathState&& other) = delete;
+		InflatedState() = default;
+		~InflatedState() = default;
+		InflatedState(const InflatedState& other) = delete;
+		InflatedState(InflatedState&& other) = delete;
+		InflatedState& operator=(const InflatedState& other) = delete;
+		InflatedState& operator=(InflatedState&& other) = delete;
 
 		PookaState* Update(PookaBehavior& pooka, const double deltaTime) override;
 		void OnEnter(PookaBehavior& pooka) override;
 		void OnExit(PookaBehavior& pooka) override;
+
+		int m_CurrentInflationState{};
+		const float m_TimeToDeflate{ 2.f };
+		float m_DeflationTimer{};
+		float m_DeathTimer{ .1f };
 	};
 }
 #define POOKASTATE

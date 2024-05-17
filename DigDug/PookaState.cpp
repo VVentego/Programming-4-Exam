@@ -1,15 +1,25 @@
 #include "PookaState.h"
-#ifdef _DEBUG
-#include <iostream>
-#endif // _DEBUG
 
-dae::PookaState* dae::NormalState::Update(PookaBehavior& pooka, const double deltaTime)
+
+using namespace dae;
+
+PookaState* NormalState::Update(PookaBehavior& pooka, const double deltaTime)
 {
 	m_StateTimer += deltaTime;
+
+	if (pooka.m_InflationLevel > 0)
+	{
+		return new InflatedState;
+	}
 
 	if (pooka.m_PlayersTransform.size() > 1)
 	{
 		pooka.SwapTarget(deltaTime);
+	}
+
+	if (!pooka.IsInTunnel())
+	{
+		return new GhostState;
 	}
 
 	pooka.CheckForTunnel();
@@ -18,27 +28,29 @@ dae::PookaState* dae::NormalState::Update(PookaBehavior& pooka, const double del
 
 	if (m_StateTimer > m_NormalStateDuration)
 	{
-#ifdef _DEBUG
-		std::cout << "Pooka State changed to ghost state!" << std::endl;
-#endif // _DEBUG
 		return new GhostState;
 	}
 
 	return nullptr;
 }
 
-void dae::NormalState::OnEnter(PookaBehavior& pooka)
+void NormalState::OnEnter(PookaBehavior& pooka)
 {
 	pooka.SetSprite(pooka.m_pWalkSprite);
 }
 
-void dae::NormalState::OnExit(PookaBehavior& pooka)
+void NormalState::OnExit(PookaBehavior& pooka)
 {
 }
 
-dae::PookaState* dae::GhostState::Update(PookaBehavior& pooka, const double deltaTime)
+PookaState* GhostState::Update(PookaBehavior& pooka, const double deltaTime)
 {
 	m_StateTimer += deltaTime;
+
+	if (pooka.m_InflationLevel > 0)
+	{
+		return new InflatedState;
+	}
 
 	if (pooka.m_PlayersTransform.size() > 1)
 	{
@@ -51,20 +63,93 @@ dae::PookaState* dae::GhostState::Update(PookaBehavior& pooka, const double delt
 
 	if (m_StateTimer > m_GhostStateDuration)
 	{
-#ifdef _DEBUG
-		std::cout << "Pooka State changed to normal state!" << std::endl;
-#endif // _DEBUG
+		if (pooka.IsInTunnel())
+		{
+			return new NormalState;
+		}
+
+		else
+		{
+			pooka.SeekNearestTunnel();
+		}
+	}
+
+	return nullptr;
+}
+
+void GhostState::OnEnter(PookaBehavior& pooka)
+{
+	pooka.SetSprite(pooka.m_pGhostSheet);
+}
+
+void GhostState::OnExit(PookaBehavior& pooka)
+{
+}
+
+PookaState* InflatedState::Update(PookaBehavior& pooka, const double deltaTime)
+{
+	if (m_CurrentInflationState > 3)
+	{
+		m_DeflationTimer += static_cast<float>(deltaTime);
+	}
+
+	if (m_DeflationTimer > m_TimeToDeflate)
+	{
+		--pooka.m_InflationLevel;
+	}
+
+	if (pooka.m_InflationLevel != m_CurrentInflationState)
+	{
+		if (m_CurrentInflationState < 5)
+		{
+			m_CurrentInflationState = pooka.m_InflationLevel;
+
+			switch (m_CurrentInflationState)
+			{
+			default:
+				m_DeflationTimer = 0;
+				[[fallthrough]];
+			case 1: 
+				pooka.SetSprite(pooka.m_pInflatedSprite1);
+				break;
+			case 2:
+				pooka.SetSprite(pooka.m_pInflatedSprite2);
+				break;
+			case 3:
+				pooka.SetSprite(pooka.m_pInflatedSprite3);
+				break;
+			case 4:
+				pooka.SetSprite(pooka.m_pInflatedSprite4);
+				break;
+			}
+		}
+	}
+
+	if (m_CurrentInflationState >= 4)
+	{
+		m_DeathTimer -= deltaTime;
+		if (m_DeathTimer <= 0)
+		{
+			pooka.Die();
+		}
+	}
+
+	if (pooka.m_InflationLevel <= 0)
+	{
+
 		return new NormalState;
 	}
 
 	return nullptr;
 }
 
-void dae::GhostState::OnEnter(PookaBehavior& pooka)
+void InflatedState::OnEnter(PookaBehavior& pooka)
 {
-	pooka.SetSprite(pooka.m_pGhostSheet);
+	m_CurrentInflationState = 1;
+	pooka.SetSprite(pooka.m_pInflatedSprite1);
 }
 
-void dae::GhostState::OnExit(PookaBehavior& pooka)
+void InflatedState::OnExit(PookaBehavior& pooka)
 {
+	pooka.m_InflationLevel = 0;
 }

@@ -16,7 +16,8 @@ void Scene::Add(std::unique_ptr<GameObject> object)
 
 void Scene::Remove(std::unique_ptr<GameObject> object)
 {
-	m_objects.erase(std::remove(m_objects.begin(), m_objects.end(), std::move(object)), m_objects.end());
+	object.reset();
+	m_objects.erase(std::remove(m_objects.begin(), m_objects.end(), object), m_objects.end());
 }
 
 void Scene::RemoveAll()
@@ -72,38 +73,51 @@ void dae::Scene::Destroy()
 	}
 }
 
-void dae::Scene::AddCollider(ColliderComponent* pCollider) 
+void dae::Scene::AddCollider(std::shared_ptr<ColliderComponent> pCollider) 
 {
-	m_pColliders.emplace_back(pCollider);
+	m_pColliders.emplace_back(std::weak_ptr<ColliderComponent>(pCollider));
 }
 
 void dae::Scene::UpdateCollisions() const
 {
-	for (ColliderComponent* collider : m_pColliders)
+	m_pColliders.erase(
+		std::remove_if(m_pColliders.begin(), m_pColliders.end(),
+			[](const std::weak_ptr<ColliderComponent>& collider) {
+				return collider.expired();
+			}),
+		m_pColliders.end());
+
+	for (std::weak_ptr<ColliderComponent> collider : m_pColliders)
 	{
-		for (ColliderComponent* otherCollider : m_pColliders)
+		if (collider.expired())
 		{
-			if (collider == otherCollider)
+			//remove collider from m_pColliders
+			continue;
+		}
+		for (std::weak_ptr<ColliderComponent> otherCollider : m_pColliders)
+		{
+
+			if (collider.lock() == otherCollider.lock())
 			{
 				continue;
 			}
 
-			const glm::vec2 colliderPosition{ collider->GetPosition() };
-			const glm::vec2 otherColliderPosition{ otherCollider->GetPosition() };
+			const glm::vec2 colliderPosition{ collider.lock()->GetPosition()};
+			const glm::vec2 otherColliderPosition{ otherCollider.lock()->GetPosition() };
 
 			// If one rectangle is on left side of the other
-			if ((colliderPosition.x + collider->m_SizeOfCollider.x) < otherColliderPosition.x || (otherColliderPosition.x + otherCollider->m_SizeOfCollider.x) < colliderPosition.x)
+			if ((colliderPosition.x + collider.lock()->m_SizeOfCollider.x) < otherColliderPosition.x || (otherColliderPosition.x + otherCollider.lock()->m_SizeOfCollider.x) < colliderPosition.x)
 			{
 				continue;
 			}
 
 			// If one rectangle is under the other
-			if (colliderPosition.y > (otherColliderPosition.y + otherCollider->m_SizeOfCollider.y) || otherColliderPosition.y > (colliderPosition.y + collider->m_SizeOfCollider.y))
+			if (colliderPosition.y > (otherColliderPosition.y + otherCollider.lock()->m_SizeOfCollider.y) || otherColliderPosition.y > (colliderPosition.y + collider.lock()->m_SizeOfCollider.y))
 			{
 				continue;
 			}
 
-			collider->CollisionCallback(otherCollider->GetOwner());
+			collider.lock()->CollisionCallback(otherCollider.lock()->GetOwner());
 		}
 	}
 }

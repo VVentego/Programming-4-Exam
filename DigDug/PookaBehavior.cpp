@@ -3,11 +3,16 @@
 #include "PookaState.h"
 #include "TunnelManager.h"
 #include "../Minigin/SpriteAnimatorComponent.h"
+#include "PumpBehaviorComponent.h"
 
 dae::PookaBehavior::PookaBehavior(GameObject* pOwner) :
 	Component(pOwner), m_CurrentState{ new dae::NormalState },
 	m_pWalkSprite{ std::make_shared<SpriteSheet>("PookaMoveRight.png", 1, 2) },
-	m_pGhostSheet{ std::make_shared<SpriteSheet>("PookaGhost.png", 1, 2) }
+	m_pGhostSheet{ std::make_shared<SpriteSheet>("PookaGhost.png", 1, 2) },
+	m_pInflatedSprite1{ std::make_shared<SpriteSheet>("PookaInflate1.png", 1, 1) },
+	m_pInflatedSprite2{ std::make_shared<SpriteSheet>("PookaInflate2.png", 1, 1) },
+	m_pInflatedSprite3{ std::make_shared<SpriteSheet>("PookaInflate3.png", 1, 1) },
+	m_pInflatedSprite4{ std::make_shared<SpriteSheet>("PookaInflate4.png", 1, 1) }
 {
 	auto pookaSpriteAnimator = std::make_unique<dae::SpriteAnimatorComponent>(pOwner);
 	pookaSpriteAnimator->AddSpriteSheet(m_pWalkSprite);
@@ -54,7 +59,12 @@ void dae::PookaBehavior::CollisionEvent(GameObject* other)
 	{
 		if (pump->IsActive())
 		{
-			ServiceLocator::GetSoundManager().Play(1, 50);
+			if (!m_IsHooked)
+			{
+				m_pPump = pump;
+				ServiceLocator::GetSoundManager().Play(1, 50);
+				m_IsHooked = true;
+			}
 		}
 	}
 }
@@ -73,6 +83,13 @@ void dae::PookaBehavior::TrackPlayer()
 		{
 			(playerPos.y > pookaPos.y) ? m_FacingDirection = Facing::up : m_FacingDirection = Facing::down;
 		}
+}
+
+void dae::PookaBehavior::Inflate(const int playerIdx)
+{
+	if (m_InflationLevel > 3) return;
+	m_InflationLevel++;
+	m_AttackingPlayerIdx = playerIdx;
 }
 
 void dae::PookaBehavior::CheckForTunnel()
@@ -154,4 +171,48 @@ void dae::PookaBehavior::UpdateMovement()
 	case Facing::up:
 		m_pOwner->SetLocalPosition(m_pOwner->GetLocalPosition() + glm::vec2{ 0, m_Speed });
 	}
+}
+
+void dae::PookaBehavior::SeekNearestTunnel()
+{
+	const glm::vec2 nearestTunnelPos = TunnelManager::GetInstance().FindNearestTunnel(m_pOwner->GetWorldPosition());
+	const glm::vec2 pookaPos{ m_pOwner->GetWorldPosition() };
+
+	if (std::abs(nearestTunnelPos.y - pookaPos.y) < 0.1f)
+	{
+		(nearestTunnelPos.x > pookaPos.x) ? m_FacingDirection = Facing::right : m_FacingDirection = Facing::left;
+	}
+
+	if (std::abs(nearestTunnelPos.x - pookaPos.x) < 0.1f)
+	{
+		(nearestTunnelPos.y > pookaPos.y) ? m_FacingDirection = Facing::up : m_FacingDirection = Facing::down;
+	}
+}
+
+bool dae::PookaBehavior::IsInTunnel() const
+{
+	return TunnelManager::GetInstance().InTunnel(m_pOwner->GetWorldPosition());
+}
+
+void dae::PookaBehavior::Die()
+{
+	ServiceLocator::GetSoundManager().Play(3, 100);
+	ServiceLocator::GetSoundManager().Play(2, 100);
+	m_pPump->Reset();
+	Event enemyKilledEvent;
+
+	//Notify event is passed to player and then player passes on a score gained event depending on depth
+	enemyKilledEvent.type = EventType::ENEMY_KILLED;
+	enemyKilledEvent.intValue = m_AttackingPlayerIdx;
+	enemyKilledEvent.stringValue = "Pooka";
+	NotifyObservers(enemyKilledEvent);
+
+	m_pOwner->Destroy();
+}
+
+void dae::PookaBehavior::GetFree()
+{
+	m_pPump->Reset();
+	m_IsHooked = false;
+	m_pPump = nullptr;
 }

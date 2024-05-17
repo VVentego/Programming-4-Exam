@@ -10,6 +10,8 @@
 namespace dae
 {
 	class Texture2D;
+	class Scene;
+	class ColliderComponent;
 
 	class GameObject final
 	{
@@ -30,6 +32,7 @@ namespace dae
 		void CollisionEvent(GameObject* other);
 
 		void AddComponent(std::unique_ptr<dae::Component> ComponentPtr);
+		void AddCollider(Scene& scene);
 		template <typename T>
 		void DestroyComponent()
 		{
@@ -78,6 +81,7 @@ namespace dae
 		GameObject(GameObject&& other) = delete;
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
+		ColliderComponent* GetCollider() const { return m_pCollider.get(); }
 
 		const Transform* GetTransform() const { return &m_Transform; }
 
@@ -93,6 +97,7 @@ namespace dae
 		void RemoveChild(GameObject* pChildObject);
 		void AddChild(GameObject* pChildObject);
 		void RecalculateTransform();
+		std::shared_ptr<ColliderComponent> m_pCollider;
 	};
 }
 

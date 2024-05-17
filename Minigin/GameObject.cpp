@@ -1,4 +1,6 @@
 #include "GameObject.h"
+#include "ColliderComponent.h"
+#include "Scene.h"
 void dae::GameObject::Start(){}
 
 void dae::GameObject::Update(const double deltaTime)
@@ -93,6 +95,14 @@ void dae::GameObject::AddComponent(std::unique_ptr<Component> component)
 	m_pComponents.emplace_back(std::move(component));
 }
 
+void dae::GameObject::AddCollider(Scene& scene)
+{
+	std::shared_ptr<ColliderComponent> collider = std::make_shared<ColliderComponent>(this);
+	m_pCollider = collider;
+
+	scene.AddCollider(collider);
+}
+
 void dae::GameObject::RemoveComponent()
 {
 	for (auto& component : m_pComponents)
@@ -107,6 +117,15 @@ void dae::GameObject::RemoveComponent()
 
 void dae::GameObject::Destroy()
 {
+	for (auto& component : m_pComponents)
+	{
+		component->Destroy();
+	}
+	for (auto& children : m_pChildren)
+	{
+		children->SetParent(nullptr);
+	}
+
 	m_IsDestroyed = true;
 }
 

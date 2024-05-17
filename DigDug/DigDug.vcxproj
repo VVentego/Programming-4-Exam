@@ -35,6 +35,7 @@
     <ClInclude Include="ComponentsHeader.h" />
     <ClInclude Include="DigDugController.h" />
     <ClInclude Include="DigDugState.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="FpsCounterComponent.h" />
     <ClInclude Include="LivesDisplayComponent.h" />
     <ClInclude Include="PookaBehavior.h" />
