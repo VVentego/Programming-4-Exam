@@ -16,7 +16,7 @@ bool LevelLoader::LoadLevel(const std::string& levelFile) {
     }
 
     LoadBackground();
-    LoadPlayerPosition();
+    LoadPlayers();
     LoadPookas();
     LoadFygars();
     LoadTunnels();
@@ -27,21 +27,38 @@ bool LevelLoader::LoadLevel(const std::string& levelFile) {
 void LevelLoader::LoadBackground() {
     lua_getglobal(L, "background");
     if (lua_isstring(L, -1)) {
-        background = lua_tostring(L, -1);
+        m_Background = lua_tostring(L, -1);
     }
     lua_pop(L, 1);
 }
 
-void LevelLoader::LoadPlayerPosition() {
-    lua_getglobal(L, "player");
+void LevelLoader::LoadPlayers() {
+    lua_getglobal(L, "players");
     if (lua_istable(L, -1)) {
-        lua_getfield(L, -1, "x");
-        playerPosition.x = static_cast<float>(lua_tointeger(L, -1));
-        lua_pop(L, 1);
+        lua_pushnil(L);
+        while (lua_next(L, -2)) {
+            if (lua_istable(L, -1)) {
+                Player player;
+                lua_getfield(L, -1, "id");
+                player.id = lua_tointeger(L, -1);
+                lua_pop(L, 1);
 
-        lua_getfield(L, -1, "y");
-        playerPosition.y = static_cast<float>(lua_tointeger(L, -1));
-        lua_pop(L, 1);
+                lua_getfield(L, -1, "x");
+                player.position.x = lua_tointeger(L, -1);
+                lua_pop(L, 1);
+
+                lua_getfield(L, -1, "y");
+                player.position.y = lua_tointeger(L, -1);
+                lua_pop(L, 1);
+
+                lua_getfield(L, -1, "usesController");
+                player.usesController = lua_toboolean(L, -1);
+                lua_pop(L, 1);
+
+                m_Players.push_back(player);
+            }
+            lua_pop(L, 1);
+        }
     }
     lua_pop(L, 1);
 }
@@ -61,7 +78,7 @@ void LevelLoader::LoadPookas() {
                 pos.y = static_cast<float>(lua_tointeger(L, -1));
                 lua_pop(L, 1);
 
-                pookas.push_back(pos);
+                m_Pookas.push_back(pos);
             }
             lua_pop(L, 1);
         }
@@ -84,7 +101,7 @@ void LevelLoader::LoadFygars() {
                 pos.y = static_cast<float>(lua_tointeger(L, -1));
                 lua_pop(L, 1);
 
-                fygars.push_back(pos);
+                m_Fygars.push_back(pos);
             }
             lua_pop(L, 1);
         }
@@ -107,7 +124,7 @@ void LevelLoader::LoadTunnels() {
                 pos.y = static_cast<float>(lua_tointeger(L, -1));
                 lua_pop(L, 1);
 
-                tunnels.push_back(pos);
+                m_Tunnels.push_back(pos);
             }
             lua_pop(L, 1);
         }
@@ -115,22 +132,25 @@ void LevelLoader::LoadTunnels() {
     lua_pop(L, 1);
 }
 
-std::string LevelLoader::GetBackground() const {
-    return background;
+std::string LevelLoader::GetBackground() const 
+{
+    return m_Background;
 }
 
-glm::vec2 LevelLoader::GetPlayerPosition() const {
-    return playerPosition;
+std::vector<Player> LevelLoader::GetPlayers() const
+{
+    return m_Players;
 }
+
 
 std::vector<glm::vec2> LevelLoader::GetPookas() const {
-    return pookas;
+    return m_Pookas;
 }
 
 std::vector<glm::vec2> LevelLoader::GetFygars() const {
-    return fygars;
+    return m_Fygars;
 }
 
 std::vector<glm::vec2> LevelLoader::GetTunnels() const {
-    return tunnels;
+    return m_Tunnels;
 }
