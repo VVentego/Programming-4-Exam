@@ -1,10 +1,10 @@
 #include "DigDugLevelState.h"
 
-void SinglePlayerState1::OnEnter(Scene& scene)
+void SinglePlayerState1::OnEnter(Scene&)
 {
 }
 
-void SinglePlayerState1::OnExit(Scene& scene)
+void SinglePlayerState1::OnExit(Scene&)
 {
 }
 
@@ -17,11 +17,11 @@ MainMenuState::MainMenuState() :
 {
 }
 
-void MainMenuState::OnEnter(Scene& scene)
+void MainMenuState::OnEnter(Scene&)
 {
 }
 
-void MainMenuState::OnExit(Scene& scene)
+void MainMenuState::OnExit(Scene&)
 {
 }
 

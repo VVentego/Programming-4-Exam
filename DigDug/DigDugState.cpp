@@ -1,18 +1,18 @@
 #include "DigDugState.h"
 
-dae::NormalState* dae::NormalState::Update(DigDugController&, const double deltaTime)
+dae::NormalState* dae::NormalState::Update(DigDugController&, const double)
 {
 	return nullptr;
 }
 
-void dae::NormalState::OnEnter(DigDugController& digDug)
+void dae::NormalState::OnEnter(DigDugController&)
 {
 };
 
-void dae::NormalState::OnExit(DigDugController& digDug) 
+void dae::NormalState::OnExit(DigDugController&) 
 {
 };
 
-void dae::NormalState::HandleInput(DigDugController& digDug) 
+void dae::NormalState::HandleInput(DigDugController&) 
 {
 };

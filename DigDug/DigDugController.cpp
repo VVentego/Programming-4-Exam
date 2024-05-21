@@ -98,7 +98,7 @@ void dae::DigDugController::OnPlayerDeath()
 	NotifyObserver(playerDiedEvent);
 }
 
-void dae::DigDugController::CollisionEvent(GameObject* other)
+void dae::DigDugController::CollisionEvent(GameObject*)
 {
 }
 

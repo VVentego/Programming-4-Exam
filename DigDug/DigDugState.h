@@ -13,11 +13,11 @@ namespace dae
 		DigDugState& operator=(const DigDugState& other) = delete;
 		DigDugState& operator=(DigDugState&& other) = delete;
 
-		virtual DigDugState* Update(DigDugController&, const double deltaTime) { return nullptr; }
+		virtual DigDugState* Update(DigDugController&, const double) { return nullptr; }
 
-		virtual void OnEnter(DigDugController& digDug) {};
-		virtual void OnExit(DigDugController& digDug) {};
-		virtual void HandleInput(DigDugController& digDug) {};
+		virtual void OnEnter(DigDugController&) {};
+		virtual void OnExit(DigDugController&) {};
+		virtual void HandleInput(DigDugController&) {};
 	};
 
 	class NormalState : public DigDugState

@@ -12,10 +12,10 @@ namespace dae
 		PookaState& operator=(const PookaState& other) = delete;
 		PookaState& operator=(PookaState&& other) = delete;
 
-		virtual PookaState* Update(PookaBehavior&, const double deltaTime) { return nullptr; }
+		virtual PookaState* Update(PookaBehavior&, const double) { return nullptr; }
 
-		virtual void OnEnter(PookaBehavior& pooka) {};
-		virtual void OnExit(PookaBehavior& pooka) {};
+		virtual void OnEnter(PookaBehavior&) {};
+		virtual void OnExit(PookaBehavior&) {};
 
 	protected:
 		float m_StateTimer{};

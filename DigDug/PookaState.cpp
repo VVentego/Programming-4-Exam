@@ -39,7 +39,7 @@ void NormalState::OnEnter(PookaBehavior& pooka)
 	pooka.SetSprite(pooka.m_pWalkSprite);
 }
 
-void NormalState::OnExit(PookaBehavior& pooka)
+void NormalState::OnExit(PookaBehavior&)
 {
 }
 
@@ -82,7 +82,7 @@ void GhostState::OnEnter(PookaBehavior& pooka)
 	pooka.SetSprite(pooka.m_pGhostSheet);
 }
 
-void GhostState::OnExit(PookaBehavior& pooka)
+void GhostState::OnExit(PookaBehavior&)
 {
 }
 

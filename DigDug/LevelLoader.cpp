@@ -38,17 +38,17 @@ void LevelLoader::LoadPlayers() {
         lua_pushnil(L);
         while (lua_next(L, -2)) {
             if (lua_istable(L, -1)) {
-                Player player;
+                Player player{};
                 lua_getfield(L, -1, "id");
-                player.id = lua_tointeger(L, -1);
+                player.id = static_cast<int>(lua_tointeger(L, -1));
                 lua_pop(L, 1);
 
                 lua_getfield(L, -1, "x");
-                player.position.x = lua_tointeger(L, -1);
+                player.position.x = static_cast<float>(lua_tointeger(L, -1));
                 lua_pop(L, 1);
 
                 lua_getfield(L, -1, "y");
-                player.position.y = lua_tointeger(L, -1);
+                player.position.y = static_cast<float>(lua_tointeger(L, -1));
                 lua_pop(L, 1);
 
                 lua_getfield(L, -1, "usesController");
@@ -69,7 +69,7 @@ void LevelLoader::LoadPookas() {
         lua_pushnil(L);
         while (lua_next(L, -2)) {
             if (lua_istable(L, -1)) {
-                glm::vec2 pos;
+                glm::vec2 pos{};
                 lua_getfield(L, -1, "x");
                 pos.x = static_cast<float>(lua_tointeger(L, -1));
                 lua_pop(L, 1);
@@ -92,7 +92,7 @@ void LevelLoader::LoadFygars() {
         lua_pushnil(L);
         while (lua_next(L, -2)) {
             if (lua_istable(L, -1)) {
-                glm::vec2 pos;
+                glm::vec2 pos{};
                 lua_getfield(L, -1, "x");
                 pos.x = static_cast<float>(lua_tointeger(L, -1));
                 lua_pop(L, 1);
@@ -115,7 +115,7 @@ void LevelLoader::LoadTunnels() {
         lua_pushnil(L);
         while (lua_next(L, -2)) {
             if (lua_istable(L, -1)) {
-                glm::vec2 pos;
+                glm::vec2 pos{};
                 lua_getfield(L, -1, "x");
                 pos.x = static_cast<float>(lua_tointeger(L, -1));
                 lua_pop(L, 1);
