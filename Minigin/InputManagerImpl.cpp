@@ -1,6 +1,5 @@
 #include "InputManager.h"
 #include <SDL.h>
-#include <imgui_impl_sdl2.h>
 #include <Windows.h>
 #include <XInput.h>
 

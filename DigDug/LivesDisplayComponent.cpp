@@ -4,7 +4,12 @@
 dae::LivesDisplayComponent::LivesDisplayComponent(GameObject* pOwner, const std::string& playerName) :
 	Component::Component(pOwner), m_PlayerName{ playerName }
 {
+	EventObserver::GetInstance().AddListener(this);
 	m_pTextComponent = m_pOwner->GetComponent<TextComponent>();
+}
+
+dae::LivesDisplayComponent::~LivesDisplayComponent()
+{
 }
 
 void dae::LivesDisplayComponent::HandleEvent(const Event& event)

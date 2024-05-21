@@ -205,7 +205,7 @@ void dae::PookaBehavior::Die()
 	enemyKilledEvent.type = EventType::ENEMY_KILLED;
 	enemyKilledEvent.intValue = m_AttackingPlayerIdx;
 	enemyKilledEvent.stringValue = "Pooka";
-	NotifyObservers(enemyKilledEvent);
+	NotifyObserver(enemyKilledEvent);
 
 	m_pOwner->Destroy();
 }

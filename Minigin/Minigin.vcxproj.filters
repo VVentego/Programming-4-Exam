@@ -19,9 +19,6 @@
     <Filter Include="Header Files\Base Class Headers">
       <UniqueIdentifier>{c91278c2-fdbd-4866-8c20-5716d2880193}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Imgui">
-      <UniqueIdentifier>{9b11e063-478a-411d-8d9e-43aa66e56e46}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Singleton.h">
@@ -66,43 +63,13 @@
     <ClInclude Include="TextureComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\3rdParty\imgui\imconfig.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rdParty\imgui\imgui.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rdParty\imgui\imgui_internal.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rdParty\imgui\imstb_rectpack.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rdParty\imgui\imstb_textedit.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rdParty\imgui\imstb_truetype.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rdParty\imgui\backends\imgui_impl_sdl2.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rdParty\imgui\imgui_plot.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="..\3rdParty\imgui\backends\imgui_impl_opengl3.h">
-      <Filter>Imgui</Filter>
-    </ClInclude>
     <ClInclude Include="GameActorCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Command.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerObserver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EventHandler.h">
+    <ClInclude Include="EventObserver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ColliderComponent.h">
@@ -125,6 +92,12 @@
     </ClInclude>
     <ClInclude Include="InputSystem.h">
       <Filter>Header Files\Base Class Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="EventListener.h">
+      <Filter>Header Files\Base Class Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelState.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -167,33 +140,6 @@
     <ClCompile Include="TextureComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\3rdParty\imgui\imgui.cpp">
-      <Filter>Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rdParty\imgui\imgui_demo.cpp">
-      <Filter>Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rdParty\imgui\imgui_draw.cpp">
-      <Filter>Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rdParty\imgui\imgui_tables.cpp">
-      <Filter>Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rdParty\imgui\imgui_widgets.cpp">
-      <Filter>Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rdParty\imgui\backends\imgui_impl_sdl2.cpp">
-      <Filter>Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rdParty\imgui\imgui_plot.cpp">
-      <Filter>Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\3rdParty\imgui\backends\imgui_impl_opengl3.cpp">
-      <Filter>Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerObserver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ColliderComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -210,6 +156,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ServiceLocator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EventObserver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

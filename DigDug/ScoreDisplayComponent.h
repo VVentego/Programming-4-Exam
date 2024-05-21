@@ -1,6 +1,5 @@
 #ifndef SCOREDISPLAYCOMPONENT
 #define SCOREDISPLAYCOMPONENT
-#include "../Minigin/EventHandler.h"
 #include "../Minigin/Component.h"
 
 namespace dae
@@ -20,6 +19,7 @@ namespace dae
 		ScoreDisplayComponent& operator=(ScoreDisplayComponent&& other) = delete;
 
 		virtual void HandleEvent(const Event& event) override;
+		const int GetScore() const { return m_Score; }
 	private:
 		int m_Score{ 0 };
 		dae::TextComponent* m_pTextComponent;

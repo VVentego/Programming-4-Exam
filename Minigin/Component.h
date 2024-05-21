@@ -2,18 +2,10 @@
 #define COMPONENT
 #include <memory>
 #include "GameObject.h"
-#include "PlayerObserver.h"
+#include "EventObserver.h"
 #include "../Minigin/ServiceLocator.h"
-
 namespace dae
 {
-	class EventListener 
-	{
-	public:
-		virtual ~EventListener() = default;
-		virtual void HandleEvent(const Event& event) = 0;
-	};
-
 	struct Rectf
 	{
 		float x{};
@@ -42,17 +34,13 @@ namespace dae
 		Component& operator=(Component&& other) = delete;
 		bool m_IsDestroyed{};
 
-		virtual void AddObserver(std::shared_ptr<PlayerObserver> observer);
 		virtual void CollisionEvent(GameObject*) {};
 
 	protected:
-		virtual void NotifyObservers(Event event);
-		virtual void RemoveObserver(std::weak_ptr<PlayerObserver> observer);
-
-		virtual void RemoveAllObservers();
+		virtual void NotifyObserver(Event event);
 
 		GameObject* m_pOwner{};
-		std::vector<std::weak_ptr<PlayerObserver>> m_pObservers;
+		std::vector<std::weak_ptr<EventObserver>> m_pObservers;
 	};
 }
 

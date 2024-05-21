@@ -16,7 +16,7 @@ namespace dae
     class TunnelManagerComponent;
     class DigDugState;
     class DigDugController final :
-        public Component, public Player
+        public Component, public Player, public EventListener
     {
     public:
         DigDugController(GameObject* pOwner, const std::string& playerName, ControllerInfo controllerInfo, GameObject* pPump);

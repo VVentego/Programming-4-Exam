@@ -1,6 +1,5 @@
 #include "DigDugController.h"
 #include "TunnelManager.h"
-#include "../Minigin/EventHandler.h"
 
 dae::DigDugController::DigDugController(GameObject* pOwner, const std::string& playerName, ControllerInfo controllerInfo, GameObject* pPump) :
 	Component(pOwner), m_PlayerName{ playerName }, m_ControllerInfo{ controllerInfo }, m_pPumpObject{ pPump }
@@ -11,6 +10,7 @@ dae::DigDugController::DigDugController(GameObject* pOwner, const std::string& p
 	m_Pump = m_pPumpObject->GetComponent<PumpBehaviorComponent>();
 	assert(m_Pump != nullptr);
 
+	EventObserver::GetInstance().AddListener(this);
 }
 
 void dae::DigDugController::Update(const double deltaTime)
@@ -95,7 +95,7 @@ void dae::DigDugController::OnPlayerDeath()
 	playerDiedEvent.type = EventType::PLAYER_DIED;
 	playerDiedEvent.stringValue = m_PlayerName.c_str();
 
-	NotifyObservers(playerDiedEvent);
+	NotifyObserver(playerDiedEvent);
 }
 
 void dae::DigDugController::CollisionEvent(GameObject* other)
@@ -115,29 +115,50 @@ void dae::DigDugController::HandleEvent(const Event& event)
 	case EventType::ENEMY_KILLED:
 		Event scoreEvent;
 		scoreEvent.type = EventType::SCORE_INCREASED;
+		scoreEvent.stringValue = m_PlayerName;
 		if (event.stringValue == "Pooka")
 		{
 			constexpr int quarterWindowHeight = 480 / 4;
 			const glm::vec2 pos{ m_pOwner->GetWorldPosition() };
-			if (pos.y < quarterWindowHeight && pos.y > 0)
+			if (pos.y < quarterWindowHeight * 4 && pos.y > quarterWindowHeight * 3)
 			{
 				scoreEvent.intValue = 500;
 			}
-			else if (pos.y < quarterWindowHeight * 2 && pos.y > quarterWindowHeight)
+			else if (pos.y < quarterWindowHeight * 3 && pos.y > quarterWindowHeight * 2)
 			{
 				scoreEvent.intValue = 400;
 			}
-			else if (pos.y < quarterWindowHeight * 3 && pos.y > quarterWindowHeight * 2)
+			else if (pos.y < quarterWindowHeight * 2 && pos.y > quarterWindowHeight)
 			{
 				scoreEvent.intValue = 300;
 			}
-			else if (pos.y < quarterWindowHeight * 4 && pos.y > quarterWindowHeight * 3)
+			else if (pos.y < quarterWindowHeight && pos.y > 0)
 			{
 				scoreEvent.intValue = 200;
 			}
 		}
-
-		NotifyObservers(scoreEvent);
+		else if (event.stringValue == "Fygar")
+		{
+			constexpr int quarterWindowHeight = 480 / 4;
+			const glm::vec2 pos{ m_pOwner->GetWorldPosition() };
+			if (pos.y < quarterWindowHeight * 4 && pos.y > quarterWindowHeight * 3)
+			{
+				scoreEvent.intValue = 1000;
+			}
+			else if (pos.y < quarterWindowHeight * 3 && pos.y > quarterWindowHeight * 2)
+			{
+				scoreEvent.intValue = 800;
+			}
+			else if (pos.y < quarterWindowHeight * 2 && pos.y > quarterWindowHeight)
+			{
+				scoreEvent.intValue = 600;
+			}
+			else if (pos.y < quarterWindowHeight && pos.y > 0)
+			{
+				scoreEvent.intValue = 400;
+			}
+		}
+		NotifyObserver(scoreEvent);
 		break;
 	}
 }

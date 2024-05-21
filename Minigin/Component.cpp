@@ -9,49 +9,11 @@ dae::Component::Component(GameObject* owner) :
 
 dae::Component::~Component() 
 {
-	RemoveAllObservers();
 }
 
-void dae::Component::NotifyObservers(Event event)
+void dae::Component::NotifyObserver(Event event)
 {
-	for (std::weak_ptr<PlayerObserver> observer : m_pObservers)
-	{
-		if (!observer.expired())
-		{
-			observer.lock()->OnNotify(event);
-		}
-
-		else RemoveObserver(observer);
-	}
-}
-
-void dae::Component::AddObserver(std::shared_ptr<PlayerObserver> observer)
-{
-	observer->AddSubject(this);
-	m_pObservers.emplace_back(std::weak_ptr<PlayerObserver>(observer));
-}
-
-void dae::Component::RemoveObserver(std::weak_ptr<PlayerObserver> observer)
-{
-	const auto pos = std::find_if(m_pObservers.begin(), m_pObservers.end(), [observer](const std::weak_ptr<PlayerObserver>& otherPtr) {
-		return otherPtr.lock().get() == observer.lock().get(); });
-
-	if (pos != m_pObservers.end())
-	{
-		m_pObservers.erase(pos);
-	}
-}
-
-void dae::Component::RemoveAllObservers()
-{
-	for (std::weak_ptr<PlayerObserver> observer : m_pObservers)
-	{
-		if (!observer.expired())
-		{
-			observer.lock()->RemoveSubject(this);
-		}
-	}
-	m_pObservers.clear();
+	EventObserver::GetInstance().Notify(event);
 }
 
 void dae::Component::Start() {}

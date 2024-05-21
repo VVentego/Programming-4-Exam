@@ -4,6 +4,7 @@
 dae::ScoreDisplayComponent::ScoreDisplayComponent(GameObject* pOwner, const std::string& playerName) :
 	Component::Component(pOwner), m_PlayerName{ playerName }
 {
+	EventObserver::GetInstance().AddListener(this);
 	m_pTextComponent = m_pOwner->GetComponent<TextComponent>();
 }
 

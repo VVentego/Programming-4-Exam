@@ -5,7 +5,7 @@ using namespace dae;
 
 PookaState* NormalState::Update(PookaBehavior& pooka, const double deltaTime)
 {
-	m_StateTimer += deltaTime;
+	m_StateTimer += static_cast<float>(deltaTime);
 
 	if (pooka.m_InflationLevel > 0)
 	{
@@ -14,7 +14,7 @@ PookaState* NormalState::Update(PookaBehavior& pooka, const double deltaTime)
 
 	if (pooka.m_PlayersTransform.size() > 1)
 	{
-		pooka.SwapTarget(deltaTime);
+		pooka.SwapTarget(static_cast<float>(deltaTime));
 	}
 
 	if (!pooka.IsInTunnel())
@@ -45,7 +45,7 @@ void NormalState::OnExit(PookaBehavior& pooka)
 
 PookaState* GhostState::Update(PookaBehavior& pooka, const double deltaTime)
 {
-	m_StateTimer += deltaTime;
+	m_StateTimer += static_cast<float>(deltaTime);
 
 	if (pooka.m_InflationLevel > 0)
 	{
@@ -127,7 +127,7 @@ PookaState* InflatedState::Update(PookaBehavior& pooka, const double deltaTime)
 
 	if (m_CurrentInflationState >= 4)
 	{
-		m_DeathTimer -= deltaTime;
+		m_DeathTimer -= static_cast<float>(deltaTime);
 		if (m_DeathTimer <= 0)
 		{
 			pooka.Die();
