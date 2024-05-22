@@ -2,12 +2,6 @@
 #define PLAYER
 namespace dae
 {
-	struct ControllerInfo
-	{
-		bool usingController{ false };
-		int playerControllerIdx{};
-	};
-
 	class Player
 	{
 	protected:

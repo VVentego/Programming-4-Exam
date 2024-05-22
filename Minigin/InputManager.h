@@ -3,10 +3,6 @@
 #include <vector>
 #include <memory>
 #include "InputSystem.h"
-#include <map>
-#include <thread>
-#include <queue>
-#include <map>
 
 namespace dae
 {
@@ -30,12 +26,6 @@ namespace dae
 		void BindXButtonMoveUp(std::unique_ptr<Command> command);
 		void BindXAttack(std::unique_ptr<Command> command);
 		void BindAttack(std::unique_ptr<Command> command);
-		void BindDeath(std::unique_ptr<Command> command);
-		void BindXDeath(std::unique_ptr<Command> command);
-
-		std::queue<Command*>* AddPlayer(ControllerInfo info) { m_InputImpl->AddPlayer(info); }
-		void RemovePlayer(const int playerIdx) { m_InputImpl->RemovePlayer(playerIdx); }
-		void SetMultiplayer(bool isMultiplayer) { m_InputImpl->SetMultiplayer(isMultiplayer); }
 
 		Command* ProcessInput();
 		Command* ProcessXInput(const int playerIdx);
@@ -58,8 +48,8 @@ namespace dae
 		InputManagerImpl& operator=(const InputManagerImpl& other) = delete;
 		InputManagerImpl& operator=(InputManagerImpl&& other) = delete;
 
-		Command* DoProcessInput();
 		Command* DoProcessXInput(const int playerIdx);
+		Command* DoProcessInput();
 		void BindButtonMoveLeft(std::unique_ptr<Command> command) { m_MoveLeft = std::move(command); }
 		void BindButtonMoveDown(std::unique_ptr<Command> command) { m_MoveDown = std::move(command); }
 		void BindButtonMoveRight(std::unique_ptr<Command> command) { m_MoveRight = std::move(command); }
@@ -70,12 +60,6 @@ namespace dae
 		void BindXButtonMoveUp(std::unique_ptr<Command> command) { m_XMoveUp = std::move(command); }
 		void BindXAttack(std::unique_ptr<Command> command) { m_XAttack = std::move(command); }
 		void BindAttack(std::unique_ptr<Command> command) { m_Attack = std::move(command); }
-		void BindDeath(std::unique_ptr<Command> command) { m_Death = std::move(command); }
-		void BindXDeath(std::unique_ptr<Command> command) { m_XDeath = std::move(command); }
-
-		std::queue<Command*>* AddPlayer(ControllerInfo info);
-		void SetMultiplayer(bool isMultiplayer) { m_Multiplayer = isMultiplayer; }
-		void RemovePlayer(const int playerIdx);
 
 		bool ShouldQuit() const { return m_ShouldQuit; }
 	private:
@@ -89,17 +73,11 @@ namespace dae
 		std::unique_ptr<Command> m_MoveUp{};
 		std::unique_ptr<Command> m_XAttack{};
 		std::unique_ptr<Command> m_Attack{};
-		std::unique_ptr<Command> m_XDeath{};
-		std::unique_ptr<Command> m_Death{};
 
-		std::map<std::jthread, int> m_Threads;
-		std::map<std::queue<Command*>, int> m_CommandQueues;
-		std::atomic<bool> m_ShouldQuit{ false };
+		bool m_ShouldQuit{ false };
 
 		float m_X{};
 		float m_Y{};
-
-		bool m_Multiplayer{};
 	};
 }
 #endif // !INPUTMANAGER

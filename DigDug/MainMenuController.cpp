@@ -6,7 +6,6 @@ MainMenuController::MainMenuController(GameObject* pOwner) :
 	Component::Component(pOwner)
 {
 	auto& resourceManager = ResourceManager::GetInstance();
-	m_CommandQueue = ServiceLocator::GetInputManager().AddPlayer({ false, 0 });
 
 	std::shared_ptr<Font> font = std::move(resourceManager.LoadFont("Lingua.otf", 14));
 
@@ -22,27 +21,6 @@ void dae::MainMenuController::Update(const double)
 
 void dae::MainMenuController::HandleInput()
 {
-	if (!m_CommandQueue->empty())
-	{
-		m_CommandQueue->front()->Execute(this);
-		m_CommandQueue->pop();
-	}
-
-	//auto& input = ServiceLocator::GetInputManager();
-
-	//Command* command = input.ProcessXInput(0);
-
-	//if (command != nullptr)
-	//{
-	//	command->Execute(this);
-	//}
-	//
-	//command = input.ProcessInput();
-
-	//if (command != nullptr)
-	//{
-	//	command->Execute(this);
-	//}
 }
 
 void dae::MainMenuController::MoveDown()

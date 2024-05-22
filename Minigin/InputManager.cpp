@@ -67,16 +67,6 @@ void dae::InputManager::BindAttack(std::unique_ptr<Command> command)
 	m_InputImpl->BindAttack(std::move(command));
 }
 
-void dae::InputManager::BindDeath(std::unique_ptr<Command> command)
-{
-	m_InputImpl->BindDeath(std::move(command));
-}
-
-void dae::InputManager::BindXDeath(std::unique_ptr<Command> command)
-{
-	m_InputImpl->BindXDeath(std::move(command));
-}
-
 dae::Command* dae::InputManager::ProcessInput()
 {
 	m_Quit = m_InputImpl->ShouldQuit();

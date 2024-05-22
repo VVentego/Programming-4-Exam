@@ -5,6 +5,11 @@
 
 namespace dae
 {
+	struct ControllerInfo
+	{
+		bool usingController{ false };
+		int playerControllerIdx{};
+	};
 	class InputSystem
 	{
 	public:
@@ -25,14 +30,9 @@ namespace dae
 		virtual void BindXButtonMoveUp(std::unique_ptr<Command> command) = 0;
 		virtual void BindXAttack(std::unique_ptr<Command> command) = 0;
 		virtual void BindAttack(std::unique_ptr<Command> command) = 0;
-		virtual void BindDeath(std::unique_ptr<Command> command) = 0;
-		virtual void BindXDeath(std::unique_ptr<Command> command) = 0;
 
 		virtual Command* ProcessInput() = 0;
 		virtual Command* ProcessXInput(const int playerIdx) = 0;
-
-		virtual std::queue<Command*>* AddPlayer(ControllerInfo) = 0;
-		virtual void RemovePlayer(const int) = 0;
 
 		virtual bool HasQuit() const { return m_Quit; }
 
@@ -60,14 +60,9 @@ namespace dae
 		void BindXButtonMoveUp(std::unique_ptr<Command>) override {};
 		void BindXAttack(std::unique_ptr<Command>) override {};
 		void BindAttack(std::unique_ptr<Command>) override {};
-		void BindDeath(std::unique_ptr<Command>) override {};
-		void BindXDeath(std::unique_ptr<Command>) override {};
 
 		Command* ProcessInput() override { return nullptr; }
 		Command* ProcessXInput(const int) override { return nullptr; }
-
-		std::queue<Command*>* AddPlayer(ControllerInfo) override { return nullptr; }
-		void RemovePlayer(const int) override {};
 
 		bool HasQuit() const { return m_Quit; }
 	};

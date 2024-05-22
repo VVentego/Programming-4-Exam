@@ -25,7 +25,6 @@ dae::Command* dae::InputManager::InputManagerImpl::DoProcessXInput(const int pla
 
 	if (!(m_PrevState.Gamepad.wButtons & XINPUT_GAMEPAD_X) && (m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_X))
 	{
-		return m_XDeath.get();
 	}
 
 
@@ -45,7 +44,6 @@ dae::Command* dae::InputManager::InputManagerImpl::DoProcessXInput(const int pla
 	{
 		return m_XMoveUp.get();
 	}
-
 	return nullptr;
 }
 
@@ -75,7 +73,6 @@ dae::Command* dae::InputManager::InputManagerImpl::DoProcessInput()
 				return m_MoveUp.get();
 				break;
 			case SDL_SCANCODE_C:
-				return m_Death.get();
 				break;
 			case SDL_SCANCODE_X:
 			case SDL_SCANCODE_Z: SDL_FALLTHROUGH;
@@ -85,34 +82,4 @@ dae::Command* dae::InputManager::InputManagerImpl::DoProcessInput()
 		}
 	}
 	return nullptr;
-}
-
-std::queue<dae::Command*>* dae::InputManager::InputManagerImpl::AddPlayer(ControllerInfo info)
-{
-	std::queue<Command*>* queue = new std::queue<Command*>();
-	m_CommandQueues.insert(std::pair(*queue, info.playerControllerIdx));
-	if (info.usingController)
-	{
-		m_Threads.insert(std::pair(std::jthread(InputManagerImpl::DoProcessXInput, info.playerControllerIdx), info.playerControllerIdx));
-	}
-
-	else
-	{
-		m_Threads.insert(std::pair(std::jthread(InputManagerImpl::DoProcessInput), info.playerControllerIdx));
-	}
-
-	return queue;
-}
-
-void dae::InputManager::InputManagerImpl::RemovePlayer(const int playerIdx)
-{
-	std::remove(m_CommandQueues.begin(), m_CommandQueues.end(), playerIdx);
-	auto thread = std::find(m_Threads.begin(), m_Threads.end(), playerIdx);
-	if (thread != m_Threads.end())
-	{
-		if (thread->first.joinable())
-		{
-			std::remove(m_Threads.begin(), m_Threads.end(), playerIdx);
-		}
-	}
 }

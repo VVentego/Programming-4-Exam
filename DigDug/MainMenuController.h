@@ -28,7 +28,6 @@ namespace dae
         void Shoot() override;
         int m_SelectionIdx{};
         const int m_MaxOptions{ 3 };
-        std::queue<Command*>* m_CommandQueue;
     };
 }
 #endif //MAINMENU

@@ -1,6 +1,5 @@
 #ifndef DIGDUG
 #define DIGDUG
-
 #include <Component.h>
 #include <Player.h>
 #include "PumpBehaviorComponent.h"
@@ -28,6 +27,7 @@ namespace dae
         void MoveLeft() override;
         void MoveUp() override;
         void Shoot() override;
+        void OnPlayerDeath();
         virtual void CollisionEvent(GameObject* other) override;
 
         void SetTunnelManager(TunnelManagerComponent* pTunnelManager);
@@ -48,8 +48,6 @@ namespace dae
         PumpBehaviorComponent* m_Pump{};
         TunnelManagerComponent* m_pTunnelManager{};
         DigDugState* m_CurrentState{};
-
-        std::queue<Command*>* m_CommandQueue{};
     };
 }
 #endif // !DIGDUG
