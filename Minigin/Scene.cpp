@@ -1,11 +1,13 @@
 #include "Scene.h"
 #include <algorithm>
 #include "LevelState.h"
-using namespace dae;
 
+using namespace dae;
 unsigned int Scene::m_idCounter = 0;
 
-Scene::Scene(const std::string& name) : m_name(name) {}
+Scene::Scene(const std::string& name) : m_name(name) 
+{
+}
 
 Scene::~Scene() = default;
 
@@ -49,7 +51,7 @@ void Scene::Render() const
 	}
 }
 
-void dae::Scene::Destroy()
+void Scene::Destroy()
 {
 	for (auto& object : m_objects)
 	{
@@ -63,12 +65,12 @@ void dae::Scene::Destroy()
 	}
 }
 
-void dae::Scene::AddCollider(std::shared_ptr<ColliderComponent> pCollider) 
+void Scene::AddCollider(std::shared_ptr<ColliderComponent> pCollider) 
 {
 	m_pColliders.emplace_back(std::weak_ptr<ColliderComponent>(pCollider));
 }
 
-void dae::Scene::UpdateCollisions() const
+void Scene::UpdateCollisions() const
 {
 	m_pColliders.erase(
 		std::remove_if(m_pColliders.begin(), m_pColliders.end(),

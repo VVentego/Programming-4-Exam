@@ -2,6 +2,12 @@
 #define PLAYER
 namespace dae
 {
+	struct ControllerInfo
+	{
+		bool usingController{ false };
+		int playerControllerIdx{};
+	};
+
 	class Player
 	{
 	protected:
@@ -18,7 +24,6 @@ namespace dae
 		virtual void MoveLeft() = 0;
 		virtual void MoveUp() = 0;
 		virtual void Shoot() = 0;
-		virtual void OnPlayerDeath() = 0;
 	};
 }
 #endif //PLAYER

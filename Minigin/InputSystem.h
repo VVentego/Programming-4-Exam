@@ -31,6 +31,9 @@ namespace dae
 		virtual Command* ProcessInput() = 0;
 		virtual Command* ProcessXInput(const int playerIdx) = 0;
 
+		virtual std::queue<Command*>* AddPlayer(ControllerInfo) = 0;
+		virtual void RemovePlayer(const int) = 0;
+
 		virtual bool HasQuit() const { return m_Quit; }
 
 	protected:
@@ -62,6 +65,9 @@ namespace dae
 
 		Command* ProcessInput() override { return nullptr; }
 		Command* ProcessXInput(const int) override { return nullptr; }
+
+		std::queue<Command*>* AddPlayer(ControllerInfo) override { return nullptr; }
+		void RemovePlayer(const int) override {};
 
 		bool HasQuit() const { return m_Quit; }
 	};

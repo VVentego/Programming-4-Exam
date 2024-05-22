@@ -45,46 +45,7 @@ dae::Command* dae::InputManager::InputManagerImpl::DoProcessXInput(const int pla
 	{
 		return m_XMoveUp.get();
 	}
-	/*
-	const bool invertY{ true };
 
-	float LX = m_CurrentState.Gamepad.sThumbLX;
-	float LY = invertY ? static_cast<float>(-m_CurrentState.Gamepad.sThumbLY) : static_cast<float>(m_CurrentState.Gamepad.sThumbLY);
-
-	//determine how far the controller is pushed
-	float magnitude = sqrt(LX * LX + LY * LY);
-
-	//determine the direction the controller is pushed
-	float normalizedLX = LX / magnitude;
-	float normalizedLY = LY / magnitude;
-
-	float normalizedMagnitude = 0;
-
-	//check if the controller is outside a circular dead zone
-	if (magnitude > XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)
-	{
-		//clip the magnitude at its expected maximum value
-		if (magnitude > 32767) magnitude = 32767;
-
-		//adjust magnitude relative to the end of the dead zone
-		magnitude -= XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
-
-		//optionally normalize the magnitude with respect to its expected range
-		//giving a magnitude value of 0.0 to 1.0
-		normalizedMagnitude = magnitude / (32767 - XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
-	}
-	else //if the controller is in the deadzone zero out the magnitude
-	{
-		magnitude = 0.0;
-		normalizedMagnitude = 0.0;
-	}
-
-	if (normalizedMagnitude != 0.0)
-	{
-		m_XMove->Update(normalizedLX * normalizedMagnitude * 2, -normalizedLY * normalizedMagnitude * 2);
-		return m_XMove.get();
-	}
-	*/
 	return nullptr;
 }
 
@@ -122,10 +83,36 @@ dae::Command* dae::InputManager::InputManagerImpl::DoProcessInput()
 				break;
 			}
 		}
-		//if (e.type == SDL_MOUSEBUTTONDOWN) {
-		//}
-		//ImGui_ImplSDL2_ProcessEvent(&e);
-		// etc...
 	}
 	return nullptr;
+}
+
+std::queue<dae::Command*>* dae::InputManager::InputManagerImpl::AddPlayer(ControllerInfo info)
+{
+	std::queue<Command*>* queue = new std::queue<Command*>();
+	m_CommandQueues.insert(std::pair(*queue, info.playerControllerIdx));
+	if (info.usingController)
+	{
+		m_Threads.insert(std::pair(std::jthread(InputManagerImpl::DoProcessXInput, info.playerControllerIdx), info.playerControllerIdx));
+	}
+
+	else
+	{
+		m_Threads.insert(std::pair(std::jthread(InputManagerImpl::DoProcessInput), info.playerControllerIdx));
+	}
+
+	return queue;
+}
+
+void dae::InputManager::InputManagerImpl::RemovePlayer(const int playerIdx)
+{
+	std::remove(m_CommandQueues.begin(), m_CommandQueues.end(), playerIdx);
+	auto thread = std::find(m_Threads.begin(), m_Threads.end(), playerIdx);
+	if (thread != m_Threads.end())
+	{
+		if (thread->first.joinable())
+		{
+			std::remove(m_Threads.begin(), m_Threads.end(), playerIdx);
+		}
+	}
 }

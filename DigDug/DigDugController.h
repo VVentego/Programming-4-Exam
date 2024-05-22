@@ -1,18 +1,12 @@
 #ifndef DIGDUG
 #define DIGDUG
 
-#include "../Minigin/Component.h"
-#include "../Minigin/Player.h"
+#include <Component.h>
+#include <Player.h>
 #include "PumpBehaviorComponent.h"
 
 namespace dae
 {
-    struct ControllerInfo
-    {
-        bool usingController{ false };
-        int playerControllerIdx{};
-    };
-
     class TunnelManagerComponent;
     class DigDugState;
     class DigDugController final :
@@ -34,7 +28,6 @@ namespace dae
         void MoveLeft() override;
         void MoveUp() override;
         void Shoot() override;
-        void OnPlayerDeath() override;
         virtual void CollisionEvent(GameObject* other) override;
 
         void SetTunnelManager(TunnelManagerComponent* pTunnelManager);
@@ -55,6 +48,8 @@ namespace dae
         PumpBehaviorComponent* m_Pump{};
         TunnelManagerComponent* m_pTunnelManager{};
         DigDugState* m_CurrentState{};
+
+        std::queue<Command*>* m_CommandQueue{};
     };
 }
 #endif // !DIGDUG

@@ -89,14 +89,14 @@ void dae::DigDugController::Shoot()
 	m_Pump->Fire(m_FacingDirection);
 }
 
-void dae::DigDugController::OnPlayerDeath()
-{
-	Event playerDiedEvent;
-	playerDiedEvent.type = EventType::PLAYER_DIED;
-	playerDiedEvent.stringValue = m_PlayerName.c_str();
-
-	NotifyObserver(playerDiedEvent);
-}
+//void dae::DigDugController::OnPlayerDeath()
+//{
+//	Event playerDiedEvent;
+//	playerDiedEvent.type = EventType::PLAYER_DIED;
+//	playerDiedEvent.stringValue = m_PlayerName.c_str();
+//
+//	NotifyObserver(playerDiedEvent);
+//}
 
 void dae::DigDugController::CollisionEvent(GameObject*)
 {

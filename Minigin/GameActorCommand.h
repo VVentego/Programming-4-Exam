@@ -61,15 +61,5 @@ namespace dae
             actor->Shoot();
         }
     };
-
-    class KillPlayer :
-        public GameActorCommand
-    {
-    public:
-        void Execute(Player* actor) override
-        {
-            actor->OnPlayerDeath();
-        }
-    };
 }
 #endif // !GAMEACTORCOMMAND

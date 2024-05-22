@@ -26,6 +26,7 @@
     <ClCompile Include="LevelLoader.cpp" />
     <ClCompile Include="LivesDisplayComponent.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MainMenuController.cpp" />
     <ClCompile Include="PookaBehavior.cpp" />
     <ClCompile Include="PookaState.cpp" />
     <ClCompile Include="PumpBehaviorComponent.cpp" />
@@ -42,6 +43,7 @@
     <ClInclude Include="DigDugLevelState.h" />
     <ClInclude Include="LevelLoader.h" />
     <ClInclude Include="LivesDisplayComponent.h" />
+    <ClInclude Include="MainMenuController.h" />
     <ClInclude Include="PookaBehavior.h" />
     <ClInclude Include="PookaState.h" />
     <ClInclude Include="PumpBehaviorComponent.h" />
@@ -132,6 +134,7 @@
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent />
+    <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -150,6 +153,7 @@
       <AdditionalDependencies>$(SolutionDir)$(Platform)\$(Configuration)\Minigin.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib</IgnoreSpecificDefaultLibraries>
     </Link>
+    <PostBuildEvent />
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -174,6 +178,7 @@
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent />
+    <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -196,6 +201,7 @@
       <AdditionalDependencies>$(SolutionDir)$(Platform)\$(Configuration)\Minigin.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>LIBCMT.lib</IgnoreSpecificDefaultLibraries>
     </Link>
+    <PostBuildEvent />
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
