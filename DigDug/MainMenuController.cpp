@@ -16,10 +16,9 @@ MainMenuController::MainMenuController(GameObject* pOwner) :
 
 void dae::MainMenuController::Update(const double)
 {
-	HandleInput();
 }
 
-void dae::MainMenuController::HandleInput()
+void dae::MainMenuController::HandleInput(Command*)
 {
 }
 

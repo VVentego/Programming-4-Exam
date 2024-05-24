@@ -71,8 +71,6 @@ dae::Minigin::Minigin(const char* dataPath) :
 
 	ResourceManager::GetInstance().Init(dataPath);
 
-	ResourceManager::GetInstance().Init(dataPath);
-
 	ServiceLocator::RegisterInputManager(std::make_unique<InputManager>());
 
 #if _DEBUG
@@ -116,6 +114,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		lastTime = currentTime;
 		lag += deltaTime;
 
+		input.UpdateInput(deltaTime);
 		doContinue = !input.HasQuit();
 		while (lag >= fixedTimeStep)
 		{

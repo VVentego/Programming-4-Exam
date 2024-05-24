@@ -3,7 +3,8 @@
 #include <memory>
 #include "GameObject.h"
 #include "EventObserver.h"
-#include "../Minigin/ServiceLocator.h"
+#include "ServiceLocator.h"
+
 namespace dae
 {
 	struct Rectf

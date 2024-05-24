@@ -19,9 +19,9 @@ namespace dae
         void Update(const double deltaTime) override;
 
     private:
-        void HandleInput();
+        void HandleInput(Command* command) override;
 
-        void MoveRight() override {};
+        void MoveRight()override {};
         void MoveDown() override;
         void MoveLeft() override {};
         void MoveUp() override;

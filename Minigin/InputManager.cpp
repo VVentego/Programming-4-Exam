@@ -7,34 +7,27 @@ dae::InputManager::InputManager() :
 	BindButtonMoveDown(std::make_unique<MoveDown>());
 	BindButtonMoveLeft(std::make_unique<MoveLeft>());
 	BindButtonMoveUp(std::make_unique<MoveUp>());
-
-	BindXButtonMoveRight(std::make_unique<MoveRight>());
-	BindXButtonMoveDown(std::make_unique<MoveDown>());
-	BindXButtonMoveLeft(std::make_unique<MoveLeft>());
-	BindXButtonMoveUp(std::make_unique<MoveUp>());
-
 	BindAttack(std::make_unique<Attack>());
-	BindXAttack(std::make_unique<Attack>());
 }
 
-void dae::InputManager::BindXButtonMoveRight(std::unique_ptr<Command> command)
+void dae::InputManager::AddPlayer1(Player& player1)
 {
-	m_InputImpl->BindXButtonMoveRight(std::move(command));
+	m_InputImpl->AddPlayer1(player1);
 }
 
-void dae::InputManager::BindXButtonMoveDown(std::unique_ptr<Command> command)
+void dae::InputManager::AddPlayer2(Player& player2)
 {
-	m_InputImpl->BindXButtonMoveDown(std::move(command));
+	m_InputImpl->AddPlayer2(player2);
 }
 
-void dae::InputManager::BindXButtonMoveLeft(std::unique_ptr<Command> command)
+void dae::InputManager::RemovePlayer1()
 {
-	m_InputImpl->BindXButtonMoveLeft(std::move(command));
+	m_InputImpl->RemovePlayer1();
 }
 
-void dae::InputManager::BindXButtonMoveUp(std::unique_ptr<Command> command)
+void dae::InputManager::RemovePlayer2()
 {
-	m_InputImpl->BindButtonMoveUp(std::move(command));
+	m_InputImpl->RemovePlayer2();
 }
 
 void dae::InputManager::BindButtonMoveRight(std::unique_ptr<Command> command)
@@ -57,25 +50,13 @@ void dae::InputManager::BindButtonMoveUp(std::unique_ptr<Command> command)
 	m_InputImpl->BindButtonMoveUp(std::move(command));
 }
 
-void dae::InputManager::BindXAttack(std::unique_ptr<Command> command)
-{
-	m_InputImpl->BindXAttack(std::move(command));
-}
-
 void dae::InputManager::BindAttack(std::unique_ptr<Command> command)
 {
 	m_InputImpl->BindAttack(std::move(command));
 }
 
-dae::Command* dae::InputManager::ProcessInput()
+void dae::InputManager::UpdateInput(const double deltaTime)
 {
+	m_InputImpl->UpdateInput(deltaTime);
 	m_Quit = m_InputImpl->ShouldQuit();
-
-	return m_InputImpl->DoProcessInput();
 }
-
-dae::Command* dae::InputManager::ProcessXInput(const int playerIdx)
-{
-	return m_InputImpl->DoProcessXInput(playerIdx);
-}
-

@@ -7,7 +7,13 @@ players = {
     x = 200,
     y = 180,
     usesController = false
-    }
+    },
+    {
+        id = 1,
+        x = 300,
+        y = 180,
+        usesController = true
+        }
 }
 
 pookas = {

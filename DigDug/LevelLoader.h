@@ -6,7 +6,7 @@
 #include <vector>
 
 struct Player {
-    int id;
+    uint32_t id;
     glm::vec2 position;
     bool usesController;
 };

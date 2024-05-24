@@ -99,9 +99,6 @@
     <ClInclude Include="LevelState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ThreadSafeQueue.h">
-      <Filter>Header Files\Base Class Headers</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">

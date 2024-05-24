@@ -12,7 +12,7 @@ namespace dae
         public Component, public Player, public EventListener
     {
     public:
-        DigDugController(GameObject* pOwner, const std::string& playerName, ControllerInfo controllerInfo, GameObject* pPump);
+        DigDugController(GameObject* pOwner, const std::string& playerName, GameObject* pPump);
         virtual ~DigDugController() = default;
         DigDugController (const DigDugController& other) = delete;
         DigDugController(DigDugController&& other) = delete;
@@ -20,7 +20,7 @@ namespace dae
         DigDugController& operator=(DigDugController&& other) = delete;
 
         void Update(const double deltaTime) override;
-        void HandleInput();
+        void HandleInput(Command* command) override;
 
         void MoveRight() override;
         void MoveDown() override;
@@ -42,7 +42,6 @@ namespace dae
         float m_DistanceMoved{};
         const float m_MoveStepDistance{ 16.f };
         glm::vec2 m_Velocity{};
-        ControllerInfo m_ControllerInfo{};
         Facing m_FacingDirection{ Facing::right };
         GameObject* m_pPumpObject{};
         PumpBehaviorComponent* m_Pump{};

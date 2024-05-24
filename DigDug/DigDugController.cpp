@@ -1,8 +1,8 @@
 #include "DigDugController.h"
 #include "TunnelManager.h"
 
-dae::DigDugController::DigDugController(GameObject* pOwner, const std::string& playerName, ControllerInfo controllerInfo, GameObject* pPump) :
-	Component(pOwner), m_PlayerName{ playerName }, m_ControllerInfo{ controllerInfo }, m_pPumpObject{ pPump }
+dae::DigDugController::DigDugController(GameObject* pOwner, const std::string& playerName, GameObject* pPump) :
+	Component(pOwner), m_PlayerName{ playerName }, m_pPumpObject{ pPump }
 {
 	assert(m_pPumpObject != nullptr);
 	m_pPumpObject->SetParent(pOwner, false);
@@ -15,8 +15,6 @@ dae::DigDugController::DigDugController(GameObject* pOwner, const std::string& p
 
 void dae::DigDugController::Update(const double deltaTime)
 {
-	HandleInput();
-
 	if (m_DistanceMoved < m_MoveStepDistance)
 	{
 		glm::vec2 currentPos = m_pOwner->GetLocalPosition();
@@ -39,12 +37,8 @@ void dae::DigDugController::Update(const double deltaTime)
 	}
 }
 
-void dae::DigDugController::HandleInput()
+void dae::DigDugController::HandleInput(Command* command)
 {
-	auto& input = ServiceLocator::GetInputManager();
-
-	Command* command = m_ControllerInfo.usingController ? input.ProcessXInput(m_ControllerInfo.playerControllerIdx) : input.ProcessInput();
-
 	if (command != nullptr)
 	{
 		if (m_DistanceMoved < m_MoveStepDistance) return;

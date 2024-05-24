@@ -2,14 +2,10 @@
 #define INPUTSYSTEM
 #include "GameActorCommand.h"
 #include <memory>
+#include <SDL_events.h>
 
 namespace dae
 {
-	struct ControllerInfo
-	{
-		bool usingController{ false };
-		int playerControllerIdx{};
-	};
 	class InputSystem
 	{
 	public:
@@ -24,17 +20,14 @@ namespace dae
 		virtual void BindButtonMoveDown(std::unique_ptr<Command> command) = 0;
 		virtual void BindButtonMoveLeft(std::unique_ptr<Command> command) = 0;
 		virtual void BindButtonMoveUp(std::unique_ptr<Command> command) = 0;
-		virtual void BindXButtonMoveRight(std::unique_ptr<Command> command) = 0;
-		virtual void BindXButtonMoveDown(std::unique_ptr<Command> command) = 0;
-		virtual void BindXButtonMoveLeft(std::unique_ptr<Command> command) = 0;
-		virtual void BindXButtonMoveUp(std::unique_ptr<Command> command) = 0;
-		virtual void BindXAttack(std::unique_ptr<Command> command) = 0;
 		virtual void BindAttack(std::unique_ptr<Command> command) = 0;
 
-		virtual Command* ProcessInput() = 0;
-		virtual Command* ProcessXInput(const int playerIdx) = 0;
-
+		virtual void UpdateInput(const double) = 0;
 		virtual bool HasQuit() const { return m_Quit; }
+		virtual void AddPlayer1(Player& player1) = 0;
+		virtual void AddPlayer2(Player& player2) = 0;
+		virtual void RemovePlayer1() = 0;
+		virtual void RemovePlayer2() = 0;
 
 	protected:
 		bool m_Quit{ false };
@@ -54,16 +47,23 @@ namespace dae
 		void BindButtonMoveDown(std::unique_ptr<Command>) override {};
 		void BindButtonMoveLeft(std::unique_ptr<Command>) override {};
 		void BindButtonMoveUp(std::unique_ptr<Command>) override {};
-		void BindXButtonMoveRight(std::unique_ptr<Command>) override {};
-		void BindXButtonMoveDown(std::unique_ptr<Command>) override {};
-		void BindXButtonMoveLeft(std::unique_ptr<Command>) override {};
-		void BindXButtonMoveUp(std::unique_ptr<Command>) override {};
-		void BindXAttack(std::unique_ptr<Command>) override {};
 		void BindAttack(std::unique_ptr<Command>) override {};
 
-		Command* ProcessInput() override { return nullptr; }
-		Command* ProcessXInput(const int) override { return nullptr; }
-
+		virtual void UpdateInput(const double) 
+		{
+			SDL_Event e;
+			while (SDL_PollEvent(&e))
+			{
+				if (e.type == SDL_QUIT) {
+					m_Quit = true;
+				}
+			}
+		};
+		void AddPlayer1(Player&) override {};
+		void AddPlayer2(Player&) override {};
+		void RemovePlayer1() override {};
+		void RemovePlayer2() override {};
+	private:
 		bool HasQuit() const { return m_Quit; }
 	};
 }

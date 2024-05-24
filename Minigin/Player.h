@@ -2,6 +2,7 @@
 #define PLAYER
 namespace dae
 {
+	class Command;
 	class Player
 	{
 	protected:
@@ -13,6 +14,7 @@ namespace dae
 		Player& operator=(Player&&) = delete;
 
 	public:
+		virtual void HandleInput(Command*) = 0;
 		virtual void MoveRight() = 0;
 		virtual void MoveDown() = 0;
 		virtual void MoveLeft() = 0;

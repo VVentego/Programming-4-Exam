@@ -3,6 +3,8 @@
 #include <vector>
 #include <memory>
 #include "InputSystem.h"
+#include <Windows.h>
+#include <Xinput.h>
 
 namespace dae
 {
@@ -16,26 +18,20 @@ namespace dae
 		InputManager& operator=(const InputManager& other) = delete;
 		InputManager& operator=(InputManager&& other) = delete;
 
+		void AddPlayer1(Player& player1) override;
+		void AddPlayer2(Player& player2) override;
+		void RemovePlayer1() override;
+		void RemovePlayer2() override;
 		void BindButtonMoveRight(std::unique_ptr<Command> command);
 		void BindButtonMoveDown(std::unique_ptr<Command> command);
 		void BindButtonMoveLeft(std::unique_ptr<Command> command);
 		void BindButtonMoveUp(std::unique_ptr<Command> command);
-		void BindXButtonMoveRight(std::unique_ptr<Command> command);
-		void BindXButtonMoveDown(std::unique_ptr<Command> command);
-		void BindXButtonMoveLeft(std::unique_ptr<Command> command);
-		void BindXButtonMoveUp(std::unique_ptr<Command> command);
-		void BindXAttack(std::unique_ptr<Command> command);
 		void BindAttack(std::unique_ptr<Command> command);
 
-		Command* ProcessInput();
-		Command* ProcessXInput(const int playerIdx);
-
-		bool HasQuit() const { return m_Quit; }
-		
+		void UpdateInput(const double deltaTime) override;
 	private:
 		class InputManagerImpl;
 		std::unique_ptr<InputManagerImpl> m_InputImpl;
-		bool m_Quit{ false };
 	};
 
 	class InputManager::InputManagerImpl
@@ -48,36 +44,45 @@ namespace dae
 		InputManagerImpl& operator=(const InputManagerImpl& other) = delete;
 		InputManagerImpl& operator=(InputManagerImpl&& other) = delete;
 
-		Command* DoProcessXInput(const int playerIdx);
-		Command* DoProcessInput();
+		void UpdateInput(const double);
+		void AddPlayer1(Player& player1);
+		void AddPlayer2(Player& player2);
+		void RemovePlayer1();
+		void RemovePlayer2();
 		void BindButtonMoveLeft(std::unique_ptr<Command> command) { m_MoveLeft = std::move(command); }
 		void BindButtonMoveDown(std::unique_ptr<Command> command) { m_MoveDown = std::move(command); }
 		void BindButtonMoveRight(std::unique_ptr<Command> command) { m_MoveRight = std::move(command); }
 		void BindButtonMoveUp(std::unique_ptr<Command> command) { m_MoveUp = std::move(command); }
-		void BindXButtonMoveRight(std::unique_ptr<Command> command) { m_XMoveRight = std::move(command); }
-		void BindXButtonMoveDown(std::unique_ptr<Command> command) { m_XMoveDown = std::move(command); }
-		void BindXButtonMoveLeft(std::unique_ptr<Command> command) { m_XMoveLeft = std::move(command); }
-		void BindXButtonMoveUp(std::unique_ptr<Command> command) { m_XMoveUp = std::move(command); }
-		void BindXAttack(std::unique_ptr<Command> command) { m_XAttack = std::move(command); }
 		void BindAttack(std::unique_ptr<Command> command) { m_Attack = std::move(command); }
 
 		bool ShouldQuit() const { return m_ShouldQuit; }
+
 	private:
-		std::unique_ptr<Command> m_XMoveRight{};
-		std::unique_ptr<Command> m_XMoveDown{};
-		std::unique_ptr<Command> m_XMoveLeft{};
-		std::unique_ptr<Command> m_XMoveUp{};
+		Command* DoProcessXInput(const int playerIdx);
+		Command* DoProcessInput();
+
+		void PollControllers();
+
 		std::unique_ptr<Command> m_MoveRight{};
 		std::unique_ptr<Command> m_MoveDown{};
 		std::unique_ptr<Command> m_MoveLeft{};
 		std::unique_ptr<Command> m_MoveUp{};
-		std::unique_ptr<Command> m_XAttack{};
 		std::unique_ptr<Command> m_Attack{};
 
+		Player* m_pPlayer1{};
+		Player* m_pPlayer2{};
+
+		uint32_t m_NrControllers{ 0 };
+		float m_PollTimer{ 2.f };
+		const float m_TimeToPoll{ 2.f };
 		bool m_ShouldQuit{ false };
 
 		float m_X{};
 		float m_Y{};
+		XINPUT_STATE m_CurrentState0{};
+		XINPUT_STATE m_PrevState0{};
+		XINPUT_STATE m_CurrentState1{};
+		XINPUT_STATE m_PrevState1{};
 	};
 }
 #endif // !INPUTMANAGER

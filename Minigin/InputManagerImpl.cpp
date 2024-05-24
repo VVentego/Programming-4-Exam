@@ -1,48 +1,64 @@
 #include "InputManager.h"
 #include <SDL.h>
-#include <Windows.h>
-#include <XInput.h>
 
 dae::Command* dae::InputManager::InputManagerImpl::DoProcessXInput(const int playerIdx)
 {
 	m_Y = 0;
 	m_X = 0;
-	int controllerIndex{ playerIdx };
-	static XINPUT_STATE m_CurrentState;
-	static XINPUT_STATE m_PrevState;
 
-	m_PrevState = m_CurrentState;
-	XInputGetState(controllerIndex, &m_CurrentState);
+	XINPUT_STATE* currentState{};
+	XINPUT_STATE* prevState{};
 
-	if (!(m_PrevState.Gamepad.wButtons & XINPUT_GAMEPAD_A) && (m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_A))
+	if (playerIdx == 0)
 	{
-		return m_XAttack.get();
+		currentState = &m_CurrentState0;
+		prevState = &m_PrevState0;
 	}
-	if (!(m_PrevState.Gamepad.wButtons & XINPUT_GAMEPAD_B) && (m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_B))
+	else if (playerIdx == 1)
 	{
-		return m_XAttack.get();
+		currentState = &m_CurrentState1;
+		prevState = &m_PrevState1;
+	}
+	else
+	{
+		return nullptr; // Invalid player index
 	}
 
-	if (!(m_PrevState.Gamepad.wButtons & XINPUT_GAMEPAD_X) && (m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_X))
+	*prevState = *currentState;
+
+	// Retrieve the current state of the controller
+	if (XInputGetState(playerIdx, currentState) != ERROR_SUCCESS)
+	{
+		return nullptr; // Controller is not connected or failed to retrieve state
+	}
+	if (!(prevState->Gamepad.wButtons & XINPUT_GAMEPAD_A) && (currentState->Gamepad.wButtons & XINPUT_GAMEPAD_A))
+	{
+		return m_Attack.get();
+	}
+	if (!(prevState->Gamepad.wButtons & XINPUT_GAMEPAD_B) && (currentState->Gamepad.wButtons & XINPUT_GAMEPAD_B))
+	{
+		return m_Attack.get();
+	}
+
+	if (!(prevState->Gamepad.wButtons & XINPUT_GAMEPAD_X) && (currentState->Gamepad.wButtons & XINPUT_GAMEPAD_X))
 	{
 	}
 
-
-	if (m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT)
+	if (currentState->Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT)
 	{
-		return m_XMoveRight.get();
+		return m_MoveRight.get();
 	}
-	if (m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN)
+	if (currentState->Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN)
 	{
-		return m_XMoveDown.get();
+		return m_MoveDown.get();
 	}
-	if (m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT)
+	if (currentState->Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT)
 	{
-		return m_XMoveLeft.get();
+		return m_MoveLeft.get();
 	}
-	if (m_CurrentState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP)
+	if (currentState->Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP)
 	{
-		return m_XMoveUp.get();
+		return m_MoveUp.get();
 	}
 	return nullptr;
 }
@@ -82,4 +98,87 @@ dae::Command* dae::InputManager::InputManagerImpl::DoProcessInput()
 		}
 	}
 	return nullptr;
+}
+
+void dae::InputManager::InputManagerImpl::PollControllers()
+{
+	if (m_PollTimer > m_TimeToPoll)
+	{
+		m_NrControllers = 0;
+
+		DWORD dwResult;
+		for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
+		{
+			XINPUT_STATE state;
+			ZeroMemory(&state, sizeof(XINPUT_STATE));
+
+			// Simply get the state of the controller from XInput.
+			dwResult = XInputGetState(i, &state);
+
+			if (dwResult == ERROR_SUCCESS)
+			{
+				++m_NrControllers;
+			}
+		}
+		m_PollTimer = 0;
+	}
+}
+
+void dae::InputManager::InputManagerImpl::UpdateInput(const double deltaTime)
+{
+	m_PollTimer += static_cast<float>(deltaTime);
+	//If there is no player 1, do nothing
+	if (m_pPlayer1 == nullptr)
+	{
+		return;
+	}
+
+	//Singleplayer
+	if (m_pPlayer2 == nullptr)
+	{
+		m_pPlayer1->HandleInput(DoProcessXInput(0));
+		m_pPlayer1->HandleInput(DoProcessInput());
+	}
+
+	//Multiplayer
+	else
+	{
+		//If there are two controllers, let the first player choose to use either controller or keyboard
+		if (m_NrControllers >= 2)
+		{
+			m_pPlayer1->HandleInput(DoProcessXInput(0));
+			m_pPlayer1->HandleInput(DoProcessInput());
+
+			m_pPlayer2->HandleInput(DoProcessXInput(1));
+		}
+		//If there is only one controller, first player uses keyboard only
+		else
+		{
+			m_pPlayer1->HandleInput(DoProcessInput());
+
+			m_pPlayer2->HandleInput(DoProcessXInput(0));
+		}
+	}
+
+	PollControllers();
+}
+
+void dae::InputManager::InputManagerImpl::AddPlayer1(Player& player1)
+{
+	m_pPlayer1 = &player1;
+}
+
+void dae::InputManager::InputManagerImpl::AddPlayer2(Player& player2)
+{
+	m_pPlayer2 = &player2;
+}
+
+void dae::InputManager::InputManagerImpl::RemovePlayer1()
+{
+	m_pPlayer1 = nullptr;
+}
+
+void dae::InputManager::InputManagerImpl::RemovePlayer2()
+{
+	m_pPlayer2 = nullptr;
 }
