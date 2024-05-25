@@ -17,6 +17,7 @@ void dae::SpriteAnimatorComponent::Update(const double elapsedSec)
 	if (m_Looping == false && m_CurrentFrame == m_EndFrame)
 	{
 		m_CurrentFrame = m_EndFrame;
+		m_LoopFinished = true;
 	}
 
 	if (m_SpriteTimer > m_FrameTime)
@@ -37,23 +38,6 @@ void dae::SpriteAnimatorComponent::FixedUpdate(const double)
 {
 }
 
-//void dae::SpriteAnimatorComponent::FlipSprite(const bool left) const
-//{
-//	if (left == true)
-//	{
-//		glPushMatrix();
-//		glScalef(-1, 1, 1);
-//		glPopMatrix();
-//	}
-//
-//	else if (left == false)
-//	{
-//		glPushMatrix();
-//		glScalef(1, 1, 1);
-//		glPopMatrix();
-//	}
-//}
-
 void dae::SpriteAnimatorComponent::AddSpriteSheet(const std::string& fileName, const int rows, const int columns)
 {
 	auto texture = ResourceManager::GetInstance().LoadTexture(fileName);
@@ -61,6 +45,9 @@ void dae::SpriteAnimatorComponent::AddSpriteSheet(const std::string& fileName, c
 
 	m_Width = static_cast<float>(m_SpriteSheet->GetWidth() / m_SpriteSheet->m_Columns);
 	m_Height = static_cast<float>(m_SpriteSheet->GetHeight() / m_SpriteSheet->m_Rows);
+
+	m_Looping = true;
+	m_LoopFinished = false;
 }
 
 void dae::SpriteAnimatorComponent::AddSpriteSheet(std::shared_ptr<SpriteSheet> spriteSheet)
@@ -71,6 +58,8 @@ void dae::SpriteAnimatorComponent::AddSpriteSheet(std::shared_ptr<SpriteSheet> s
 	}
 
 	m_SpriteSheet = spriteSheet;
+	m_Width = static_cast<float>(m_SpriteSheet->GetWidth() / m_SpriteSheet->m_Columns);
+	m_Height = static_cast<float>(m_SpriteSheet->GetHeight() / m_SpriteSheet->m_Rows);
 	m_Looping = true;
 	m_LoopFinished = false;
 }

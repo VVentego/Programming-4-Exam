@@ -1,5 +1,6 @@
 #ifndef POOKASTATE
 #include "PookaBehavior.h"
+
 namespace dae
 {
 	class PookaState
@@ -21,15 +22,15 @@ namespace dae
 		float m_StateTimer{};
 	};
 
-	class NormalState : public PookaState
+	class PookaNormalState : public PookaState
 	{
 	public:
-		NormalState(){};
-		~NormalState() = default;
-		NormalState(const NormalState& other) = delete;
-		NormalState(NormalState&& other) = delete;
-		NormalState& operator=(const NormalState& other) = delete;
-		NormalState& operator=(NormalState&& other) = delete;
+		PookaNormalState() {};
+		~PookaNormalState() = default;
+		PookaNormalState(const PookaNormalState& other) = delete;
+		PookaNormalState(PookaNormalState&& other) = delete;
+		PookaNormalState& operator=(const PookaNormalState& other) = delete;
+		PookaNormalState& operator=(PookaNormalState&& other) = delete;
 
 		PookaState* Update(PookaBehavior& pooka, const double deltaTime) override;
 		void OnEnter(PookaBehavior& pooka) override;
@@ -39,15 +40,15 @@ namespace dae
 		const float m_NormalStateDuration{ 5.f };
 	};
 
-	class GhostState : public PookaState
+	class PookaGhostState : public PookaState
 	{
 	public:
-		GhostState() = default;
-		~GhostState() = default;
-		GhostState(const GhostState& other) = delete;
-		GhostState(GhostState&& other) = delete;
-		GhostState& operator=(const GhostState& other) = delete;
-		GhostState& operator=(GhostState&& other) = delete;
+		PookaGhostState() = default;
+		~PookaGhostState() = default;
+		PookaGhostState(const PookaGhostState& other) = delete;
+		PookaGhostState(PookaGhostState&& other) = delete;
+		PookaGhostState& operator=(const PookaGhostState& other) = delete;
+		PookaGhostState& operator=(PookaGhostState&& other) = delete;
 
 		PookaState* Update(PookaBehavior& pooka, const double deltaTime) override;
 		void OnEnter(PookaBehavior& pooka) override;
@@ -57,15 +58,15 @@ namespace dae
 		const float m_GhostStateDuration{ 5.f };
 	};
 
-	class InflatedState : public PookaState
+	class PookaInflatedState : public PookaState
 	{
 	public:
-		InflatedState() = default;
-		~InflatedState() = default;
-		InflatedState(const InflatedState& other) = delete;
-		InflatedState(InflatedState&& other) = delete;
-		InflatedState& operator=(const InflatedState& other) = delete;
-		InflatedState& operator=(InflatedState&& other) = delete;
+		PookaInflatedState() = default;
+		~PookaInflatedState() = default;
+		PookaInflatedState(const PookaInflatedState& other) = delete;
+		PookaInflatedState(PookaInflatedState&& other) = delete;
+		PookaInflatedState& operator=(const PookaInflatedState& other) = delete;
+		PookaInflatedState& operator=(PookaInflatedState&& other) = delete;
 
 		PookaState* Update(PookaBehavior& pooka, const double deltaTime) override;
 		void OnEnter(PookaBehavior& pooka) override;
@@ -77,5 +78,6 @@ namespace dae
 		float m_DeathTimer{ .1f };
 	};
 }
+
 #define POOKASTATE
 #endif // !POOKASTATE

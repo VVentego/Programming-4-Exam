@@ -27,10 +27,11 @@ namespace dae
 
 		bool GetHooked() const { return m_IsHooked; }
 		void Inflate(const int playerIdx) override;
+		bool IsInflated() const override { return m_InflationLevel > 0; }
 	private:
-		friend class NormalState;
-		friend class GhostState;
-		friend class InflatedState;
+		friend class PookaNormalState;
+		friend class PookaGhostState;
+		friend class PookaInflatedState;
 		void TrackPlayer();
 		void CheckForTunnel();
 		void ReverseDirection();

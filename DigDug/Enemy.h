@@ -13,7 +13,7 @@ protected:
 public:
 	virtual bool GetHooked() const { return m_IsHooked; }
 	virtual void Inflate(const int playerIdx) = 0;
-
+	virtual bool IsInflated() const = 0;
 	bool m_IsHooked{};
 };
 #endif // !ENEMY

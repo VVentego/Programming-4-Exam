@@ -3,10 +3,9 @@
 #include "PookaState.h"
 #include "TunnelManager.h"
 #include "../Minigin/SpriteAnimatorComponent.h"
-#include "PumpBehaviorComponent.h"
 
 dae::PookaBehavior::PookaBehavior(GameObject* pOwner) :
-	Component(pOwner), m_CurrentState{ new dae::NormalState },
+	Component(pOwner), m_CurrentState{ new PookaNormalState },
 	m_pWalkSprite{ std::make_shared<SpriteSheet>("PookaMoveRight.png", 1, 2) },
 	m_pGhostSheet{ std::make_shared<SpriteSheet>("PookaGhost.png", 1, 2) },
 	m_pInflatedSprite1{ std::make_shared<SpriteSheet>("PookaInflate1.png", 1, 1) },

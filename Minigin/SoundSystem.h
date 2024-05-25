@@ -12,7 +12,10 @@ namespace dae
 		virtual void Init(const std::string& dataPath) = 0;
 		virtual void Play(const sound_id id, const int volume) = 0;
 		virtual void AddTrack(const std::string& fileName, sound_id id) = 0;
+		virtual void AddMusic(const std::string& fileName) = 0;
 		virtual void Destroy() = 0;
+		virtual void PlayMusic() = 0;
+		virtual void StopMusic() = 0;
 	};
 
 	class NullSoundSystem : public SoundSystem
@@ -24,6 +27,9 @@ namespace dae
 		void Init(const std::string&) override {};
 		void Play(const sound_id, const int) override {};
 		void AddTrack(const std::string&, sound_id) override {};
+		void AddMusic(const std::string&) override {};
 		void Destroy() override {};
+		virtual void PlayMusic() override {};
+		virtual void StopMusic() override {};
 	};
 }

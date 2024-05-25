@@ -1,9 +1,26 @@
 #include "DigDugController.h"
 #include "TunnelManager.h"
+#include "Enemy.h"
+#include <SpriteAnimatorComponent.h>
+#include "DigDugState.h"
 
 dae::DigDugController::DigDugController(GameObject* pOwner, const std::string& playerName, GameObject* pPump) :
-	Component(pOwner), m_PlayerName{ playerName }, m_pPumpObject{ pPump }
+	Component(pOwner), m_PlayerName{ playerName }, m_pPumpObject{ pPump }, m_CurrentState{ new DigDugNormalState() },
+	m_pWalkSpriteRight{ std::make_shared<SpriteSheet>("DigDugMoveRight.png", 1, 2) },
+	m_pWalkSpriteDown{ std::make_shared<SpriteSheet>("DigDugMoveDown.png", 1, 2) },
+	m_pWalkSpriteLeft{ std::make_shared<SpriteSheet>("DigDugMoveLeft.png", 1, 2) },
+	m_pWalkSpriteUp{ std::make_shared<SpriteSheet>("DigDugMoveUp.png", 1, 2) },
+	m_pDigSpriteRight{ std::make_shared<SpriteSheet>("DigDugDigRight.png", 1, 2) },
+	m_pDigSpriteDown{ std::make_shared<SpriteSheet>("DigDugDigDown.png", 1, 2) },
+	m_pDigSpriteLeft{ std::make_shared<SpriteSheet>("DigDugDigLeft.png", 1, 2) },
+	m_pDigSpriteUp{ std::make_shared<SpriteSheet>("DigDugDigUp.png", 1, 2) },
+	m_pDeathSprite{ std::make_shared<SpriteSheet>("DigDugDeath.png", 1, 4) }
 {
+	auto digDugSpriteAnimator = std::make_unique<SpriteAnimatorComponent>(pOwner);
+	digDugSpriteAnimator->AddSpriteSheet(m_pWalkSpriteRight);
+	m_pAnimatorComponent = digDugSpriteAnimator.get();
+	pOwner->AddComponent(std::move(digDugSpriteAnimator));
+	m_Size = m_pAnimatorComponent->GetSize();
 	assert(m_pPumpObject != nullptr);
 	m_pPumpObject->SetParent(pOwner, false);
 
@@ -13,44 +30,47 @@ dae::DigDugController::DigDugController(GameObject* pOwner, const std::string& p
 	EventObserver::GetInstance().AddListener(this);
 }
 
-void dae::DigDugController::Update(const double deltaTime)
+dae::DigDugController::~DigDugController()
 {
-	if (m_DistanceMoved < m_MoveStepDistance)
+	delete m_CurrentState;
+	m_CurrentState = nullptr;
+
+	if (m_PlayerName == "Player1")
 	{
-		glm::vec2 currentPos = m_pOwner->GetLocalPosition();
-
-		m_pOwner->SetLocalPosition(currentPos.x + m_Velocity.x * static_cast<float>(deltaTime),
-			currentPos.y + m_Velocity.y * static_cast<float>(deltaTime));
-
-		m_DistanceMoved += m_MoveSpeed * static_cast<float>(deltaTime);
+		ServiceLocator::GetInputManager().RemovePlayer1();
 	}
-
 	else
 	{
-		m_Velocity = {};
-		auto& tunnelManager = TunnelManager::GetInstance();
-		auto ownerPos = m_pOwner->GetWorldPosition();
-		if(!tunnelManager.InTunnel(ownerPos))
+		ServiceLocator::GetInputManager().RemovePlayer2();
+	}
+}
+
+void dae::DigDugController::Update(const double deltaTime)
+{
+	if (m_Lives > 0)
+	{
+		auto nextState = m_CurrentState->Update(*this, deltaTime);
+
+		if (nextState != nullptr)
 		{
-			tunnelManager.DigTunnel(ownerPos);
+			m_CurrentState->OnExit(*this);
+			delete m_CurrentState;
+			m_CurrentState = nextState;
+			m_CurrentState->OnEnter(*this);
 		}
 	}
 }
 
 void dae::DigDugController::HandleInput(Command* command)
 {
-	if (command != nullptr)
-	{
-		if (m_DistanceMoved < m_MoveStepDistance) return;
-		command->Execute(this);
-	}
+	m_CurrentState->HandleInput(*this, command);
 }
 
 void dae::DigDugController::MoveRight()
 {
 	m_Velocity = { m_MoveSpeed, 0 };
 
-	m_FacingDirection = Facing::right;
+	m_NewFacingDirection = Facing::right;
 	m_DistanceMoved = 0;
 }
 
@@ -58,7 +78,7 @@ void dae::DigDugController::MoveDown()
 {
 	m_Velocity = { 0, m_MoveSpeed };
 
-	m_FacingDirection = Facing::down;
+	m_NewFacingDirection = Facing::down;
 	m_DistanceMoved = 0;
 }
 
@@ -66,7 +86,7 @@ void dae::DigDugController::MoveLeft()
 {
 	m_Velocity = { -m_MoveSpeed, 0 };
 
-	m_FacingDirection = Facing::left;
+	m_NewFacingDirection = Facing::left;
 	m_DistanceMoved = 0;
 }
 
@@ -74,7 +94,7 @@ void dae::DigDugController::MoveUp()
 {
 	m_Velocity = { 0, -m_MoveSpeed };
 
-	m_FacingDirection = Facing::up;
+	m_NewFacingDirection = Facing::up;
 	m_DistanceMoved = 0;
 }
 
@@ -85,15 +105,27 @@ void dae::DigDugController::Shoot()
 
 void dae::DigDugController::OnPlayerDeath()
 {
+	m_Lives--;
 	Event playerDiedEvent;
 	playerDiedEvent.type = EventType::PLAYER_DIED;
 	playerDiedEvent.stringValue = m_PlayerName.c_str();
-
+	
 	NotifyObserver(playerDiedEvent);
+
+	if (m_Lives > 0)
+	{
+		m_pOwner->SetWorldPosition(m_StartPos);
+	}
+
+	else
+	{
+		m_pAnimatorComponent->Destroy();
+	}
 }
 
-void dae::DigDugController::CollisionEvent(GameObject*)
+void dae::DigDugController::CollisionEvent(GameObject* other)
 {
+	m_CurrentState->HandleCollision(*this, other);
 }
 
 void dae::DigDugController::SetTunnelManager(TunnelManagerComponent* pTunnelManager)
@@ -154,5 +186,70 @@ void dae::DigDugController::HandleEvent(const Event& event)
 		}
 		NotifyObserver(scoreEvent);
 		break;
+	}
+}
+
+void dae::DigDugController::SetSpriteSheet(std::shared_ptr<SpriteSheet> spriteSheet, const double frameTime)
+{
+	m_pAnimatorComponent->AddSpriteSheet(spriteSheet);
+	m_pAnimatorComponent->m_FrameTime = frameTime;
+}
+
+void dae::DigDugController::DigTunnel()
+{
+	auto& tunnelManager = TunnelManager::GetInstance();
+	auto ownerPos = m_pOwner->GetWorldPosition();
+	if (!tunnelManager.InTunnel(ownerPos) == true)
+	{
+		tunnelManager.DigTunnel(ownerPos);
+	}
+}
+
+bool dae::DigDugController::InTunnel()
+{
+	glm::vec2 checkPos{ m_pOwner->GetWorldPosition() };
+
+	switch (m_FacingDirection)
+	{
+	case Facing::right:
+		checkPos += glm::vec2{ m_CheckDistance + m_Size.x, 0 };
+		break;
+	case Facing::down:
+		checkPos += glm::vec2{ m_CheckDistance + m_Size.y, 0 };
+		break;
+	case Facing::left:
+		checkPos += glm::vec2{ -m_CheckDistance, 0 };
+		break;
+	case Facing::up:
+		checkPos += glm::vec2{ 0, -m_CheckDistance };
+		break;
+	}
+
+	return TunnelManager::GetInstance().InTunnel(checkPos);
+}
+
+bool dae::DigDugController::IsDoneDying()
+{
+	if (m_pAnimatorComponent->RenderOnce())
+	{
+		return true;
+	}
+
+	return false;
+}
+
+void dae::DigDugController::PlayMusic()
+{
+	if (m_PlayerName == "Player0")
+	{
+		ServiceLocator::GetSoundManager().PlayMusic();
+	}
+}
+
+void dae::DigDugController::StopMusic()
+{
+	if (m_PlayerName == "Player0")
+	{
+		ServiceLocator::GetSoundManager().StopMusic();
 	}
 }

@@ -72,7 +72,7 @@ dae::Command* dae::InputManager::InputManagerImpl::DoProcessInput()
 			m_ShouldQuit = true;
 		}
 
-		if (e.type == SDL_KEYUP)
+		if (e.type == SDL_KEYDOWN)
 		{
 			switch (e.key.keysym.scancode)
 			{

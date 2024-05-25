@@ -7,6 +7,7 @@
 #include "SoundSystem.h"
 
 struct Mix_Chunk;
+struct _Mix_Music;
 
 namespace dae
 {
@@ -31,8 +32,11 @@ namespace dae
 
 		virtual void Init(const std::string& dataPath) override;
 		virtual void Play(const sound_id id, const int volume) override;
+		virtual void PlayMusic() override;
+		virtual void StopMusic() override;
 		virtual void Destroy() override;
 		virtual void AddTrack(const std::string& fileName, sound_id id);
+		virtual void AddMusic(const std::string& fileName) override;
 	protected:
 		std::string m_dataPath{};
 
@@ -45,15 +49,15 @@ namespace dae
 	{
 	public:
 		SoundManagerDebug() = default;
-		virtual ~SoundManagerDebug() = default;
+		~SoundManagerDebug() = default;
 		SoundManagerDebug(const SoundManagerDebug& other) = delete;
 		SoundManagerDebug(SoundManagerDebug&& other) noexcept
 		{
 			m_dataPath = other.m_dataPath;
 			m_SoundSystemImpl = std::move(other.m_SoundSystemImpl);
 		}
-		virtual SoundManagerDebug& operator=(const SoundManagerDebug& other) = delete;
-		virtual SoundManagerDebug& operator=(SoundManagerDebug&& other) noexcept
+		SoundManagerDebug& operator=(const SoundManagerDebug& other) = delete;
+		SoundManagerDebug& operator=(SoundManagerDebug&& other) noexcept
 		{
 			m_dataPath = other.m_dataPath;
 			m_SoundSystemImpl = std::move(other.m_SoundSystemImpl);
@@ -63,6 +67,9 @@ namespace dae
 		void Init(const std::string& dataPath) override;
 		void Play(const sound_id id, const int volume) override;
 		void AddTrack(const std::string& fileName, sound_id id) override;
+		void AddMusic(const std::string& fileName) override;
+		virtual void PlayMusic() override;
+		virtual void StopMusic() override;
 	};
 
 #ifndef SOUNDSYSTEMIMPL
@@ -85,6 +92,9 @@ namespace dae
 		bool Init();
 		void LoadTrack(const std::string& fileName, sound_id id);
 		void AddTrack(const std::string& fileName, sound_id id);
+		void AddMusic(const std::string& fileName);
+		virtual void PlayMusic();
+		virtual void StopMusic();
 		void Destroy();
 
 	private:
@@ -94,6 +104,7 @@ namespace dae
 		int tail_{};
 ;		std::mutex mutex;
 		std::map<sound_id, Mix_Chunk*> m_AudioTracks;
+		_Mix_Music* m_Music{};
 		std::map<sound_id, std::string> m_TracksToLoad;
 		std::jthread m_SoundThread;
 		std::condition_variable cv{};

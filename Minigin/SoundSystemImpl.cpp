@@ -69,11 +69,40 @@ void dae::SoundManager::SoundSystemImpl::AddTrack(const std::string& fileName, s
     cv.notify_one();
 }
 
+void dae::SoundManager::SoundSystemImpl::AddMusic(const std::string& fileName)
+{
+    m_Music = Mix_LoadMUS(fileName.c_str());
+    assert(m_Music != nullptr);
+}
+
+void dae::SoundManager::SoundSystemImpl::PlayMusic()
+{
+    if (Mix_PlayingMusic() == 0)
+    {
+        Mix_PlayMusic(m_Music, -1);
+    }
+
+    else
+    {
+        Mix_ResumeMusic();
+    }
+}
+
+void dae::SoundManager::SoundSystemImpl::StopMusic()
+{
+    Mix_PauseMusic();
+}
+
 void dae::SoundManager::SoundSystemImpl::Destroy()
 {
     for (auto& track : m_AudioTracks)
     {
         Mix_FreeChunk(track.second);
+    }
+
+    if (m_Music != nullptr)
+    {
+        Mix_FreeMusic(m_Music);
     }
 
     m_Running = false;

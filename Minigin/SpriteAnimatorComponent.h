@@ -26,10 +26,10 @@ namespace dae
 		const bool RenderOnce();
 		const glm::vec2 GetSize() const;
 		bool m_Looping{ true };
+		double m_FrameTime{ 0.2 };
 	private:
 		int m_CurrentFrame{};
 		int m_EndFrame{ 1 };
-		double m_FrameTime{ 0.2 };
 		double m_SpriteTimer{};
 		std::shared_ptr<SpriteSheet> m_SpriteSheet;
 		int m_CurrentSpriteSheet{};

@@ -8,12 +8,14 @@ namespace dae
 {
     class TunnelManagerComponent;
     class DigDugState;
+    class SpriteAnimatorComponent;
+    class SpriteSheet;
     class DigDugController final :
         public Component, public Player, public EventListener
     {
     public:
         DigDugController(GameObject* pOwner, const std::string& playerName, GameObject* pPump);
-        virtual ~DigDugController() = default;
+        ~DigDugController();
         DigDugController (const DigDugController& other) = delete;
         DigDugController(DigDugController&& other) = delete;
         DigDugController& operator=(const DigDugController& other) = delete;
@@ -31,22 +33,45 @@ namespace dae
         virtual void CollisionEvent(GameObject* other) override;
 
         void SetTunnelManager(TunnelManagerComponent* pTunnelManager);
-
+        void SetStartPos(const glm::vec2 pos) { m_StartPos = pos; }
         void HandleEvent(const Event& event);
 
         const std::string m_PlayerName;
     private:
-        friend class NormalState;
-        friend class DigState;
+        void SetSpriteSheet(std::shared_ptr<SpriteSheet> spriteSheet, const double frameTime);
+        void DigTunnel();
+        bool InTunnel();
+        bool IsDoneDying();
+        void PlayMusic();
+        void StopMusic();
+        friend class DigDugNormalState;
+        friend class DigDugDigState;
+        friend class DigDugDeathState;
         const float m_MoveSpeed{ 20.f };
+        const float m_CheckDistance{ 3.f };
         float m_DistanceMoved{};
         const float m_MoveStepDistance{ 16.f };
         glm::vec2 m_Velocity{};
+        Facing m_NewFacingDirection{};
         Facing m_FacingDirection{ Facing::right };
         GameObject* m_pPumpObject{};
+        SpriteAnimatorComponent* m_pAnimatorComponent{};
         PumpBehaviorComponent* m_Pump{};
         TunnelManagerComponent* m_pTunnelManager{};
-        DigDugState* m_CurrentState{};
+        glm::vec2 m_Size{};
+        glm::vec2 m_StartPos{};
+        DigDugState* m_CurrentState;
+        std::shared_ptr<SpriteSheet> m_pWalkSpriteRight;
+        std::shared_ptr<SpriteSheet> m_pWalkSpriteDown;
+        std::shared_ptr<SpriteSheet> m_pWalkSpriteLeft;
+        std::shared_ptr<SpriteSheet> m_pWalkSpriteUp;
+        std::shared_ptr<SpriteSheet> m_pDigSpriteRight;
+        std::shared_ptr<SpriteSheet> m_pDigSpriteDown;
+        std::shared_ptr<SpriteSheet> m_pDigSpriteLeft;
+        std::shared_ptr<SpriteSheet> m_pDigSpriteUp;
+        std::shared_ptr<SpriteSheet> m_pDeathSprite;
+
+        int m_Lives{ 3 };
     };
 }
 #endif // !DIGDUG

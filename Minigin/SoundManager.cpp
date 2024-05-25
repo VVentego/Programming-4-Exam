@@ -12,6 +12,16 @@ void dae::SoundManager::Play(const sound_id id, const int volume)
 	m_SoundSystemImpl->Play(id, volume);
 }
 
+void dae::SoundManager::PlayMusic()
+{
+	m_SoundSystemImpl->PlayMusic();
+}
+
+void dae::SoundManager::StopMusic()
+{
+	m_SoundSystemImpl->StopMusic();
+}
+
 void dae::SoundManager::Destroy()
 {
 	m_SoundSystemImpl->Destroy();
@@ -21,6 +31,11 @@ void dae::SoundManager::AddTrack(const std::string& fileName, const sound_id id)
 {
 	const auto fullPath = m_dataPath + fileName;
 	m_SoundSystemImpl->AddTrack(fullPath, id);
+}
+
+void dae::SoundManager::AddMusic(const std::string& fileName)
+{
+	m_SoundSystemImpl->AddMusic(fileName);
 }
 
 dae::SoundManager::SoundManager() :
@@ -45,5 +60,21 @@ void dae::SoundManagerDebug::AddTrack(const std::string& fileName, sound_id id)
 {
 	SoundManager::AddTrack(fileName, id);
 	std::cout << "SoundManager added track of name: " << fileName << " and ID " << std::to_string(id) << std::endl;
+}
+
+void dae::SoundManagerDebug::AddMusic(const std::string& fileName)
+{
+	SoundManager::AddMusic(fileName);
+	std::cout << "SoundManager added music track of name: " << fileName << std::endl;
+}
+
+void dae::SoundManagerDebug::PlayMusic()
+{
+	SoundManager::PlayMusic();
+}
+
+void dae::SoundManagerDebug::StopMusic()
+{
+	SoundManager::StopMusic();
 }
 
