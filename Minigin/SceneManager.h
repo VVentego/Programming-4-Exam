@@ -18,6 +18,9 @@ namespace dae
 		void FixedUpdate(const double fixedTimeStep);
 		void Render();
 		void DestroyObjects();
+		void TransferPersistentObjects(Scene& first, Scene& second);
+		std::shared_ptr<Scene> GetCurrentScene();
+		std::shared_ptr<Scene> GetScene(const std::string& name);
 
 	private:
 		friend class Singleton<SceneManager>;

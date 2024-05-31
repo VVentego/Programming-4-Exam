@@ -3,14 +3,9 @@
 
 #include <string>
 #include <functional>
-#include "GameObject.h"
-#include "TextComponent.h"
-#include "TextureComponent.h"
-#include "SpriteAnimatorComponent.h"
-#include "ColliderComponent.h"
 
-const int gWindowWidth{ 640 };
-const int gWindowHeight{ 480 };
+const int gWindowWidth{ 448 };
+const int gWindowHeight{ 576 };
 
 namespace dae
 {

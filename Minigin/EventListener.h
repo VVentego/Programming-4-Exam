@@ -6,7 +6,7 @@ enum class EventType {
     SCORE_INCREASED,
     PLAYER_DIED,
     ENEMY_KILLED,
-    SKIP_LEVEL
+    LOAD_LEVEL
 };
 
 struct Event {

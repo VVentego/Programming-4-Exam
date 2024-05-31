@@ -1,5 +1,10 @@
 #ifndef COMPONENTSHEADER
 #define COMPONENTSHEADER
+#include "GameObject.h"
+#include "TextComponent.h"
+#include "TextureComponent.h"
+#include "SpriteAnimatorComponent.h"
+#include "ColliderComponent.h"
 #include "LivesDisplayComponent.h"
 #include "DigDugController.h"
 #include "FpsCounterComponent.h"

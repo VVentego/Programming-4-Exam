@@ -29,6 +29,11 @@ void Scene::RemoveAll()
 
 void Scene::Update(const double deltaTime)
 {
+	for (auto& persistentObject : m_PersistentObjects)
+	{
+		persistentObject->Update(deltaTime);
+	}
+
 	for(auto& object : m_objects)
 	{
 		object->Update(deltaTime);
@@ -37,6 +42,11 @@ void Scene::Update(const double deltaTime)
 
 void Scene::FixedUpdate(const double fixedTimeStep)
 {
+	for (auto& persistentObject : m_PersistentObjects)
+	{
+		persistentObject->FixedUpdate(fixedTimeStep);
+	}
+
 	for (auto& object : m_objects)
 	{
 		object->FixedUpdate(fixedTimeStep);
@@ -45,6 +55,11 @@ void Scene::FixedUpdate(const double fixedTimeStep)
 
 void Scene::Render() const
 {
+	for (auto& persistentObject : m_PersistentObjects)
+	{
+		persistentObject->Render();
+	}
+
 	for (const auto& object : m_objects)
 	{
 		object->Render();
@@ -53,12 +68,23 @@ void Scene::Render() const
 
 void Scene::Destroy()
 {
+	for (auto& persistentObject : m_PersistentObjects)
+	{
+		if (persistentObject->m_IsDestroyed)
+		{
+			RemovePersistentObject(std::move(persistentObject));
+			continue;
+		}
+
+		persistentObject->RemoveComponent();
+	}
+
 	for (auto& object : m_objects)
 	{
 		if (object->m_IsDestroyed)
 		{
 			Remove(std::move(object));
-			return;
+			continue;
 		}
 
 		object->RemoveComponent();
@@ -112,5 +138,21 @@ void Scene::UpdateCollisions() const
 			collider.lock()->CollisionCallback(otherCollider.lock()->GetOwner());
 		}
 	}
+}
+
+void dae::Scene::AddPersistentObject(std::unique_ptr<GameObject> object)
+{
+	m_PersistentObjects.emplace_back(std::move(object));
+}
+
+void dae::Scene::RemovePersistentObject(std::unique_ptr<GameObject> object)
+{
+	object.reset();
+	m_PersistentObjects.erase(std::remove(m_PersistentObjects.begin(), m_PersistentObjects.end(), object), m_PersistentObjects.end());
+}
+
+std::vector<std::unique_ptr<GameObject>>& dae::Scene::PassPersistentObjects()
+{
+	return m_PersistentObjects;
 }
 

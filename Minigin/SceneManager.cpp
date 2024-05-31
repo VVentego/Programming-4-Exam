@@ -34,6 +34,40 @@ void dae::SceneManager::DestroyObjects()
 	}
 }
 
+void dae::SceneManager::TransferPersistentObjects(Scene& first, Scene& second)
+{
+	auto& persistentObjects = first.PassPersistentObjects();
+	for (auto& object : persistentObjects)
+	{
+		second.AddPersistentObject(std::move(object));
+	}
+}
+
+std::shared_ptr<dae::Scene> dae::SceneManager::GetCurrentScene() 
+{
+	if (m_scenes.empty())
+	{
+		return nullptr;
+	}
+
+	return m_scenes.front(); 
+}
+
+std::shared_ptr<dae::Scene> dae::SceneManager::GetScene(const std::string& name)
+{
+	auto it = std::find_if(m_scenes.begin(), m_scenes.end(), [&name](const std::shared_ptr<Scene> scene)
+		{
+			return scene->m_name == name;
+		});
+
+	if (it != m_scenes.end())
+	{
+		return *it;
+	}
+
+	return nullptr;
+}
+
 dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
 {
 	const auto& scene = std::shared_ptr<Scene>(new Scene(name));

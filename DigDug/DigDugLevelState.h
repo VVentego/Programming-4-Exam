@@ -1,13 +1,15 @@
 #ifndef DIGDUGSTATE
 #define DIGDUGSTATE
-#include "../Minigin/LevelState.h"
+#include <LevelState.h>
 
+class Scene;
 class MainMenuState : public LevelState
 {
+public:
 	MainMenuState();
-	void OnEnter(Scene& scene);
-	void OnExit(Scene& scene);
-	void HandleEvent();
+	void OnEnter(dae::Scene& scene);
+	void OnExit(dae::Scene& scene);
+	void HandleEvent() override;
 
 private:
 	std::unique_ptr<GameObject> m_MainMenuObject;
@@ -15,10 +17,13 @@ private:
 
 class SinglePlayerState1 : public LevelState
 {
+public:
 	SinglePlayerState1();
-	void OnEnter(Scene& scene);
-	void OnExit(Scene& scene);
+	void OnEnter(dae::Scene& scene);
+	void OnExit(dae::Scene& scene);
 	void HandleEvent();
+private:
+
 };
 #endif // !DIGDUGSTATE
 

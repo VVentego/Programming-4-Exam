@@ -12,6 +12,8 @@
 #include <thread>
 #include <math.h>
 #include "SoundManager.h"
+#include "ResourceManager.h"
+#include "ServiceLocator.h"
 
 SDL_Window* g_window{};
 using namespace std::chrono;
