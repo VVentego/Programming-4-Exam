@@ -1,6 +1,9 @@
 #include "MainMenuController.h"
 #include <TextComponent.h>
 #include <Scene.h>
+#ifdef _DEBUG
+#include <iostream>
+#endif // _DEBUG
 
 using namespace dae;
 
@@ -32,6 +35,11 @@ MainMenuController::MainMenuController(GameObject* pOwner, const int, const int 
 	scene.Add(std::move(textObject));
 }
 
+dae::MainMenuController::~MainMenuController()
+{
+	ServiceLocator::GetInputManager().RemovePlayer1();
+}
+
 void dae::MainMenuController::Update(const double)
 {
 }
@@ -51,6 +59,9 @@ void dae::MainMenuController::MoveDown()
 	{
 		m_SelectionIdx = 0;
 	}
+#ifdef _DEBUG
+	std::cout << "Menu selection = " << std::to_string(m_SelectionIdx) << std::endl;
+#endif
 }
 
 void dae::MainMenuController::MoveUp()
@@ -60,6 +71,9 @@ void dae::MainMenuController::MoveUp()
 	{
 		m_SelectionIdx = m_MaxOptions;
 	}
+#ifdef _DEBUG
+	std::cout << "Menu selection = " << std::to_string(m_SelectionIdx) << std::endl;
+#endif
 }
 
 void dae::MainMenuController::Shoot()

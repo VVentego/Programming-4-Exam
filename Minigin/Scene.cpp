@@ -73,7 +73,7 @@ void Scene::Destroy()
 		if (persistentObject->m_IsDestroyed)
 		{
 			RemovePersistentObject(std::move(persistentObject));
-			continue;
+			return;
 		}
 
 		persistentObject->RemoveComponent();
@@ -84,7 +84,7 @@ void Scene::Destroy()
 		if (object->m_IsDestroyed)
 		{
 			Remove(std::move(object));
-			continue;
+			return;
 		}
 
 		object->RemoveComponent();

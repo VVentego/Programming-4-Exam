@@ -5,6 +5,7 @@
 #include <string>
 #include <memory>
 #include "Singleton.h"
+#include "LevelState.h"
 
 namespace dae
 {
@@ -18,14 +19,17 @@ namespace dae
 		void FixedUpdate(const double fixedTimeStep);
 		void Render();
 		void DestroyObjects();
+		void RemoveCurrentScene();
 		void TransferPersistentObjects(Scene& first, Scene& second);
-		std::shared_ptr<Scene> GetCurrentScene();
-		std::shared_ptr<Scene> GetScene(const std::string& name);
+		Scene* GetCurrentScene();
+		Scene* GetScene(const std::string& name);
+		void SetLevelState(std::unique_ptr<LevelState> levelState);
 
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;
 		std::vector<std::shared_ptr<Scene>> m_scenes;
+		std::unique_ptr<LevelState> m_LevelState{};
 	};
 }
 #endif

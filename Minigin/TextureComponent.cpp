@@ -27,7 +27,7 @@ void dae::TextureComponent::Start()
 
 void dae::TextureComponent::Render() const
 {
-	if (m_IsDestroyed || !m_ShouldRender) return;
+	if (m_IsDestroyed || !m_ShouldRender || !m_texture.get()) return;
 
 	const auto& pos = m_pOwner->GetWorldPosition();
 	

@@ -50,6 +50,10 @@ void EventObserver::BroadcastToListeners()
 
 		for (EventListener* handler : m_pListeners)
 		{
+			if (handler == nullptr)
+			{
+				continue;
+			}
 			handler->HandleEvent(event);
 		}
 	}

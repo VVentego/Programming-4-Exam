@@ -1,22 +1,21 @@
 #ifndef LEVELSTATE
 #define LEVELSTATE
 #include "Component.h"
-using namespace dae;
+#include <memory>
+
 class LevelState : public EventListener
 {
 public:
 	LevelState();
 	virtual ~LevelState() = default;
-	virtual void OnEnter(Scene& scene) = 0;
-	virtual void OnExit(Scene& scene) = 0;
-	virtual void HandleEvent() = 0;
+	virtual void OnEnter(dae::Scene& scene) = 0;
+	virtual std::unique_ptr<LevelState> OnExit(dae::Scene& scene) = 0;
+	virtual void HandleEvent(const Event& event) = 0;
 
+	virtual bool IsExited() { return m_Exit; }
 protected:
-	GameObject* m_pPlayer1ScoreObject{};
-	GameObject* m_pPlayer2ScoreObject{};
-	GameObject* m_pPlayer1LivesObject{};
-	GameObject* m_pPlayer2LivesObject{};
-
 	int m_EnemiesLeft{};
+	bool m_Exit{};
+	std::unique_ptr<LevelState> m_NextState{};
 };
 #endif // !LEVELSTATE

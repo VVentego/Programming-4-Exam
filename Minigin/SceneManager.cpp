@@ -8,6 +8,15 @@ void dae::SceneManager::Update(const double deltaTime)
 		scene->Update(deltaTime);
 		scene->UpdateCollisions();
 	}
+
+	if (m_LevelState->IsExited())
+	{
+		auto newLevelState = m_LevelState->OnExit(*GetCurrentScene());
+		m_LevelState.reset();
+		m_LevelState = std::move(newLevelState);
+		m_LevelState->OnEnter(*GetCurrentScene());
+		RemoveCurrentScene();
+	}
 }
 
 void dae::SceneManager::FixedUpdate(const double fixedTimeStep)
@@ -34,6 +43,11 @@ void dae::SceneManager::DestroyObjects()
 	}
 }
 
+void dae::SceneManager::RemoveCurrentScene()
+{
+	m_scenes.erase(m_scenes.begin());
+}
+
 void dae::SceneManager::TransferPersistentObjects(Scene& first, Scene& second)
 {
 	auto& persistentObjects = first.PassPersistentObjects();
@@ -43,17 +57,17 @@ void dae::SceneManager::TransferPersistentObjects(Scene& first, Scene& second)
 	}
 }
 
-std::shared_ptr<dae::Scene> dae::SceneManager::GetCurrentScene() 
+dae::Scene* dae::SceneManager::GetCurrentScene() 
 {
 	if (m_scenes.empty())
 	{
 		return nullptr;
 	}
 
-	return m_scenes.front(); 
+	return m_scenes.front().get(); 
 }
 
-std::shared_ptr<dae::Scene> dae::SceneManager::GetScene(const std::string& name)
+dae::Scene* dae::SceneManager::GetScene(const std::string& name)
 {
 	auto it = std::find_if(m_scenes.begin(), m_scenes.end(), [&name](const std::shared_ptr<Scene> scene)
 		{
@@ -62,10 +76,16 @@ std::shared_ptr<dae::Scene> dae::SceneManager::GetScene(const std::string& name)
 
 	if (it != m_scenes.end())
 	{
-		return *it;
+		return it->get();
 	}
 
 	return nullptr;
+}
+
+void dae::SceneManager::SetLevelState(std::unique_ptr<LevelState> levelState)
+{
+	m_LevelState = std::move(levelState);
+	m_LevelState->OnEnter(*GetCurrentScene());
 }
 
 dae::Scene& dae::SceneManager::CreateScene(const std::string& name)

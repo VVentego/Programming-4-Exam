@@ -37,7 +37,7 @@ namespace dae
 		void OnExit(PookaBehavior& pooka) override;
 
 	private:
-		const float m_NormalStateDuration{ 5.f };
+		const float m_NormalStateDuration{ 20.f };
 	};
 
 	class PookaGhostState : public PookaState

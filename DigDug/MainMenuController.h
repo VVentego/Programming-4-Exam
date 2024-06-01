@@ -10,7 +10,7 @@ namespace dae
     {
     public:
         MainMenuController(GameObject* pOwner, const int windowWidth, const int windowHeight, Scene& scene);
-        virtual ~MainMenuController() = default;
+        virtual ~MainMenuController();
         MainMenuController(const MainMenuController& other) = delete;
         MainMenuController(MainMenuController&& other) = delete;
         MainMenuController& operator=(const MainMenuController& other) = delete;

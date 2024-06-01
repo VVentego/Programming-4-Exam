@@ -230,53 +230,53 @@ void LevelLoader::CreateUI(dae::Scene& scene)
 
     std::shared_ptr<dae::Font> font = std::move(resourceManager.LoadFont("Lingua.otf", 36));
 
-    float offset{ 5 };
-    go = std::make_unique<dae::GameObject>();
-    go->AddComponent(std::make_unique<dae::TextComponent>("60.0", font, go.get()));
-    go->AddComponent(std::make_unique<dae::FpsCounterComponent>(go.get()));
-    go->GetComponent<dae::TextComponent>()->SetColor({ 255, 0, 0, 255 });
-    go->SetWorldPosition(offset, offset);
-    scene.Add(std::move(go));
+    //float offset{ 5 };
+    //go = std::make_unique<dae::GameObject>();
+    //go->AddComponent(std::make_unique<dae::TextComponent>("60.0", font, go.get()));
+    //go->AddComponent(std::make_unique<dae::FpsCounterComponent>(go.get()));
+    //go->GetComponent<dae::TextComponent>()->SetColor({ 255, 0, 0, 255 });
+    //go->SetWorldPosition(offset, offset);
+    //scene.Add(std::move(go));
 
-    go = std::make_unique<dae::GameObject>();
-    font = std::move(resourceManager.LoadFont("Lingua.otf", 14));
-    go->AddComponent(std::make_unique<dae::TextComponent>("Use WASD to move Dig Dug, Z and X to attack.", font, go.get()));
-    go->SetWorldPosition(5, gWindowHeight - 75);
-    scene.Add(std::move(go));
+    //go = std::make_unique<dae::GameObject>();
+    //font = std::move(resourceManager.LoadFont("Lingua.otf", 14));
+    //go->AddComponent(std::make_unique<dae::TextComponent>("Use WASD to move Dig Dug, Z and X to attack.", font, go.get()));
+    //go->SetWorldPosition(5, gWindowHeight - 75);
+    //scene.Add(std::move(go));
 
-    //Score Display Event Handler
-    go = std::make_unique<dae::GameObject>();
-    font = std::move(resourceManager.LoadFont("Lingua.otf", 24));
-    go->AddComponent(std::make_unique<dae::TextComponent>("Score: 50", font, go.get()));
-    go->AddComponent(std::make_unique<dae::ScoreDisplayComponent>(go.get(), "Player0"));
-    go->GetComponent<dae::TextComponent>()->SetColor({ 255, 255, 255, 255 });
-    go->SetWorldPosition(5, gWindowHeight - 100);
-    scene.Add(std::move(go));
+    ////Score Display Event Handler
+    //go = std::make_unique<dae::GameObject>();
+    //font = std::move(resourceManager.LoadFont("Lingua.otf", 24));
+    //go->AddComponent(std::make_unique<dae::TextComponent>("Score: 50", font, go.get()));
+    //go->AddComponent(std::make_unique<dae::ScoreDisplayComponent>(go.get(), "Player0"));
+    //go->GetComponent<dae::TextComponent>()->SetColor({ 255, 255, 255, 255 });
+    //go->SetWorldPosition(5, gWindowHeight - 100);
+    //scene.Add(std::move(go));
 
-    //Score Display Event Handler
-    go = std::make_unique<dae::GameObject>();
-    font = std::move(resourceManager.LoadFont("Lingua.otf", 24));
-    go->AddComponent(std::make_unique<dae::TextComponent>("Score: 50", font, go.get()));
-    go->AddComponent(std::make_unique<dae::ScoreDisplayComponent>(go.get(), "Player1"));
-    go->GetComponent<dae::TextComponent>()->SetColor({ 255, 255, 255, 255 });
-    go->SetWorldPosition(5, gWindowHeight - 150);
-    scene.Add(std::move(go));
+    ////Score Display Event Handler
+    //go = std::make_unique<dae::GameObject>();
+    //font = std::move(resourceManager.LoadFont("Lingua.otf", 24));
+    //go->AddComponent(std::make_unique<dae::TextComponent>("Score: 50", font, go.get()));
+    //go->AddComponent(std::make_unique<dae::ScoreDisplayComponent>(go.get(), "Player1"));
+    //go->GetComponent<dae::TextComponent>()->SetColor({ 255, 255, 255, 255 });
+    //go->SetWorldPosition(5, gWindowHeight - 150);
+    //scene.Add(std::move(go));
 
-    //Lives Display Event Handler
-    go = std::make_unique<dae::GameObject>();
-    font = std::move(resourceManager.LoadFont("Lingua.otf", 24));
-    go->AddComponent(std::make_unique<dae::TextComponent>("Score: 50", font, go.get()));
-    go->AddComponent(std::make_unique<dae::LivesDisplayComponent>(go.get(), "Player0"));
-    go->GetComponent<dae::TextComponent>()->SetColor({ 255, 255, 255, 255 });
-    go->SetWorldPosition(5, gWindowHeight - 125);
-    scene.Add(std::move(go));
+    ////Lives Display Event Handler
+    //go = std::make_unique<dae::GameObject>();
+    //font = std::move(resourceManager.LoadFont("Lingua.otf", 24));
+    //go->AddComponent(std::make_unique<dae::TextComponent>("Score: 50", font, go.get()));
+    //go->AddComponent(std::make_unique<dae::LivesDisplayComponent>(go.get(), "Player0"));
+    //go->GetComponent<dae::TextComponent>()->SetColor({ 255, 255, 255, 255 });
+    //go->SetWorldPosition(5, gWindowHeight - 125);
+    //scene.Add(std::move(go));
 
-    //Lives Display Event Handler
-    go = std::make_unique<dae::GameObject>();
-    font = std::move(resourceManager.LoadFont("Lingua.otf", 24));
-    go->AddComponent(std::make_unique<dae::TextComponent>("Score: 50", font, go.get()));
-    go->AddComponent(std::make_unique<dae::LivesDisplayComponent>(go.get(), "Player1"));
-    go->GetComponent<dae::TextComponent>()->SetColor({ 255, 255, 255, 255 });
-    go->SetWorldPosition(5, gWindowHeight - 175);
-    scene.Add(std::move(go));
+    ////Lives Display Event Handler
+    //go = std::make_unique<dae::GameObject>();
+    //font = std::move(resourceManager.LoadFont("Lingua.otf", 24));
+    //go->AddComponent(std::make_unique<dae::TextComponent>("Score: 50", font, go.get()));
+    //go->AddComponent(std::make_unique<dae::LivesDisplayComponent>(go.get(), "Player1"));
+    //go->GetComponent<dae::TextComponent>()->SetColor({ 255, 255, 255, 255 });
+    //go->SetWorldPosition(5, gWindowHeight - 175);
+    //scene.Add(std::move(go));
 }
