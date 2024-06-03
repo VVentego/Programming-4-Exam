@@ -9,6 +9,7 @@
 #include <Minigin.h>
 #include "LivesDisplayComponent.h"
 #include "MainMenuController.h"
+#include <chrono>
 
 using namespace dae;
 SinglePlayerState1::SinglePlayerState1()
@@ -66,11 +67,37 @@ void SinglePlayerState1::OnEnter(dae::Scene& scene)
 
 std::unique_ptr<LevelState> SinglePlayerState1::OnExit(dae::Scene&)
 {
+    auto start = std::chrono::high_resolution_clock::now();
+    while (true)
+    {
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> elapsed = end - start;
+
+        if (elapsed.count() >= m_EndLevelDelay)
+        {
+            break;
+        }
+    }
+
     return std::move(m_NextState);
 }
 
 void SinglePlayerState1::HandleEvent(const Event& event)
 {
+    if (event.type == EventType::PLAYER_DIED)
+    {
+        if (event.stringValue == "Player0")
+        {
+            --m_Player0Lives;
+            if (m_Player0Lives <= 0)
+            {
+                m_Exit = true;
+                EventObserver::GetInstance().RemoveListener(this);
+                m_NextState = std::make_unique<MainMenuState>();
+            }
+        }
+    }
+
     if (event.type == EventType::LOAD_LEVEL)
     {
         EventObserver::GetInstance().RemoveListener(this);
@@ -87,11 +114,12 @@ MainMenuState::~MainMenuState()
   
 }
 
-void MainMenuState::OnEnter(dae::Scene& scene)
+void MainMenuState::OnEnter(dae::Scene&)
 {
+    auto& newScene = dae::SceneManager::GetInstance().CreateScene("Level1");
     auto mainMenuController = std::make_unique<GameObject>();
-    mainMenuController->AddComponent(std::make_unique<dae::MainMenuController>(mainMenuController.get(), gWindowWidth, gWindowHeight, scene));
-    scene.Add(std::move(mainMenuController));
+    mainMenuController->AddComponent(std::make_unique<dae::MainMenuController>(mainMenuController.get(), gWindowWidth, gWindowHeight, newScene));
+    newScene.Add(std::move(mainMenuController));
 }
 
 std::unique_ptr<LevelState> MainMenuState::OnExit(dae::Scene& scene)

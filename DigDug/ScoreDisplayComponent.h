@@ -12,7 +12,7 @@ namespace dae
 		void Update(const double deltaTime) override;
 
 		ScoreDisplayComponent(GameObject* pOwner, const std::string& playerName);
-		virtual ~ScoreDisplayComponent() = default;
+		virtual ~ScoreDisplayComponent();
 		ScoreDisplayComponent(const ScoreDisplayComponent& other) = delete;
 		ScoreDisplayComponent(ScoreDisplayComponent&& other) = delete;
 		ScoreDisplayComponent& operator=(const ScoreDisplayComponent& other) = delete;

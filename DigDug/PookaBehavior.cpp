@@ -73,14 +73,13 @@ void dae::PookaBehavior::TrackPlayer()
 	const glm::vec2 playerPos{ m_PlayersTransform[m_TargetIdx]->GetWorldPosition() };
 	const glm::vec2 pookaPos{ m_pOwner->GetWorldPosition() };
 
-	if (std::abs(playerPos.y - pookaPos.y) < 0.1f)
-	{
-		(playerPos.x > pookaPos.x) ? m_FacingDirection = Facing::right : m_FacingDirection = Facing::left;
-	}
-
 	if (std::abs(playerPos.x - pookaPos.x) < 0.1f)
 	{
 		(playerPos.y > pookaPos.y) ? m_FacingDirection = Facing::up : m_FacingDirection = Facing::down;
+	}
+	if (std::abs(playerPos.y - pookaPos.y) < 0.1f)
+	{
+		(playerPos.x > pookaPos.x) ? m_FacingDirection = Facing::right : m_FacingDirection = Facing::left;
 	}
 }
 
@@ -100,13 +99,13 @@ void dae::PookaBehavior::CheckForTunnel()
 		checkLocation = m_pOwner->GetWorldPosition() + glm::vec2{ m_CheckDistance + m_Size, m_Size / 2 };
 		break;
 	case Facing::down:
-		checkLocation = m_pOwner->GetWorldPosition() + glm::vec2{ m_Size / 2, -m_CheckDistance };
+		checkLocation = m_pOwner->GetWorldPosition() + glm::vec2{ m_Size / 2, m_CheckDistance + m_Size };
 		break;
 	case Facing::left:
 		checkLocation = m_pOwner->GetWorldPosition() + glm::vec2{ -m_CheckDistance, m_Size / 2 };
 		break;
 	case Facing::up:
-		checkLocation = m_pOwner->GetWorldPosition() + glm::vec2{ m_Size / 2, m_CheckDistance + m_Size };
+		checkLocation = m_pOwner->GetWorldPosition() + glm::vec2{ m_Size / 2, -m_CheckDistance };
 		break;
 	}
 

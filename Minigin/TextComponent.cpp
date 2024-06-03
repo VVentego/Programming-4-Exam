@@ -40,3 +40,8 @@ void dae::TextComponent::SetText(const std::string& text)
 	m_text = text;
 	m_needsUpdate = true;
 }
+
+const glm::vec2 dae::TextComponent::GetSize()
+{
+	return m_pTextureComponent->GetSize();
+}

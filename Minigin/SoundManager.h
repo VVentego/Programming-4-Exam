@@ -93,8 +93,8 @@ namespace dae
 		void LoadTrack(const std::string& fileName, sound_id id);
 		void AddTrack(const std::string& fileName, sound_id id);
 		void AddMusic(const std::string& fileName);
-		virtual void PlayMusic();
-		virtual void StopMusic();
+		void PlayMusic();
+		void StopMusic();
 		void Destroy();
 
 	private:
@@ -107,9 +107,12 @@ namespace dae
 		_Mix_Music* m_Music{};
 		std::map<sound_id, std::string> m_TracksToLoad;
 		std::jthread m_SoundThread;
+		std::jthread m_LoadingThread;
 		std::condition_variable cv{};
+		std::condition_variable cv1{};
 		bool m_Running{ true };
 		void Update();
+		void UpdateLoadedTracks();
 	};
 #endif // !SOUNDSYSTEMIMPL
 }

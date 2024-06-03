@@ -7,31 +7,31 @@
 
 using namespace dae;
 
-MainMenuController::MainMenuController(GameObject* pOwner, const int, const int windowHeight, Scene& scene) :
+MainMenuController::MainMenuController(GameObject* pOwner, const int windowWidth, const int windowHeight, Scene& scene) :
 	Component::Component(pOwner)
 {
 	//Register self as player 1
 	ServiceLocator::GetInputManager().AddPlayer1(*this);
 	auto& resourceManager = ResourceManager::GetInstance();
-	const float spacing{ 20 };
+	const float spacing{ 40 };
 
 	std::shared_ptr<Font> font = std::move(resourceManager.LoadFont("Lingua.otf", 14));
 	std::unique_ptr<GameObject> textObject = std::make_unique<GameObject>();
-	textObject->AddComponent(std::make_unique<TextComponent>("Single Player", font, pOwner));
-	textObject->SetWorldPosition(spacing, windowHeight - spacing);
+	textObject->AddComponent(std::make_unique<TextComponent>("Single Player", font, textObject.get()));
 	textObject->SetParent(pOwner);
+	textObject->SetWorldPosition(windowWidth / static_cast<float>(2), windowHeight - spacing);
 	scene.Add(std::move(textObject));
 
 	textObject = std::make_unique<GameObject>();
-	textObject->AddComponent(std::make_unique<TextComponent>("Multiplayer", font, pOwner));
-	textObject->SetWorldPosition(spacing, windowHeight - spacing * 2);
+	textObject->AddComponent(std::make_unique<TextComponent>("Multiplayer", font, textObject.get()));
 	textObject->SetParent(pOwner);
+	textObject->SetWorldPosition(windowWidth / static_cast<float>(2), windowHeight - spacing * 2);
 	scene.Add(std::move(textObject));
 	
 	textObject = std::make_unique<GameObject>();
-	textObject->AddComponent(std::make_unique<TextComponent>("Versus", font, pOwner));
-	textObject->SetWorldPosition(spacing, windowHeight - spacing * 3);
+	textObject->AddComponent(std::make_unique<TextComponent>("Versus", font, textObject.get()));
 	textObject->SetParent(pOwner);
+	textObject->SetWorldPosition(windowWidth / static_cast<float>(2), windowHeight - spacing * 3);
 	scene.Add(std::move(textObject));
 }
 

@@ -45,6 +45,7 @@ bool dae::SoundManager::SoundSystemImpl::Init()
     tail_ = 0;
 
     m_SoundThread = std::jthread(&SoundSystemImpl::Update, this);
+    m_LoadingThread = std::jthread(&SoundSystemImpl::UpdateLoadedTracks, this);
 
     for (int i{}; i < MAX_PENDING; ++i)
     {
@@ -66,7 +67,7 @@ void dae::SoundManager::SoundSystemImpl::LoadTrack(const std::string& fileName, 
 void dae::SoundManager::SoundSystemImpl::AddTrack(const std::string& fileName, sound_id id)
 {
     m_TracksToLoad.insert(std::pair<sound_id, std::string>(id, fileName));
-    cv.notify_one();
+    cv1.notify_one();
 }
 
 void dae::SoundManager::SoundSystemImpl::AddMusic(const std::string& fileName)
@@ -107,10 +108,16 @@ void dae::SoundManager::SoundSystemImpl::Destroy()
 
     m_Running = false;
     cv.notify_one();
+    cv1.notify_one();
 
     if (m_SoundThread.joinable())
     {
         m_SoundThread.join();
+    }
+
+    if (m_LoadingThread.joinable())
+    {
+        m_LoadingThread.join();
     }
     Mix_CloseAudio();
 }
@@ -121,14 +128,6 @@ void dae::SoundManager::SoundSystemImpl::Update()
     {
         std::unique_lock<std::mutex> lock(mutex);
 
-        if (!m_TracksToLoad.empty())
-        {
-            for (auto& track : m_TracksToLoad)
-            {
-                LoadTrack(track.second, track.first);
-            }
-            m_TracksToLoad.clear();
-        }
         cv.wait(lock, [this] { return !(head_ == tail_) || !m_Running; });
 
         auto trackIt = m_AudioTracks.find(m_Pending[head_].id);
@@ -140,5 +139,24 @@ void dae::SoundManager::SoundSystemImpl::Update()
         }
 
         head_ = (head_ + 1) % MAX_PENDING;
+    }
+}
+
+void dae::SoundManager::SoundSystemImpl::UpdateLoadedTracks()
+{
+    while (m_Running)
+    {
+        std::unique_lock<std::mutex> lock(mutex);
+
+        cv1.wait(lock, [this] { return !m_TracksToLoad.empty() || !m_Running; });
+
+        if (!m_TracksToLoad.empty())
+        {
+            for (auto& track : m_TracksToLoad)
+            {
+                LoadTrack(track.second, track.first);
+            }
+            m_TracksToLoad.clear();
+        }
     }
 }

@@ -15,17 +15,17 @@ namespace dae
 
 		virtual PookaState* Update(PookaBehavior&, const double) { return nullptr; }
 
-		virtual void OnEnter(PookaBehavior&) {};
-		virtual void OnExit(PookaBehavior&) {};
+		virtual void OnEnter(PookaBehavior&) = 0;
+		virtual void OnExit(PookaBehavior&) = 0;
 
 	protected:
 		float m_StateTimer{};
 	};
 
-	class PookaNormalState : public PookaState
+	class PookaNormalState final : public PookaState
 	{
 	public:
-		PookaNormalState() {};
+		PookaNormalState() = default;
 		~PookaNormalState() = default;
 		PookaNormalState(const PookaNormalState& other) = delete;
 		PookaNormalState(PookaNormalState&& other) = delete;
@@ -40,7 +40,7 @@ namespace dae
 		const float m_NormalStateDuration{ 20.f };
 	};
 
-	class PookaGhostState : public PookaState
+	class PookaGhostState final : public PookaState
 	{
 	public:
 		PookaGhostState() = default;
@@ -58,7 +58,7 @@ namespace dae
 		const float m_GhostStateDuration{ 5.f };
 	};
 
-	class PookaInflatedState : public PookaState
+	class PookaInflatedState final : public PookaState
 	{
 	public:
 		PookaInflatedState() = default;

@@ -8,6 +8,11 @@ dae::ScoreDisplayComponent::ScoreDisplayComponent(GameObject* pOwner, const std:
 	m_pTextComponent = m_pOwner->GetComponent<TextComponent>();
 }
 
+dae::ScoreDisplayComponent::~ScoreDisplayComponent()
+{
+	EventObserver::GetInstance().RemoveListener(this);
+}
+
 void dae::ScoreDisplayComponent::HandleEvent(const Event& event)
 {
 	if (event.type != EventType::SCORE_INCREASED)

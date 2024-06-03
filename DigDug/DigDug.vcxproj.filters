@@ -57,6 +57,12 @@
     <ClCompile Include="MainMenuController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RockBehavior.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RockState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DigDugController.h">
@@ -105,6 +111,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MainMenuController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RockBehavior.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RockState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

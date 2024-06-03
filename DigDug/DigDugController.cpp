@@ -2,6 +2,7 @@
 #include "TunnelManager.h"
 #include "Enemy.h"
 #include <SpriteAnimatorComponent.h>
+#include <TextureComponent.h>
 #include "DigDugState.h"
 
 dae::DigDugController::DigDugController(GameObject* pOwner, const std::string& playerName, GameObject* pPump) :
@@ -16,6 +17,11 @@ dae::DigDugController::DigDugController(GameObject* pOwner, const std::string& p
 	m_pDigSpriteUp{ std::make_shared<SpriteSheet>("DigDugDigUp.png", 1, 2) },
 	m_pDeathSprite{ std::make_shared<SpriteSheet>("DigDugDeath.png", 1, 4) }
 {
+	auto tunnelRenderer = std::make_unique<TextureComponent>(pOwner);
+	tunnelRenderer->SetTexture("TunnelHorizontal.png");
+	m_pTunnelTexture = tunnelRenderer.get();
+	pOwner->AddComponent(std::move(tunnelRenderer));
+
 	auto digDugSpriteAnimator = std::make_unique<SpriteAnimatorComponent>(pOwner);
 	digDugSpriteAnimator->AddSpriteSheet(m_pWalkSpriteRight);
 	m_pAnimatorComponent = digDugSpriteAnimator.get();
@@ -34,6 +40,8 @@ dae::DigDugController::~DigDugController()
 {
 	delete m_CurrentState;
 	m_CurrentState = nullptr;
+
+	EventObserver::GetInstance().RemoveListener(this);
 
 	if (m_PlayerName == "Player1")
 	{
@@ -105,7 +113,7 @@ void dae::DigDugController::Shoot()
 
 void dae::DigDugController::OnPlayerDeath()
 {
-	m_Lives--;
+	--m_Lives;
 	Event playerDiedEvent;
 	playerDiedEvent.type = EventType::PLAYER_DIED;
 	playerDiedEvent.stringValue = m_PlayerName.c_str();
@@ -252,4 +260,9 @@ void dae::DigDugController::StopMusic()
 	{
 		ServiceLocator::GetSoundManager().StopMusic();
 	}
+}
+
+void dae::DigDugController::RenderTunnel(const bool doRender)
+{
+	m_pTunnelTexture->m_ShouldRender = doRender;
 }

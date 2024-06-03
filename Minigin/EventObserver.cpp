@@ -21,9 +21,22 @@ void EventObserver::Notify(const Event& event)
 	cv.notify_one();
 }
 
+void dae::EventObserver::AddListener(EventListener* eventListener)
+{
+	auto it = std::find(m_pListeners.begin(), m_pListeners.end(), eventListener);
+	if (it == m_pListeners.end())
+	{
+		m_pListeners.push_back(eventListener);
+	}
+}
+
 void EventObserver::RemoveListener(EventListener* listener)
 {
-	m_pListeners.erase(remove(m_pListeners.begin(), m_pListeners.end(), listener), m_pListeners.end());
+	auto it = std::find(m_pListeners.begin(), m_pListeners.end(), listener);
+	if (it != m_pListeners.end())
+	{
+		m_pListeners.erase(it);
+	}
 }
 
 EventObserver::EventObserver()

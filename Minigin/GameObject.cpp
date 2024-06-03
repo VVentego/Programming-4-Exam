@@ -48,7 +48,7 @@ void dae::GameObject::SetLocalPosition(const float x, const float y)
 	SetPositionDirty();
 }
 
-void dae::GameObject::SetLocalPosition(const glm::vec2 pos)
+void dae::GameObject::SetLocalPosition(const glm::vec2& pos)
 {
 	m_Transform.SetLocalPosition(pos);
 	SetPositionDirty();
@@ -65,7 +65,7 @@ void dae::GameObject::SetWorldPosition(const float x, const float y)
 	SetPositionDirty();
 }
 
-void dae::GameObject::SetWorldPosition(const glm::vec2 worldPosition)
+void dae::GameObject::SetWorldPosition(const glm::vec2& worldPosition)
 {
 	SetWorldPosition(worldPosition.x, worldPosition.y);
 }

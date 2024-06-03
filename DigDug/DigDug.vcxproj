@@ -30,6 +30,8 @@
     <ClCompile Include="PookaBehavior.cpp" />
     <ClCompile Include="PookaState.cpp" />
     <ClCompile Include="PumpBehaviorComponent.cpp" />
+    <ClCompile Include="RockBehavior.cpp" />
+    <ClCompile Include="RockState.cpp" />
     <ClCompile Include="ScoreDisplayComponent.cpp" />
     <ClCompile Include="TunnelManager.cpp" />
     <ClCompile Include="TunnelTextureComponent.cpp" />
@@ -47,6 +49,8 @@
     <ClInclude Include="PookaBehavior.h" />
     <ClInclude Include="PookaState.h" />
     <ClInclude Include="PumpBehaviorComponent.h" />
+    <ClInclude Include="RockBehavior.h" />
+    <ClInclude Include="RockState.h" />
     <ClInclude Include="ScoreDisplayComponent.h" />
     <ClInclude Include="TunnelDweller.h" />
     <ClInclude Include="TunnelManager.h" />

@@ -10,6 +10,7 @@ dae::LivesDisplayComponent::LivesDisplayComponent(GameObject* pOwner, const std:
 
 dae::LivesDisplayComponent::~LivesDisplayComponent()
 {
+	EventObserver::GetInstance().RemoveListener(this);
 }
 
 void dae::LivesDisplayComponent::HandleEvent(const Event& event)

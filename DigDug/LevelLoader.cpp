@@ -23,6 +23,7 @@ bool LevelLoader::LoadLevel(const std::string& levelFile) {
     LoadPookas();
     LoadFygars();
     LoadTunnels();
+    LoadRocks();
 
     return true;
 }
@@ -135,6 +136,30 @@ void LevelLoader::LoadTunnels() {
     lua_pop(L, 1);
 }
 
+void LevelLoader::LoadRocks()
+{
+    lua_getglobal(L, "rocks");
+    if (lua_istable(L, -1)) {
+        lua_pushnil(L);
+        while (lua_next(L, -2)) {
+            if (lua_istable(L, -1)) {
+                glm::vec2 pos{};
+                lua_getfield(L, -1, "x");
+                pos.x = static_cast<float>(lua_tointeger(L, -1));
+                lua_pop(L, 1);
+
+                lua_getfield(L, -1, "y");
+                pos.y = static_cast<float>(lua_tointeger(L, -1));
+                lua_pop(L, 1);
+
+                m_Rocks.push_back(pos);
+            }
+            lua_pop(L, 1);
+        }
+    }
+    lua_pop(L, 1);
+}
+
 std::string LevelLoader::GetBackground() const 
 {
     return m_Background;
@@ -146,16 +171,24 @@ std::vector<LoadedPlayer> LevelLoader::GetPlayers() const
 }
 
 
-std::vector<glm::vec2> LevelLoader::GetPookas() const {
+std::vector<glm::vec2> LevelLoader::GetPookas() const 
+{
     return m_Pookas;
 }
 
-std::vector<glm::vec2> LevelLoader::GetFygars() const {
+std::vector<glm::vec2> LevelLoader::GetFygars() const 
+{
     return m_Fygars;
 }
 
-std::vector<glm::vec2> LevelLoader::GetTunnels() const {
+std::vector<glm::vec2> LevelLoader::GetTunnels() const 
+{
     return m_Tunnels;
+}
+
+std::vector<glm::vec2> LevelLoader::GetRocks() const
+{
+    return m_Rocks;
 }
 
 void LevelLoader::CreateBackground(dae::Scene& scene)
@@ -214,6 +247,14 @@ void LevelLoader::CreateEntities(dae::Scene& scene)
         }
         pooka->AddCollider(scene);
         scene.Add(std::move(pooka));
+    }
+
+    for (auto& rockPos : m_Rocks)
+    {
+        auto rock = std::make_unique<dae::GameObject>();
+        rock->AddComponent(std::make_unique<dae::RockBehavior>(rock.get()));
+        rock->SetWorldPosition(rockPos.x, rockPos.y);
+        scene.Add(std::move(rock));
     }
 }
 

@@ -12,6 +12,7 @@
 #include "PumpBehaviorComponent.h"
 #include "ScoreDisplayComponent.h"
 #include "PookaBehavior.h"
+#include "RockBehavior.h"
 
 #endif // !COMPONENTSHEADER
 

@@ -22,8 +22,9 @@ namespace dae
 		EventObserver& operator=(EventObserver&& other) = delete;
 
         void Notify(const Event& event);
-        void AddListener(EventListener* eventListener) { m_pListeners.push_back(eventListener); }
+        void AddListener(EventListener* eventListener);
         void RemoveListener(EventListener* listener);
+        void ClearListeners() { m_pListeners.clear(); }
 
 	private:
 		friend class Singleton;

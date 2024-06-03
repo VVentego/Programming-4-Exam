@@ -111,7 +111,7 @@ void dae::DigDugNormalState::HandleCollision(DigDugController&, GameObject* othe
 
 DigDugState* DigDugDeathState::Update(DigDugController& digDug, const double)
 {
-	if (digDug.IsDoneDying())
+	if (digDug.IsDoneDying() && digDug.m_Lives > 0)
 	{
 		return new DigDugNormalState;
 	}
@@ -121,7 +121,10 @@ DigDugState* DigDugDeathState::Update(DigDugController& digDug, const double)
 
 void DigDugDeathState::OnEnter(DigDugController& digDug)
 {
-	digDug.SetSpriteSheet(digDug.m_pDeathSprite, 0.5);
+	ServiceLocator::GetSoundManager().Play(6, 100);
+	digDug.RenderTunnel(false);
+
+	digDug.SetSpriteSheet(digDug.m_pDeathSprite, 0.1);
 }
 
 void DigDugDeathState::OnExit(DigDugController& digDug)
@@ -183,6 +186,8 @@ DigDugState* dae::DigDugDigState::Update(DigDugController& digDug, const double 
 
 void dae::DigDugDigState::OnEnter(DigDugController& digDug)
 {
+	digDug.RenderTunnel(true);
+
 	switch (digDug.m_FacingDirection)
 	{
 	case Facing::right:
@@ -202,6 +207,8 @@ void dae::DigDugDigState::OnEnter(DigDugController& digDug)
 
 void dae::DigDugDigState::OnExit(DigDugController& digDug) 
 {
+	digDug.RenderTunnel(false);
+
 	digDug.StopMusic();
 }
 

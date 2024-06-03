@@ -38,15 +38,16 @@ namespace dae
 
         const std::string m_PlayerName;
     private:
+        friend class DigDugNormalState;
+        friend class DigDugDigState;
+        friend class DigDugDeathState;
         void SetSpriteSheet(std::shared_ptr<SpriteSheet> spriteSheet, const double frameTime);
         void DigTunnel();
         bool InTunnel();
         bool IsDoneDying();
         void PlayMusic();
         void StopMusic();
-        friend class DigDugNormalState;
-        friend class DigDugDigState;
-        friend class DigDugDeathState;
+        void RenderTunnel(const bool doRender);
         const float m_MoveSpeed{ 20.f };
         const float m_CheckDistance{ 3.f };
         float m_DistanceMoved{};
@@ -70,6 +71,7 @@ namespace dae
         std::shared_ptr<SpriteSheet> m_pDigSpriteLeft;
         std::shared_ptr<SpriteSheet> m_pDigSpriteUp;
         std::shared_ptr<SpriteSheet> m_pDeathSprite;
+        TextureComponent* m_pTunnelTexture{};
 
         int m_Lives{ 3 };
     };

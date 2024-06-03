@@ -21,7 +21,7 @@ namespace dae
 		virtual void HandleCollision(DigDugController&, GameObject*) = 0;
 	};
 
-	class DigDugNormalState : public DigDugState
+	class DigDugNormalState final : public DigDugState
 	{
 	public:
 		DigDugNormalState() = default;
@@ -36,14 +36,14 @@ namespace dae
 		void OnEnter(DigDugController& digDug) override;
 		void OnExit(DigDugController& digDug) override;
 		void HandleInput(DigDugController& digDug, Command* command) override;
-		virtual void HandleCollision(DigDugController& digDug, GameObject* other);
+		virtual void HandleCollision(DigDugController& digDug, GameObject* other) override;
 
 	private:
 		bool m_Dead{};
 		float m_InvulnerabilityTimer{ 1.f };
 	};
 
-	class DigDugDigState : public DigDugState
+	class DigDugDigState final : public DigDugState
 	{
 	public:
 		DigDugDigState() = default;
@@ -58,13 +58,13 @@ namespace dae
 		void OnEnter(DigDugController& digDug) override;
 		void OnExit(DigDugController& digDug) override;
 		void HandleInput(DigDugController& digDug, Command* command) override;
-		virtual void HandleCollision(DigDugController& digDug, GameObject* other);
+		virtual void HandleCollision(DigDugController& digDug, GameObject* other) override;
 
 	private:
 		bool m_Dead{};
 	};
 
-	class DigDugDeathState : public DigDugState
+	class DigDugDeathState final : public DigDugState
 	{
 	public:
 		DigDugDeathState() = default;

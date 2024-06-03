@@ -25,6 +25,8 @@ void Scene::Remove(std::unique_ptr<GameObject> object)
 void Scene::RemoveAll()
 {
 	m_objects.clear();
+
+	m_PersistentObjects.clear();
 }
 
 void Scene::Update(const double deltaTime)
