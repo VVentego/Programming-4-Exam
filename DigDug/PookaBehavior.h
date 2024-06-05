@@ -1,6 +1,6 @@
 #ifndef POOKA
 #define POOKA
-#include "../Minigin/Component.h"
+#include <Component.h>
 #include "Enemy.h"
 
 namespace dae 
@@ -25,22 +25,23 @@ namespace dae
 		void AddPlayerToChase(GameObject* playerTransform);
 		void CollisionEvent(GameObject* other) override;
 
-		bool GetHooked() const { return m_IsHooked; }
 		void Inflate(const int playerIdx) override;
-		bool IsInflated() const override { return m_InflationLevel > 0; }
+
 	private:
 		friend class PookaNormalState;
 		friend class PookaGhostState;
 		friend class PookaInflatedState;
+		friend class PookaFlattenedState;
 		void TrackPlayer();
 		void CheckForTunnel();
-		void ReverseDirection();
+		void FindNewDirection();
 		void SetSprite(std::shared_ptr<SpriteSheet> spriteSheet);
 		void SwapTarget(const double deltaTime);
 		void UpdateMovement();
 		void SeekNearestTunnel();
 		bool IsInTunnel() const;
 		void Die();
+		void CrushedByRock();
 		void GetFree();
 
 		SpriteAnimatorComponent* m_pAnimatorComponent{};
@@ -50,21 +51,18 @@ namespace dae
 		std::shared_ptr<SpriteSheet> m_pInflatedSprite2;
 		std::shared_ptr<SpriteSheet> m_pInflatedSprite3;
 		std::shared_ptr<SpriteSheet> m_pInflatedSprite4;
+		std::shared_ptr<SpriteSheet> m_pFlattenedSprite;
 
 		Facing m_FacingDirection{ Facing::right };
 		float m_Speed{ .1f };
-		int m_InflationLevel{};
-		const int m_MaxInflationLevel{ 3 };
+
 		const float m_TimeToChangeTarget{ 10.f };
 		float m_ChangeTargetTimer{};
 		int m_TargetIdx{};
 		std::vector<GameObject*> m_PlayersTransform;
-		float m_CheckDistance{ 0.f };
-		bool m_BumpedRecently{};
+		float m_CheckDistance{ 5.f };
 		PookaState* m_CurrentState;
 		const int m_Size{ 14 };
-		int m_AttackingPlayerIdx{};
-		PumpBehaviorComponent* m_pPump{};
 	};
 }
 #endif // !POOKA

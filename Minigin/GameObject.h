@@ -82,8 +82,8 @@ namespace dae
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
 		ColliderComponent* GetCollider() const { return m_pCollider.get(); }
-
 		const Transform* GetTransform() const { return &m_Transform; }
+		void SnapToGrid();
 
 		bool m_IsDestroyed{};
 	private:
@@ -109,3 +109,4 @@ enum class Facing
 	up
 };
 #endif
+

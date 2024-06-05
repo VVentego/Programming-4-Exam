@@ -37,7 +37,7 @@ namespace dae
 		void OnExit(PookaBehavior& pooka) override;
 
 	private:
-		const float m_NormalStateDuration{ 20.f };
+		const float m_NormalStateDuration{ 60.f };
 	};
 
 	class PookaGhostState final : public PookaState
@@ -72,9 +72,27 @@ namespace dae
 		void OnEnter(PookaBehavior& pooka) override;
 		void OnExit(PookaBehavior& pooka) override;
 
+	private:
 		int m_CurrentInflationState{};
 		const float m_TimeToDeflate{ 2.f };
 		float m_DeflationTimer{};
+		float m_DeathTimer{ .1f };
+	};
+
+	class PookaFlattenedState final : public PookaState
+	{
+	public:
+		PookaFlattenedState() = default;
+		~PookaFlattenedState() = default;
+		PookaFlattenedState(const PookaFlattenedState& other) = delete;
+		PookaFlattenedState(PookaFlattenedState&& other) = delete;
+		PookaFlattenedState& operator=(const PookaFlattenedState& other) = delete;
+		PookaFlattenedState& operator=(PookaFlattenedState&& other) = delete;
+
+		PookaState* Update(PookaBehavior& pooka, const double deltaTime) override;
+		void OnEnter(PookaBehavior& pooka) override;
+		void OnExit(PookaBehavior& pooka) override;
+
 		float m_DeathTimer{ .1f };
 	};
 }

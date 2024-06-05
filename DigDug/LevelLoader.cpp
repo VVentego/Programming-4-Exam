@@ -191,7 +191,7 @@ std::vector<glm::vec2> LevelLoader::GetRocks() const
     return m_Rocks;
 }
 
-void LevelLoader::CreateBackground(dae::Scene& scene)
+void LevelLoader::CreateBackground(dae::Scene& scene) const
 {
     auto go = std::make_unique<dae::GameObject>();
 
@@ -221,6 +221,7 @@ void LevelLoader::CreateEntities(dae::Scene& scene)
         digdug->AddComponent(std::make_unique<dae::DigDugController>(digdug.get(), std::string("Player").append(std::to_string(player.id)), pump.get()));
         digdug->GetComponent<dae::DigDugController>()->SetStartPos(player.position);
         digdug->AddCollider(scene);
+        digdug->SnapToGrid();
 
         if (player.id == 0)
         {
@@ -241,6 +242,7 @@ void LevelLoader::CreateEntities(dae::Scene& scene)
         auto pooka = std::make_unique<dae::GameObject>();
         pooka->AddComponent(std::make_unique<dae::PookaBehavior>(pooka.get()));
         pooka->SetWorldPosition(pookaPos.x, pookaPos.y);
+        pooka->SnapToGrid();
         for (auto digdug : digdugs)
         {
             pooka->GetComponent<dae::PookaBehavior>()->AddPlayerToChase(digdug);
@@ -254,6 +256,12 @@ void LevelLoader::CreateEntities(dae::Scene& scene)
         auto rock = std::make_unique<dae::GameObject>();
         rock->AddComponent(std::make_unique<dae::RockBehavior>(rock.get()));
         rock->SetWorldPosition(rockPos.x, rockPos.y);
+        rock->SnapToGrid();
+        for (auto digdug : digdugs)
+        {
+            rock->GetComponent<dae::RockBehavior>()->AddPlayer(digdug);
+        }
+        rock->AddCollider(scene);
         scene.Add(std::move(rock));
     }
 }

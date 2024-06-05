@@ -41,17 +41,21 @@ namespace dae
         friend class DigDugNormalState;
         friend class DigDugDigState;
         friend class DigDugDeathState;
+        friend class DigDugPumpState;
         void SetSpriteSheet(std::shared_ptr<SpriteSheet> spriteSheet, const double frameTime);
         void DigTunnel();
+        bool CentreInTunnel();
         bool InTunnel();
         bool IsDoneDying();
         void PlayMusic();
         void StopMusic();
         void RenderTunnel(const bool doRender);
-        const float m_MoveSpeed{ 20.f };
+        const float m_MoveSpeed{ 40.f };
         const float m_CheckDistance{ 3.f };
-        float m_DistanceMoved{};
         const float m_MoveStepDistance{ 16.f };
+        float m_DistanceMoved{ m_MoveStepDistance + 1 };
+        const float m_InvulnLength{ 2.f };
+        float m_InvulnerabilityTimer{ m_InvulnLength };
         glm::vec2 m_Velocity{};
         Facing m_NewFacingDirection{};
         Facing m_FacingDirection{ Facing::right };
@@ -71,6 +75,10 @@ namespace dae
         std::shared_ptr<SpriteSheet> m_pDigSpriteLeft;
         std::shared_ptr<SpriteSheet> m_pDigSpriteUp;
         std::shared_ptr<SpriteSheet> m_pDeathSprite;
+        std::shared_ptr<SpriteSheet> m_pPumpSpriteRight;
+        std::shared_ptr<SpriteSheet> m_pPumpSpriteDown;
+        std::shared_ptr<SpriteSheet> m_pPumpSpriteLeft;
+        std::shared_ptr<SpriteSheet> m_pPumpSpriteUp;
         TextureComponent* m_pTunnelTexture{};
 
         int m_Lives{ 3 };

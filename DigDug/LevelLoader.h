@@ -28,7 +28,7 @@ public:
     std::vector<glm::vec2> GetTunnels() const;
     std::vector<glm::vec2> GetRocks() const;
 
-    void CreateBackground(dae::Scene& scene);
+    void CreateBackground(dae::Scene& scene) const;
 
     void CreateEntities(dae::Scene& scene);
 

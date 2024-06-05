@@ -23,6 +23,8 @@
     <ClCompile Include="DigDugState.cpp" />
     <ClCompile Include="FpsCounterComponent.cpp" />
     <ClCompile Include="DigDugLevelState.cpp" />
+    <ClCompile Include="FygarBehavior.cpp" />
+    <ClCompile Include="FygarState.cpp" />
     <ClCompile Include="LevelLoader.cpp" />
     <ClCompile Include="LivesDisplayComponent.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -43,6 +45,8 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="FpsCounterComponent.h" />
     <ClInclude Include="DigDugLevelState.h" />
+    <ClInclude Include="FygarBehavior.h" />
+    <ClInclude Include="FygarState.h" />
     <ClInclude Include="LevelLoader.h" />
     <ClInclude Include="LivesDisplayComponent.h" />
     <ClInclude Include="MainMenuController.h" />

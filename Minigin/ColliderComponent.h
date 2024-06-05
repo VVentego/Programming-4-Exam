@@ -15,6 +15,7 @@ namespace dae
 		ColliderComponent& operator=(const ColliderComponent& other) = delete;
 		ColliderComponent& operator=(ColliderComponent&& other) = delete;
 
+		void UpdateColliderSize(const glm::vec2 newSize);
 		void CollisionCallback(GameObject* other);
 		GameObject* GetOwner();
 

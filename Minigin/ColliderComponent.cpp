@@ -27,6 +27,11 @@ dae::ColliderComponent::ColliderComponent(GameObject* pOwner, const float width,
 {
 }
 
+void dae::ColliderComponent::UpdateColliderSize(const glm::vec2 newSize)
+{
+	m_SizeOfCollider = newSize;
+}
+
 void dae::ColliderComponent::CollisionCallback(GameObject* other)
 {
 	m_pOwner->CollisionEvent(other);

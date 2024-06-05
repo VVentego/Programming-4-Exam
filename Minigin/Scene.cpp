@@ -57,14 +57,14 @@ void Scene::FixedUpdate(const double fixedTimeStep)
 
 void Scene::Render() const
 {
-	for (auto& persistentObject : m_PersistentObjects)
-	{
-		persistentObject->Render();
-	}
-
 	for (const auto& object : m_objects)
 	{
 		object->Render();
+	}
+
+	for (auto& persistentObject : m_PersistentObjects)
+	{
+		persistentObject->Render();
 	}
 }
 

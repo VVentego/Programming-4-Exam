@@ -1,6 +1,7 @@
 #include "PumpBehaviorComponent.h"
 #include "../Minigin/TextureComponent.h"
 #include "PookaBehavior.h"
+#include <ColliderComponent.h>
 
 dae::PumpBehaviorComponent::PumpBehaviorComponent(GameObject* pOwner, const int playerIdx) :
 	Component::Component(pOwner), m_PlayerIdx{ playerIdx }
@@ -69,6 +70,7 @@ void dae::PumpBehaviorComponent::Fire(const Facing direction)
 		if (static_cast<unsigned int>(m_FacingDirection) <= m_Textures.size())
 		{
 			m_TextureComponent->SetTexture(m_Textures[static_cast<int>(m_FacingDirection)]);
+			m_pOwner->GetCollider()->UpdateColliderSize(m_TextureComponent->GetSize());
 		}
 
 		soundManager.Play(0, 100);

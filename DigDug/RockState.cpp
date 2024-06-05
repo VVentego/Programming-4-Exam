@@ -1,8 +1,7 @@
 #include "RockState.h"
-
 dae::RockState* dae::RockIdleState::Update(RockBehavior& rock, const double)
 {
-	if (!rock.IsInTunnel())
+	if (rock.IsInTunnel())
 	{
 		return new RockFallingState;
 	}
@@ -19,12 +18,12 @@ void dae::RockIdleState::OnExit(RockBehavior&)
 {
 }
 
-
 dae::RockState* dae::RockFallingState::Update(RockBehavior& rock, const double deltaTime)
 {
 	rock.Fall(deltaTime);
+	m_MinimumFallDistance -= rock.m_FallSpeed * static_cast<float>(deltaTime);
 
-	if (!rock.IsInTunnel())
+	if (!rock.DeepCheckInTunnel() && m_MinimumFallDistance <= 0)
 	{
 		return new RockBreakState;
 	}
@@ -36,6 +35,7 @@ void dae::RockFallingState::OnEnter(RockBehavior& rock)
 {
 	rock.SetSprite(rock.m_pFallingRockSprite);
 	rock.m_CanKill = true;
+	rock.SetInstigatingPlayer();
 }
 
 void dae::RockFallingState::OnExit(RockBehavior&)

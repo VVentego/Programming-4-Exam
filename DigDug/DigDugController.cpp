@@ -15,6 +15,10 @@ dae::DigDugController::DigDugController(GameObject* pOwner, const std::string& p
 	m_pDigSpriteDown{ std::make_shared<SpriteSheet>("DigDugDigDown.png", 1, 2) },
 	m_pDigSpriteLeft{ std::make_shared<SpriteSheet>("DigDugDigLeft.png", 1, 2) },
 	m_pDigSpriteUp{ std::make_shared<SpriteSheet>("DigDugDigUp.png", 1, 2) },
+	m_pPumpSpriteRight{ std::make_shared<SpriteSheet>("DigDugPumpRight.png", 1, 2) },
+	m_pPumpSpriteDown{ std::make_shared<SpriteSheet>("DigDugPumpDown.png", 1, 2) },
+	m_pPumpSpriteLeft{ std::make_shared<SpriteSheet>("DigDugPumpLeft.png", 1, 2) },
+	m_pPumpSpriteUp{ std::make_shared<SpriteSheet>("DigDugPumpUp.png", 1, 2) },
 	m_pDeathSprite{ std::make_shared<SpriteSheet>("DigDugDeath.png", 1, 4) }
 {
 	auto tunnelRenderer = std::make_unique<TextureComponent>(pOwner);
@@ -108,6 +112,7 @@ void dae::DigDugController::MoveUp()
 
 void dae::DigDugController::Shoot()
 {
+	m_InvulnerabilityTimer = 0;
 	m_Pump->Fire(m_FacingDirection);
 }
 
@@ -144,13 +149,17 @@ void dae::DigDugController::SetTunnelManager(TunnelManagerComponent* pTunnelMana
 
 void dae::DigDugController::HandleEvent(const Event& event)
 {
-	switch (event.type)
+	if (event.stringValue.back() != m_PlayerName.back())
 	{
-	case EventType::ENEMY_KILLED:
-		Event scoreEvent;
+		return;
+	}
+
+	if (event.type == EventType::ENEMY_KILLED)
+	{
+		Event scoreEvent{};
 		scoreEvent.type = EventType::SCORE_INCREASED;
 		scoreEvent.stringValue = m_PlayerName;
-		if (event.stringValue == "Pooka")
+		if (event.stringValue == "Pooka" + std::string(1, m_PlayerName.back()))
 		{
 			constexpr int quarterWindowHeight = 480 / 4;
 			const glm::vec2 pos{ m_pOwner->GetWorldPosition() };
@@ -171,7 +180,7 @@ void dae::DigDugController::HandleEvent(const Event& event)
 				scoreEvent.intValue = 200;
 			}
 		}
-		else if (event.stringValue == "Fygar")
+		else if (event.stringValue == "Fygar" + std::string(1, m_PlayerName.back()))
 		{
 			constexpr int quarterWindowHeight = 480 / 4;
 			const glm::vec2 pos{ m_pOwner->GetWorldPosition() };
@@ -192,8 +201,40 @@ void dae::DigDugController::HandleEvent(const Event& event)
 				scoreEvent.intValue = 400;
 			}
 		}
+		else if (event.stringValue == "Rocked" + std::string(1, m_PlayerName.back()))
+		{
+			switch(event.intValue)
+			{
+			case 1:
+				scoreEvent.intValue = 1000;
+				break;
+			case 2:
+				scoreEvent.intValue = 2500;
+				break;
+			case 3:
+				scoreEvent.intValue = 4000;
+				break;
+			case 4:
+				scoreEvent.intValue = 6000;
+				break;
+			case 5:
+				scoreEvent.intValue = 8000;
+				break;
+			case 6:
+				scoreEvent.intValue = 10000;
+				break;
+			case 7:
+				scoreEvent.intValue = 12000;
+				break;
+			case 8:
+				scoreEvent.intValue = 15000;
+				break;
+			default:
+				scoreEvent.intValue = 15000;
+				break;
+			}
+		}
 		NotifyObserver(scoreEvent);
-		break;
 	}
 }
 
@@ -207,10 +248,18 @@ void dae::DigDugController::DigTunnel()
 {
 	auto& tunnelManager = TunnelManager::GetInstance();
 	auto ownerPos = m_pOwner->GetWorldPosition();
-	if (!tunnelManager.InTunnel(ownerPos) == true)
+	if (!CentreInTunnel())
 	{
 		tunnelManager.DigTunnel(ownerPos);
 	}
+}
+
+bool dae::DigDugController::CentreInTunnel()
+{
+	glm::vec2 checkPos{ m_pOwner->GetWorldPosition() };
+
+	checkPos += m_Size / 2.f;
+	return TunnelManager::GetInstance().InTunnel(checkPos);
 }
 
 bool dae::DigDugController::InTunnel()

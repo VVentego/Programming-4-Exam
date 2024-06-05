@@ -20,26 +20,34 @@ namespace dae
 		RockBehavior& operator=(RockBehavior&& other) = delete;
 
 		void Update(const double deltaTime) override;
+		void AddPlayer(GameObject* player);
 
 		const bool CanKill() const { return m_CanKill; }
+		void CollisionEvent(GameObject* other) override;
+		const std::string& GetInstigatingPlayer() const;
 	private:
 		friend class RockIdleState;
 		friend class RockFallingState;
 		friend class RockBreakState;
 		void SetSprite(std::shared_ptr<SpriteSheet> spriteSheet);
 		void Fall(const double deltaTime);
-		bool IsInTunnel();
+		const bool IsInTunnel() const;
+		const bool DeepCheckInTunnel() const;
 		void Die();
 		bool IsDoneDying();
-
-		const float m_FallSpeed{ 5.f };
-		const float m_TunnelCheckOffset{ 2.f };
+		GameObject* GetNearestPlayer();
+		void SetInstigatingPlayer();
+		const float m_FallSpeed{ 10.f };
+		const float m_TunnelCheckOffset{ 10.f };
 		RockState* m_CurrentState;
 		SpriteAnimatorComponent* m_pAnimatorComponent{};
+		std::vector<GameObject*> m_pPlayers{};
 		std::shared_ptr<SpriteSheet> m_pNormalRockSprite;
 		std::shared_ptr<SpriteSheet> m_pFallingRockSprite;
 		std::shared_ptr<SpriteSheet> m_pBreakingRockSprite;
 		bool m_CanKill{};
+		int m_KillCount{};
+		std::string m_InstigatingPlayerName{};
     };
 }
 #endif // !ROCK

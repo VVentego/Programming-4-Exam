@@ -6,7 +6,12 @@ namespace dae
 	{
 		m_StateTimer += static_cast<float>(deltaTime);
 
-		if (pooka.m_InflationLevel > 0)
+		if (pooka.m_Flattened == true)
+		{
+			return new PookaFlattenedState;
+		}
+
+		if (pooka.m_InflationLevel > 0 || pooka.m_IsHooked)
 		{
 			return new PookaInflatedState;
 		}
@@ -21,9 +26,10 @@ namespace dae
 			return new PookaGhostState;
 		}
 
+		pooka.UpdateMovement();
+
 		pooka.CheckForTunnel();
 
-		pooka.UpdateMovement();
 
 		if (m_StateTimer > m_NormalStateDuration)
 		{
@@ -46,7 +52,12 @@ namespace dae
 	{
 		m_StateTimer += static_cast<float>(deltaTime);
 
-		if (pooka.m_InflationLevel > 0)
+		if (pooka.m_Flattened == true)
+		{
+			return new PookaFlattenedState;
+		}
+
+		if (pooka.m_InflationLevel > 0 || pooka.m_IsHooked)
 		{
 			return new PookaInflatedState;
 		}
@@ -79,6 +90,7 @@ namespace dae
 	void PookaGhostState::OnEnter(PookaBehavior& pooka)
 	{
 		pooka.SetSprite(pooka.m_pGhostSheet);
+		ServiceLocator::GetSoundManager().Play(5, 100);
 	}
 
 	void PookaGhostState::OnExit(PookaBehavior&)
@@ -87,14 +99,20 @@ namespace dae
 
 	PookaState* PookaInflatedState::Update(PookaBehavior& pooka, const double deltaTime)
 	{
-		if (m_CurrentInflationState > 3)
-		{
-			m_DeflationTimer += static_cast<float>(deltaTime);
-		}
+		m_DeflationTimer += static_cast<float>(deltaTime);
 
 		if (m_DeflationTimer > m_TimeToDeflate)
 		{
+			if (pooka.m_InflationLevel <= 0)
+			{
+				return new PookaNormalState;
+			}
 			--pooka.m_InflationLevel;
+		}
+
+		if (pooka.m_Flattened == true)
+		{
+			return new PookaFlattenedState;
 		}
 
 		if (pooka.m_InflationLevel != m_CurrentInflationState)
@@ -133,12 +151,6 @@ namespace dae
 			}
 		}
 
-		if (pooka.m_InflationLevel <= 0)
-		{
-
-			return new PookaNormalState;
-		}
-
 		return nullptr;
 	}
 
@@ -151,5 +163,24 @@ namespace dae
 	void PookaInflatedState::OnExit(PookaBehavior& pooka)
 	{
 		pooka.m_InflationLevel = 0;
+		pooka.GetFree();
+	}
+
+	PookaState* PookaFlattenedState::Update(PookaBehavior& pooka, const double deltaTime)
+	{
+		m_DeathTimer -= static_cast<float>(deltaTime);
+		if (m_DeathTimer <= 0)
+		{
+			pooka.CrushedByRock();
+		}
+
+		return nullptr;
+	}
+	void PookaFlattenedState::OnEnter(PookaBehavior& pooka)
+	{
+		pooka.SetSprite(pooka.m_pFlattenedSprite);
+	}
+	void PookaFlattenedState::OnExit(PookaBehavior&)
+	{
 	}
 }

@@ -35,26 +35,22 @@ void SinglePlayerState1::OnEnter(dae::Scene& scene)
 	pLevelLoader->CreateBackground(newScene);
     
     auto& resourceManager = dae::ResourceManager::GetInstance();
-    auto go = std::make_unique<dae::GameObject>();
-
-    std::shared_ptr<dae::Font> font = std::move(resourceManager.LoadFont("Lingua.otf", 36));
 
     //Score Display Event Handler
-    go = std::make_unique<dae::GameObject>();
-    font = std::move(resourceManager.LoadFont("Lingua.otf", 24));
+    auto go = std::make_unique<dae::GameObject>();
+    std::shared_ptr<dae::Font> font = resourceManager.LoadFont("Lingua.otf", 24);
     go->AddComponent(std::make_unique<dae::TextComponent>("Score: 50", font, go.get()));
     go->AddComponent(std::make_unique<dae::ScoreDisplayComponent>(go.get(), "Player0"));
-    go->GetComponent<dae::TextComponent>()->SetColor({ 0, 0, 0, 255 });
-    go->SetWorldPosition(5, 10);
+    go->GetComponent<dae::TextComponent>()->SetColor({ 255, 255, 255, 255 });
+    go->SetWorldPosition(5, 24);
     newScene.AddPersistentObject(std::move(go));
 
     //Lives Display Event Handler
     go = std::make_unique<dae::GameObject>();
-    font = std::move(resourceManager.LoadFont("Lingua.otf", 24));
     go->AddComponent(std::make_unique<dae::TextComponent>("Score: 50", font, go.get()));
     go->AddComponent(std::make_unique<dae::LivesDisplayComponent>(go.get(), "Player0"));
-    go->GetComponent<dae::TextComponent>()->SetColor({ 0, 0, 0, 255 });
-    go->SetWorldPosition(5, 20);
+    go->GetComponent<dae::TextComponent>()->SetColor({ 255, 255, 255, 255 });
+    go->SetWorldPosition(5, 48);
     newScene.AddPersistentObject(std::move(go));
 
 	auto& tunnelManager = TunnelManager::GetInstance();
@@ -132,9 +128,9 @@ void MainMenuState::HandleEvent(const Event& event)
 {
     if (event.type == EventType::LOAD_LEVEL)
     {
-        EventObserver::GetInstance().RemoveListener(this);
         if (event.stringValue == "Level0")
         {
+            EventObserver::GetInstance().RemoveListener(this);
             m_NextState = std::make_unique<SinglePlayerState1>();
             m_Exit = true;
         }

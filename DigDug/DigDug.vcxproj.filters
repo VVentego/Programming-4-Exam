@@ -63,6 +63,12 @@
     <ClCompile Include="RockState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FygarBehavior.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FygarState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DigDugController.h">
@@ -117,6 +123,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RockState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FygarBehavior.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FygarState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

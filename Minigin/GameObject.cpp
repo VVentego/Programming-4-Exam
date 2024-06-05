@@ -190,3 +190,13 @@ void dae::GameObject::RecalculateTransform()
 
 	m_TransformNeedsUpdate = false;
 }
+
+void dae::GameObject::SnapToGrid() 
+{
+	const glm::vec2 currentPos{ GetWorldPosition() };
+
+	glm::vec2 snappedPos{};
+	snappedPos.x = std::round(currentPos.x / 16.0f) * 16.0f;
+	snappedPos.y = std::round(currentPos.y / 16.0f) * 16.0f;
+	SetWorldPosition(snappedPos);
+}

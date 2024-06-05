@@ -40,7 +40,6 @@ namespace dae
 
 	private:
 		bool m_Dead{};
-		float m_InvulnerabilityTimer{ 1.f };
 	};
 
 	class DigDugDigState final : public DigDugState
@@ -58,10 +57,11 @@ namespace dae
 		void OnEnter(DigDugController& digDug) override;
 		void OnExit(DigDugController& digDug) override;
 		void HandleInput(DigDugController& digDug, Command* command) override;
-		virtual void HandleCollision(DigDugController& digDug, GameObject* other) override;
+		void HandleCollision(DigDugController& digDug, GameObject* other) override;
 
 	private:
 		bool m_Dead{};
+		bool m_DoneDigging{};
 	};
 
 	class DigDugDeathState final : public DigDugState
@@ -82,6 +82,29 @@ namespace dae
 		void HandleCollision(DigDugController&, GameObject*) override {};
 	private:
 		float m_DeathTimer{ 2.f };
+	};
+
+
+	class DigDugPumpState final : public DigDugState
+	{
+	public:
+		DigDugPumpState() = default;
+		~DigDugPumpState() = default;
+		DigDugPumpState(const DigDugPumpState& other) = delete;
+		DigDugPumpState(DigDugPumpState&& other) = delete;
+		DigDugPumpState& operator=(const DigDugPumpState& other) = delete;
+		DigDugPumpState& operator=(DigDugPumpState&& other) = delete;
+
+		DigDugState* Update(DigDugController&, const double deltaTime) override;
+
+		void OnEnter(DigDugController& digDug) override;
+		void OnExit(DigDugController& digDug) override;
+		void HandleInput(DigDugController& digDug, Command* command) override;
+		void HandleCollision(DigDugController& digDug, GameObject* other) override;
+
+	private:
+		bool m_Dead{};
+		bool m_DoneDigging{};
 	};
 }
 #endif //DIGDUGSTATE

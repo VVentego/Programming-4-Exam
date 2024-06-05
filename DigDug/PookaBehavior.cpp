@@ -3,6 +3,7 @@
 #include "PookaState.h"
 #include "TunnelManager.h"
 #include "../Minigin/SpriteAnimatorComponent.h"
+#include "RockBehavior.h"
 
 dae::PookaBehavior::PookaBehavior(GameObject* pOwner) :
 	Component(pOwner), m_CurrentState{ new PookaNormalState },
@@ -11,7 +12,8 @@ dae::PookaBehavior::PookaBehavior(GameObject* pOwner) :
 	m_pInflatedSprite1{ std::make_shared<SpriteSheet>("PookaInflate1.png", 1, 1) },
 	m_pInflatedSprite2{ std::make_shared<SpriteSheet>("PookaInflate2.png", 1, 1) },
 	m_pInflatedSprite3{ std::make_shared<SpriteSheet>("PookaInflate3.png", 1, 1) },
-	m_pInflatedSprite4{ std::make_shared<SpriteSheet>("PookaInflate4.png", 1, 1) }
+	m_pInflatedSprite4{ std::make_shared<SpriteSheet>("PookaInflate4.png", 1, 1) },
+	m_pFlattenedSprite{ std::make_shared<SpriteSheet>("PookaFlat.png", 1, 1) }
 {
 	auto pookaSpriteAnimator = std::make_unique<dae::SpriteAnimatorComponent>(pOwner);
 	pookaSpriteAnimator->AddSpriteSheet(m_pWalkSprite);
@@ -49,7 +51,7 @@ void dae::PookaBehavior::AddPlayerToChase(GameObject* playerTransform)
 
 void dae::PookaBehavior::CollisionEvent(GameObject* other)
 {
-	if(other == nullptr)
+	if (other == nullptr)
 	{
 		return;
 	}
@@ -66,6 +68,14 @@ void dae::PookaBehavior::CollisionEvent(GameObject* other)
 			}
 		}
 	}
+	if (auto rock = other->GetComponent<RockBehavior>())
+	{
+		if (rock->CanKill())
+		{
+			m_AttackingPlayerIdx = rock->GetInstigatingPlayer().back();
+			m_Flattened = true;
+		}
+	}
 }
 
 void dae::PookaBehavior::TrackPlayer()
@@ -73,13 +83,26 @@ void dae::PookaBehavior::TrackPlayer()
 	const glm::vec2 playerPos{ m_PlayersTransform[m_TargetIdx]->GetWorldPosition() };
 	const glm::vec2 pookaPos{ m_pOwner->GetWorldPosition() };
 
-	if (std::abs(playerPos.x - pookaPos.x) < 0.1f)
+	if (std::abs(playerPos.x - pookaPos.x) < 0.1f) 
 	{
-		(playerPos.y > pookaPos.y) ? m_FacingDirection = Facing::up : m_FacingDirection = Facing::down;
+		if (playerPos.y > pookaPos.y) {
+			m_FacingDirection = Facing::up;
+		}
+		else 
+		{
+			m_FacingDirection = Facing::down;
+		}
 	}
-	if (std::abs(playerPos.y - pookaPos.y) < 0.1f)
+	else if (std::abs(playerPos.y - pookaPos.y) < 0.1f) 
 	{
-		(playerPos.x > pookaPos.x) ? m_FacingDirection = Facing::right : m_FacingDirection = Facing::left;
+		if (playerPos.x > pookaPos.x) 
+		{
+			m_FacingDirection = Facing::right;
+		}
+		else 
+		{
+			m_FacingDirection = Facing::left;
+		}
 	}
 }
 
@@ -93,19 +116,20 @@ void dae::PookaBehavior::Inflate(const int playerIdx)
 void dae::PookaBehavior::CheckForTunnel()
 {
 	glm::vec2 checkLocation{};
+	glm::vec2 pos{ m_pOwner->GetWorldPosition() };
 	switch (m_FacingDirection)
 	{
 	case Facing::right:
-		checkLocation = m_pOwner->GetWorldPosition() + glm::vec2{ m_CheckDistance + m_Size, m_Size / 2 };
+		checkLocation = pos + glm::vec2{ m_CheckDistance + m_Size, m_Size / 2 };
 		break;
 	case Facing::down:
-		checkLocation = m_pOwner->GetWorldPosition() + glm::vec2{ m_Size / 2, m_CheckDistance + m_Size };
+		checkLocation = pos + glm::vec2{ m_Size / 2, m_CheckDistance + m_Size };
 		break;
 	case Facing::left:
-		checkLocation = m_pOwner->GetWorldPosition() + glm::vec2{ -m_CheckDistance, m_Size / 2 };
+		checkLocation = pos + glm::vec2{ -m_CheckDistance, m_Size / 2 };
 		break;
 	case Facing::up:
-		checkLocation = m_pOwner->GetWorldPosition() + glm::vec2{ m_Size / 2, -m_CheckDistance };
+		checkLocation = pos + glm::vec2{ m_Size / 2, -m_CheckDistance };
 		break;
 	}
 
@@ -113,28 +137,99 @@ void dae::PookaBehavior::CheckForTunnel()
 
 	if (!tunnelManager.InTunnel(checkLocation))
 	{
-		ReverseDirection();
+		FindNewDirection();
 	}
 }
 
-void dae::PookaBehavior::ReverseDirection()
+void dae::PookaBehavior::FindNewDirection()
 {
+	glm::vec2 checkLocation{};
+	glm::vec2 pos{ m_pOwner->GetWorldPosition() };
+	auto& tunnelManager = TunnelManager::GetInstance();
 	switch (m_FacingDirection)
 	{
 	case Facing::right:
-		m_FacingDirection = Facing::left;
+		checkLocation = pos + glm::vec2{ m_Size / 2, m_CheckDistance + m_Size };
+		if (tunnelManager.InTunnel(checkLocation))
+		{
+			m_FacingDirection = Facing::down;
+			return;
+		}
+		checkLocation = pos + glm::vec2{ -m_CheckDistance, m_Size / 2 };
+		if(tunnelManager.InTunnel(checkLocation))
+		{
+			m_FacingDirection = Facing::left;
+			return;
+		}
+		checkLocation = pos + glm::vec2{ m_Size / 2, -m_CheckDistance };
+		if (tunnelManager.InTunnel(checkLocation))
+		{
+			m_FacingDirection = Facing::up;
+			return;
+		}
 		break;
 	case Facing::down:
-		m_FacingDirection = Facing::up;
+		checkLocation = pos + glm::vec2{ -m_CheckDistance, m_Size / 2 };
+		if (tunnelManager.InTunnel(checkLocation))
+		{
+			m_FacingDirection = Facing::left;
+			return;
+		}
+		checkLocation = pos + glm::vec2{ m_Size / 2, -m_CheckDistance };
+		if (tunnelManager.InTunnel(checkLocation))
+		{
+			m_FacingDirection = Facing::up;
+			return;
+		}
+		checkLocation = pos + glm::vec2{ m_CheckDistance + m_Size, m_Size / 2 };
+		if (tunnelManager.InTunnel(checkLocation))
+		{
+			m_FacingDirection = Facing::right;
+			return;
+		}
 		break;
 	case Facing::left:
-		m_FacingDirection = Facing::right;
+		checkLocation = pos + glm::vec2{ m_Size / 2, -m_CheckDistance };
+		if (tunnelManager.InTunnel(checkLocation))
+		{
+			m_FacingDirection = Facing::up;
+			return;
+		}
+		checkLocation = pos + glm::vec2{ m_CheckDistance + m_Size, m_Size / 2 };
+		if (tunnelManager.InTunnel(checkLocation))
+		{
+			m_FacingDirection = Facing::right;
+			return;
+		}
+		checkLocation = pos + glm::vec2{ m_Size / 2, m_CheckDistance + m_Size };
+		if (tunnelManager.InTunnel(checkLocation))
+		{
+			m_FacingDirection = Facing::down;
+			return;
+		}
 		break;
 	case Facing::up:
-		m_FacingDirection = Facing::down;
+		checkLocation = pos + glm::vec2{ m_CheckDistance + m_Size, m_Size / 2 };
+		if (tunnelManager.InTunnel(checkLocation))
+		{
+			m_FacingDirection = Facing::right;
+			return;
+		}
+		checkLocation = pos + glm::vec2{ m_Size / 2, m_CheckDistance + m_Size };
+		if (tunnelManager.InTunnel(checkLocation))
+		{
+			m_FacingDirection = Facing::down;
+			return;
+		}
+		checkLocation = pos + glm::vec2{ -m_CheckDistance, m_Size / 2 };
+		if (tunnelManager.InTunnel(checkLocation))
+		{
+			m_FacingDirection = Facing::left;
+			return;
+		}
 		break;
 	}
-	m_BumpedRecently = true;
+
 }
 
 void dae::PookaBehavior::SetSprite(std::shared_ptr<SpriteSheet> spriteSheet)
@@ -189,7 +284,9 @@ void dae::PookaBehavior::SeekNearestTunnel()
 
 bool dae::PookaBehavior::IsInTunnel() const
 {
-	return TunnelManager::GetInstance().InTunnel(m_pOwner->GetWorldPosition());
+	glm::vec2 checkPos = m_pOwner->GetWorldPosition();
+	checkPos += m_Size;
+	return TunnelManager::GetInstance().InTunnel(checkPos);
 }
 
 void dae::PookaBehavior::Die()
@@ -201,9 +298,15 @@ void dae::PookaBehavior::Die()
 
 	//Notify event is passed to player and then player passes on a score gained event depending on depth
 	enemyKilledEvent.type = EventType::ENEMY_KILLED;
-	enemyKilledEvent.intValue = m_AttackingPlayerIdx;
-	enemyKilledEvent.stringValue = "Pooka";
+	enemyKilledEvent.stringValue = "Pooka" + std::to_string(m_AttackingPlayerIdx);
 	NotifyObserver(enemyKilledEvent);
+
+	m_pOwner->Destroy();
+}
+
+void dae::PookaBehavior::CrushedByRock()
+{
+	ServiceLocator::GetSoundManager().Play(2, 100);
 
 	m_pOwner->Destroy();
 }
