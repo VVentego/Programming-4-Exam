@@ -91,7 +91,7 @@ void dae::MainMenuController::Shoot()
 		EventObserver::GetInstance().Notify(loadLevelEvent);
 		break;
 	case 2:
-		loadLevelEvent.stringValue = "VersusLevel0";
+		loadLevelEvent.stringValue = "versus";
 		EventObserver::GetInstance().Notify(loadLevelEvent);
 		break;
 	}

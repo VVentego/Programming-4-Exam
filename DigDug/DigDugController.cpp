@@ -141,12 +141,6 @@ void dae::DigDugController::CollisionEvent(GameObject* other)
 	m_CurrentState->HandleCollision(*this, other);
 }
 
-void dae::DigDugController::SetTunnelManager(TunnelManagerComponent* pTunnelManager)
-{
-	assert(pTunnelManager != nullptr);
-	m_pTunnelManager = pTunnelManager;
-}
-
 void dae::DigDugController::HandleEvent(const Event& event)
 {
 	if (event.stringValue.back() != m_PlayerName.back())
@@ -272,7 +266,7 @@ bool dae::DigDugController::InTunnel()
 		checkPos += glm::vec2{ m_CheckDistance + m_Size.x, 0 };
 		break;
 	case Facing::down:
-		checkPos += glm::vec2{ m_CheckDistance + m_Size.y, 0 };
+		checkPos += glm::vec2{ 0, m_CheckDistance + m_Size.y };
 		break;
 	case Facing::left:
 		checkPos += glm::vec2{ -m_CheckDistance, 0 };

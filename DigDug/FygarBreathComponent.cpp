@@ -1,4 +1,5 @@
 #include "FygarBreathComponent.h"
+#include <ColliderComponent.h>
 
 dae::FygarBreathComponent::FygarBreathComponent(GameObject* pOwner) : 
 	Component::Component(pOwner),
@@ -75,6 +76,7 @@ void dae::FygarBreathComponent::SetNewFrame(const int newFrame)
 		default:
 			m_pSpriteAnimator->AddSpriteSheet(m_pBreathSpriteRight1);
 		}
+		m_pOwner->GetCollider()->UpdateColliderSize(m_pSpriteAnimator->GetSize());
 	}
 	else
 	{
@@ -82,19 +84,17 @@ void dae::FygarBreathComponent::SetNewFrame(const int newFrame)
 		{
 		case 0:
 			m_pSpriteAnimator->AddSpriteSheet(m_pBreathSpriteLeft1);
-			m_pOwner->SetLocalPosition(-m_pSpriteAnimator->GetSize().x, 0);
 			break;
 		case 1:
 			m_pSpriteAnimator->AddSpriteSheet(m_pBreathSpriteLeft2);
-			m_pOwner->SetLocalPosition(-m_pSpriteAnimator->GetSize().x, 0);
 			break;
 		case 2:
 			m_pSpriteAnimator->AddSpriteSheet(m_pBreathSpriteLeft3);
-			m_pOwner->SetLocalPosition(-m_pSpriteAnimator->GetSize().x, 0);
 			break;
 		default:
 			m_pSpriteAnimator->AddSpriteSheet(m_pBreathSpriteLeft1);
-			m_pOwner->SetLocalPosition(-m_pSpriteAnimator->GetSize().x, 0);
 		}
+		m_pOwner->SetLocalPosition(-m_pSpriteAnimator->GetSize().x, 0);
+		m_pOwner->GetCollider()->UpdateColliderSize(m_pSpriteAnimator->GetSize());
 	}
 }

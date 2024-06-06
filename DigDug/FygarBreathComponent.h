@@ -19,6 +19,7 @@ namespace dae
 		void Update(const double deltaTime) override;
 		void Toggle(const bool active, const bool facingRight);
 		void SetLocalPosition(const glm::vec2 newPos);
+		const bool IsActive() const { return m_Active; }
 	private:
 		void SetNewFrame(const int newFrame);
 

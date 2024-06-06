@@ -26,6 +26,8 @@
     <ClCompile Include="DigDugLevelState.cpp" />
     <ClCompile Include="FygarBehavior.cpp" />
     <ClCompile Include="FygarBreathComponent.cpp" />
+    <ClCompile Include="FygarPlayerController.cpp" />
+    <ClCompile Include="FygarPlayerState.cpp" />
     <ClCompile Include="FygarState.cpp" />
     <ClCompile Include="LevelLoader.cpp" />
     <ClCompile Include="LivesDisplayComponent.cpp" />
@@ -49,6 +51,8 @@
     <ClInclude Include="DigDugLevelState.h" />
     <ClInclude Include="FygarBehavior.h" />
     <ClInclude Include="FygarBreathComponent.h" />
+    <ClInclude Include="FygarPlayerController.h" />
+    <ClInclude Include="FygarPlayerState.h" />
     <ClInclude Include="FygarState.h" />
     <ClInclude Include="LevelLoader.h" />
     <ClInclude Include="LivesDisplayComponent.h" />

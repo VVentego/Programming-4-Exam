@@ -27,5 +27,18 @@ private:
 	int m_Player0Lives{ 3 };
 	float m_EndLevelDelay{ 1.f };
 };
+
+class VersusPlayerState1 : public LevelState
+{
+public:
+	VersusPlayerState1();
+	~VersusPlayerState1();
+	void OnEnter(dae::Scene& scene);
+	std::unique_ptr<LevelState> OnExit(dae::Scene& scene) override;
+	void HandleEvent(const Event& event) override;
+private:
+	int m_Player0Lives{ 3 };
+	float m_EndLevelDelay{ 1.f };
+};
 #endif // !DIGDUGSTATE
 

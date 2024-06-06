@@ -10,7 +10,7 @@ namespace dae
 	class SpriteSheet;
 	class PumpBehaviorComponent;
 	class FygarBreathComponent;
-	class FygarBehavior final : public Component, public Enemy
+	class FygarBehavior : public Component, public Enemy
 	{
 	public:
 		FygarBehavior(GameObject* pOwner, FygarBreathComponent* pFygarBreathComponent);
@@ -21,17 +21,11 @@ namespace dae
 		FygarBehavior& operator=(FygarBehavior&& other) = delete;
 
 		void Update(const double deltaTime) override;
-		void CollisionEvent(GameObject* other);
+		virtual void CollisionEvent(GameObject* other);
 
-	private:
-		friend class FygarNormalState;
-		friend class FygarGhostState;
-		friend class FygarInflatedState;
-		friend class FygarFlattenedState;
-		friend class FygarFireBreathingState;
-		void Die() override;
-		bool PlayerInRange();
-		void ToggleFireBreath(const bool active);
+	protected:
+		virtual void Die() override;
+		virtual void ToggleFireBreath(const bool active);
 
 		FygarBreathComponent* m_FygarBreathComponent{};
 		std::shared_ptr<SpriteSheet> m_pWalkLeftSprite;
@@ -43,10 +37,18 @@ namespace dae
 		std::shared_ptr<SpriteSheet> m_pInflatedSprite4;
 		std::shared_ptr<SpriteSheet> m_pFlattenedSprite;
 
-		FygarState* m_CurrentState;
 		float m_FireTimer{};
 		const float m_FireCooldown{ 5.f };
 		const float m_FireRange{ 48.f };
+
+	private:
+		friend class FygarNormalState;
+		friend class FygarGhostState;
+		friend class FygarInflatedState;
+		friend class FygarFlattenedState;
+		friend class FygarFireBreathingState;
+		bool PlayerInRange();
+		FygarState* m_CurrentState;
 	};
 }
 #endif // !FYGAR

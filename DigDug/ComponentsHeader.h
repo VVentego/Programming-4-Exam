@@ -15,6 +15,6 @@
 #include "RockBehavior.h"
 #include "FygarBehavior.h"
 #include "FygarBreathComponent.h"
-
+#include "FygarPlayerController.h"
 #endif // !COMPONENTSHEADER
 

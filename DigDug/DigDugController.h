@@ -32,7 +32,6 @@ namespace dae
         void OnPlayerDeath();
         virtual void CollisionEvent(GameObject* other) override;
 
-        void SetTunnelManager(TunnelManagerComponent* pTunnelManager);
         void SetStartPos(const glm::vec2 pos) { m_StartPos = pos; }
         void HandleEvent(const Event& event);
 
@@ -62,7 +61,6 @@ namespace dae
         GameObject* m_pPumpObject{};
         SpriteAnimatorComponent* m_pAnimatorComponent{};
         PumpBehaviorComponent* m_Pump{};
-        TunnelManagerComponent* m_pTunnelManager{};
         glm::vec2 m_Size{};
         glm::vec2 m_StartPos{};
         DigDugState* m_CurrentState;

@@ -1,6 +1,7 @@
 #include "DigDugState.h"
 #include "Enemy.h"
 #include "RockBehavior.h"
+#include "FygarBreathComponent.h"
 
 using namespace dae;
 
@@ -105,7 +106,6 @@ void dae::DigDugNormalState::HandleCollision(DigDugController& digDug, GameObjec
 	{
 		return;
 	}
-
 	if (auto enemy = other->GetComponent<Enemy>())
 	{
 		if (enemy->IsInflated() == true)
@@ -114,10 +114,16 @@ void dae::DigDugNormalState::HandleCollision(DigDugController& digDug, GameObjec
 		}
 		m_Dead = true;
 	}
-
 	if (auto rock = other->GetComponent<RockBehavior>())
 	{
 		if (rock->CanKill() && !m_Dead)
+		{
+			m_Dead = true;
+		}
+	}
+	if (auto fire = other->GetComponent<FygarBreathComponent>())
+	{
+		if (fire->IsActive())
 		{
 			m_Dead = true;
 		}
@@ -249,7 +255,6 @@ void dae::DigDugDigState::HandleInput(DigDugController& digDug, Command* command
 			return;
 		}
 		command->Execute(&digDug);
-		//m_DoneDigging = false;
 	}
 }
 
@@ -271,6 +276,13 @@ void dae::DigDugDigState::HandleCollision(DigDugController& digDug, GameObject* 
 	if (auto rock = other->GetComponent<RockBehavior>())
 	{
 		if (rock->CanKill() && !m_Dead)
+		{
+			m_Dead = true;
+		}
+	}
+	if (auto fire = other->GetComponent<FygarBreathComponent>())
+	{
+		if (fire->IsActive())
 		{
 			m_Dead = true;
 		}
@@ -335,7 +347,6 @@ void dae::DigDugPumpState::HandleCollision(DigDugController& digDug, GameObject*
 	{
 		return;
 	}
-
 	if (auto enemy = other->GetComponent<Enemy>())
 	{
 		if (enemy->IsInflated() == true)
@@ -344,10 +355,16 @@ void dae::DigDugPumpState::HandleCollision(DigDugController& digDug, GameObject*
 		}
 		m_Dead = true;
 	}
-
 	if (auto rock = other->GetComponent<RockBehavior>())
 	{
 		if (rock->CanKill() && !m_Dead)
+		{
+			m_Dead = true;
+		}
+	}
+	if (auto fire = other->GetComponent<FygarBreathComponent>())
+	{
+		if (fire->IsActive())
 		{
 			m_Dead = true;
 		}

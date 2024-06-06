@@ -25,6 +25,7 @@ public:
     std::vector<LoadedPlayer> GetPlayers() const;
     std::vector<glm::vec2> GetPookas() const;
     std::vector<glm::vec2> GetFygars() const;
+    glm::vec2 GetFygarPlayer() const;
     std::vector<glm::vec2> GetTunnels() const;
     std::vector<glm::vec2> GetRocks() const;
 
@@ -40,6 +41,7 @@ private:
     std::vector<LoadedPlayer> m_Players;
     std::vector<glm::vec2> m_Pookas;
     std::vector<glm::vec2> m_Fygars;
+    glm::vec2 m_FygarPlayer{ 0, 0 };
     std::vector<glm::vec2> m_Tunnels;
     std::vector<glm::vec2> m_Rocks;
 
@@ -47,6 +49,7 @@ private:
     void LoadPlayers();
     void LoadPookas();
     void LoadFygars();
+    void LoadFygarPlayer();
     void LoadTunnels();
     void LoadRocks();
 };

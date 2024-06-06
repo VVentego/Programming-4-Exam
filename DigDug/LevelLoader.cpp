@@ -1,4 +1,3 @@
-// LevelLoader.cpp
 #include "LevelLoader.h"
 #include "ComponentsHeader.h"
 #include <memory>
@@ -22,6 +21,7 @@ bool LevelLoader::LoadLevel(const std::string& levelFile) {
     LoadPlayers();
     LoadPookas();
     LoadFygars();
+    LoadFygarPlayer();
     LoadTunnels();
     LoadRocks();
 
@@ -113,6 +113,31 @@ void LevelLoader::LoadFygars() {
     lua_pop(L, 1);
 }
 
+void LevelLoader::LoadFygarPlayer()
+{
+    lua_getglobal(L, "fygarplayer");
+    if (lua_istable(L, -1)) {
+        lua_pushnil(L);
+        while (lua_next(L, -2)) {
+            if (lua_istable(L, -1)) {
+                glm::vec2 pos{};
+                lua_getfield(L, -1, "x");
+                pos.x = static_cast<float>(lua_tointeger(L, -1));
+                lua_pop(L, 1);
+
+                lua_getfield(L, -1, "y");
+                pos.y = static_cast<float>(lua_tointeger(L, -1));
+                lua_pop(L, 1);
+
+                m_FygarPlayer = pos;
+            }
+            lua_pop(L, 1);
+            break;
+        }
+    }
+    lua_pop(L, 1);
+}
+
 void LevelLoader::LoadTunnels() {
     lua_getglobal(L, "tunnels");
     if (lua_istable(L, -1)) {
@@ -179,6 +204,11 @@ std::vector<glm::vec2> LevelLoader::GetPookas() const
 std::vector<glm::vec2> LevelLoader::GetFygars() const 
 {
     return m_Fygars;
+}
+
+glm::vec2 LevelLoader::GetFygarPlayer() const
+{
+    return m_FygarPlayer;
 }
 
 std::vector<glm::vec2> LevelLoader::GetTunnels() const 
@@ -265,6 +295,23 @@ void LevelLoader::CreateEntities(dae::Scene& scene)
         {
             fygar->GetComponent<dae::FygarBehavior>()->AddPlayerToChase(digdug);
         }
+        fygar->AddCollider(scene);
+        fireBreath->AddCollider(scene);
+        scene.Add(std::move(fygar));
+        scene.Add(std::move(fireBreath));
+    }
+
+    if (m_FygarPlayer != glm::vec2{ 0, 0 })
+    {
+        auto fireBreath = std::make_unique<dae::GameObject>();
+        fireBreath->AddComponent(std::make_unique<dae::FygarBreathComponent>(fireBreath.get()));
+
+        auto fygar = std::make_unique<dae::GameObject>();
+        fygar->AddComponent(std::make_unique<dae::FygarPlayerController>(fygar.get(), fireBreath->GetComponent<dae::FygarBreathComponent>()));
+        ServiceLocator::GetInputManager().AddPlayer2(*fygar->GetComponent<dae::FygarPlayerController>());
+        fygar->SetWorldPosition(m_FygarPlayer);
+        fygar->SnapToGrid();
+        fireBreath->SetParent(fygar.get(), false);
         fygar->AddCollider(scene);
         fireBreath->AddCollider(scene);
         scene.Add(std::move(fygar));

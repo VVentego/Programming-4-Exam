@@ -20,6 +20,8 @@ namespace dae
 		GameObject* GetOwner();
 
 		const glm::vec2 GetPosition();
+		const glm::vec2 GetSize() const { return m_SizeOfCollider; }
+	private:
 		glm::vec2 m_SizeOfCollider{};
     };
 }

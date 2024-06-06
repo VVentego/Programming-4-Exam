@@ -126,13 +126,13 @@ void Scene::UpdateCollisions() const
 			const glm::vec2 otherColliderPosition{ otherCollider.lock()->GetPosition() };
 
 			// If one rectangle is on left side of the other
-			if ((colliderPosition.x + collider.lock()->m_SizeOfCollider.x) < otherColliderPosition.x || (otherColliderPosition.x + otherCollider.lock()->m_SizeOfCollider.x) < colliderPosition.x)
+			if ((colliderPosition.x + collider.lock()->GetSize().x) < otherColliderPosition.x || (otherColliderPosition.x + otherCollider.lock()->GetSize().x) < colliderPosition.x)
 			{
 				continue;
 			}
 
 			// If one rectangle is under the other
-			if (colliderPosition.y > (otherColliderPosition.y + otherCollider.lock()->m_SizeOfCollider.y) || otherColliderPosition.y > (colliderPosition.y + collider.lock()->m_SizeOfCollider.y))
+			if (colliderPosition.y > (otherColliderPosition.y + otherCollider.lock()->GetSize().y) || otherColliderPosition.y > (colliderPosition.y + collider.lock()->GetSize().y))
 			{
 				continue;
 			}
