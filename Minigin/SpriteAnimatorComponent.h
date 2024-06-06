@@ -17,7 +17,6 @@ namespace dae
 
 		void Update(const double) override;
 		void FixedUpdate(const double fixedTimeStep) override;
-		//void FlipSprite(const bool left) const;
 
 		void AddSpriteSheet(const std::string& fileName, const int rows, const int columns);
 		void AddSpriteSheet(std::shared_ptr<SpriteSheet> spriteSheet);
@@ -27,6 +26,7 @@ namespace dae
 		const glm::vec2 GetSize() const;
 		bool m_Looping{ true };
 		double m_FrameTime{ 0.2 };
+		bool m_ShouldRender{ true };
 	private:
 		int m_CurrentFrame{};
 		int m_EndFrame{ 1 };

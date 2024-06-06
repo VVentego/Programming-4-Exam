@@ -25,6 +25,8 @@ void dae::Renderer::Init(SDL_Window* window)
 	{
 		throw std::runtime_error(std::string("SDL_CreateRenderer Error: ") + SDL_GetError());
 	}
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
+	SDL_RenderSetLogicalSize(m_renderer, 448, 576);
 }
 
 void dae::Renderer::Render() const
@@ -33,6 +35,7 @@ void dae::Renderer::Render() const
 	SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a);
 	SDL_RenderClear(m_renderer);
 	
+	SDL_RenderSetScale(m_renderer, 2, 2);
 	SceneManager::GetInstance().Render();
 
 	SDL_RenderPresent(m_renderer);

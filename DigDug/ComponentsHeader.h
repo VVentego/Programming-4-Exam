@@ -13,6 +13,8 @@
 #include "ScoreDisplayComponent.h"
 #include "PookaBehavior.h"
 #include "RockBehavior.h"
+#include "FygarBehavior.h"
+#include "FygarBreathComponent.h"
 
 #endif // !COMPONENTSHEADER
 

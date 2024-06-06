@@ -20,12 +20,20 @@ void dae::RockIdleState::OnExit(RockBehavior&)
 
 dae::RockState* dae::RockFallingState::Update(RockBehavior& rock, const double deltaTime)
 {
-	rock.Fall(deltaTime);
-	m_MinimumFallDistance -= rock.m_FallSpeed * static_cast<float>(deltaTime);
+	if (m_FallDelay < 0)
+	{
+		rock.Fall(deltaTime);
+		m_MinimumFallDistance -= rock.m_FallSpeed * static_cast<float>(deltaTime);
+	}
 
 	if (!rock.DeepCheckInTunnel() && m_MinimumFallDistance <= 0)
 	{
 		return new RockBreakState;
+	}
+
+	else
+	{
+		m_FallDelay -= static_cast<float>(deltaTime);
 	}
 
 	return nullptr;

@@ -113,12 +113,14 @@ const bool dae::RockBehavior::DeepCheckInTunnel() const
 
 void dae::RockBehavior::Die()
 {
-	Event event{};
-	event.type = EventType::ENEMY_KILLED;
-	event.stringValue = "Rocked" + m_InstigatingPlayerName.back();
-	event.intValue = m_KillCount;
-	EventObserver::GetInstance().Notify(event);
-
+	if (m_KillCount > 0)
+	{
+		Event event{};
+		event.type = EventType::ENEMY_KILLED;
+		event.stringValue = std::string("Rocked") + std::string(1, m_InstigatingPlayerName.back());
+		event.intValue = m_KillCount;
+		EventObserver::GetInstance().Notify(event);
+	}
 	m_pOwner->Destroy();
 }
 

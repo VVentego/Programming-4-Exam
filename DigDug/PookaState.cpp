@@ -26,10 +26,27 @@ namespace dae
 			return new PookaGhostState;
 		}
 
+		pooka.TrackPlayer();
+
 		pooka.UpdateMovement();
 
 		pooka.CheckForTunnel();
 
+		switch (pooka.m_FacingDirection)
+		{
+		case Facing::right:
+			pooka.SetSprite(pooka.m_pWalkRightSprite);
+			break;
+		case Facing::down:
+			pooka.SetSprite(pooka.m_pWalkLeftSprite);
+			break;
+		case Facing::left:
+			pooka.SetSprite(pooka.m_pWalkLeftSprite);
+			break;
+		case Facing::up:
+			pooka.SetSprite(pooka.m_pWalkRightSprite);
+			break;
+		}
 
 		if (m_StateTimer > m_NormalStateDuration)
 		{
@@ -41,7 +58,22 @@ namespace dae
 
 	void PookaNormalState::OnEnter(PookaBehavior& pooka)
 	{
-		pooka.SetSprite(pooka.m_pWalkSprite);
+		switch (pooka.m_FacingDirection)
+		{
+		case Facing::right:
+			pooka.SetSprite(pooka.m_pWalkRightSprite);
+			break;
+		case Facing::down:
+			pooka.SetSprite(pooka.m_pWalkLeftSprite);
+			break;
+		case Facing::left:
+			pooka.SetSprite(pooka.m_pWalkLeftSprite);
+			break;
+		case Facing::up:
+			pooka.SetSprite(pooka.m_pWalkRightSprite);
+			break;
+		}
+		pooka.m_pOwner->SnapToGrid();
 	}
 
 	void PookaNormalState::OnExit(PookaBehavior&)
@@ -67,9 +99,7 @@ namespace dae
 			pooka.SwapTarget(deltaTime);
 		}
 
-		pooka.TrackPlayer();
-
-		pooka.UpdateMovement();
+		pooka.GhostSeek();
 
 		if (m_StateTimer > m_GhostStateDuration)
 		{

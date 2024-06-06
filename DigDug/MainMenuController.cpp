@@ -19,19 +19,19 @@ MainMenuController::MainMenuController(GameObject* pOwner, const int windowWidth
 	std::unique_ptr<GameObject> textObject = std::make_unique<GameObject>();
 	textObject->AddComponent(std::make_unique<TextComponent>("Single Player", font, textObject.get()));
 	textObject->SetParent(pOwner);
-	textObject->SetWorldPosition(windowWidth / static_cast<float>(2), windowHeight - spacing);
+	textObject->SetWorldPosition(windowWidth / static_cast<float>(4), windowHeight / static_cast<float>(2) - spacing);
 	scene.Add(std::move(textObject));
 
 	textObject = std::make_unique<GameObject>();
 	textObject->AddComponent(std::make_unique<TextComponent>("Multiplayer", font, textObject.get()));
 	textObject->SetParent(pOwner);
-	textObject->SetWorldPosition(windowWidth / static_cast<float>(2), windowHeight - spacing * 2);
+	textObject->SetWorldPosition(windowWidth / static_cast<float>(4), windowHeight / static_cast<float>(2) - spacing * 2);
 	scene.Add(std::move(textObject));
 	
 	textObject = std::make_unique<GameObject>();
 	textObject->AddComponent(std::make_unique<TextComponent>("Versus", font, textObject.get()));
 	textObject->SetParent(pOwner);
-	textObject->SetWorldPosition(windowWidth / static_cast<float>(2), windowHeight - spacing * 3);
+	textObject->SetWorldPosition(windowWidth / static_cast<float>(4), windowHeight / static_cast<float>(2) - spacing * 3);
 	scene.Add(std::move(textObject));
 }
 

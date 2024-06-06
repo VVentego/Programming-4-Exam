@@ -6,8 +6,9 @@
 #include "RockBehavior.h"
 
 dae::PookaBehavior::PookaBehavior(GameObject* pOwner) :
-	Component(pOwner), m_CurrentState{ new PookaNormalState },
-	m_pWalkSprite{ std::make_shared<SpriteSheet>("PookaMoveRight.png", 1, 2) },
+	Component(pOwner), Enemy(pOwner), m_CurrentState{ new PookaNormalState },
+	m_pWalkLeftSprite{ std::make_shared<SpriteSheet>("PookaMoveLeft.png", 1, 2) },
+	m_pWalkRightSprite{ std::make_shared<SpriteSheet>("PookaMoveRight.png", 1, 2) },
 	m_pGhostSheet{ std::make_shared<SpriteSheet>("PookaGhost.png", 1, 2) },
 	m_pInflatedSprite1{ std::make_shared<SpriteSheet>("PookaInflate1.png", 1, 1) },
 	m_pInflatedSprite2{ std::make_shared<SpriteSheet>("PookaInflate2.png", 1, 1) },
@@ -16,7 +17,7 @@ dae::PookaBehavior::PookaBehavior(GameObject* pOwner) :
 	m_pFlattenedSprite{ std::make_shared<SpriteSheet>("PookaFlat.png", 1, 1) }
 {
 	auto pookaSpriteAnimator = std::make_unique<dae::SpriteAnimatorComponent>(pOwner);
-	pookaSpriteAnimator->AddSpriteSheet(m_pWalkSprite);
+	pookaSpriteAnimator->AddSpriteSheet(m_pWalkLeftSprite);
 	m_pAnimatorComponent = pookaSpriteAnimator.get();
 	pOwner->AddComponent(std::move(pookaSpriteAnimator));
 	m_TargetIdx = 0;
@@ -42,11 +43,6 @@ void dae::PookaBehavior::Update(const double deltaTime)
 		m_CurrentState = nextState;
 		m_CurrentState->OnEnter(*this);
 	}
-}
-
-void dae::PookaBehavior::AddPlayerToChase(GameObject* playerTransform)
-{
-	m_PlayersTransform.push_back(playerTransform);
 }
 
 void dae::PookaBehavior::CollisionEvent(GameObject* other)
@@ -78,217 +74,6 @@ void dae::PookaBehavior::CollisionEvent(GameObject* other)
 	}
 }
 
-void dae::PookaBehavior::TrackPlayer()
-{
-	const glm::vec2 playerPos{ m_PlayersTransform[m_TargetIdx]->GetWorldPosition() };
-	const glm::vec2 pookaPos{ m_pOwner->GetWorldPosition() };
-
-	if (std::abs(playerPos.x - pookaPos.x) < 0.1f) 
-	{
-		if (playerPos.y > pookaPos.y) {
-			m_FacingDirection = Facing::up;
-		}
-		else 
-		{
-			m_FacingDirection = Facing::down;
-		}
-	}
-	else if (std::abs(playerPos.y - pookaPos.y) < 0.1f) 
-	{
-		if (playerPos.x > pookaPos.x) 
-		{
-			m_FacingDirection = Facing::right;
-		}
-		else 
-		{
-			m_FacingDirection = Facing::left;
-		}
-	}
-}
-
-void dae::PookaBehavior::Inflate(const int playerIdx)
-{
-	if (m_InflationLevel > 3) return;
-	m_InflationLevel++;
-	m_AttackingPlayerIdx = playerIdx;
-}
-
-void dae::PookaBehavior::CheckForTunnel()
-{
-	glm::vec2 checkLocation{};
-	glm::vec2 pos{ m_pOwner->GetWorldPosition() };
-	switch (m_FacingDirection)
-	{
-	case Facing::right:
-		checkLocation = pos + glm::vec2{ m_CheckDistance + m_Size, m_Size / 2 };
-		break;
-	case Facing::down:
-		checkLocation = pos + glm::vec2{ m_Size / 2, m_CheckDistance + m_Size };
-		break;
-	case Facing::left:
-		checkLocation = pos + glm::vec2{ -m_CheckDistance, m_Size / 2 };
-		break;
-	case Facing::up:
-		checkLocation = pos + glm::vec2{ m_Size / 2, -m_CheckDistance };
-		break;
-	}
-
-	auto& tunnelManager = TunnelManager::GetInstance();
-
-	if (!tunnelManager.InTunnel(checkLocation))
-	{
-		FindNewDirection();
-	}
-}
-
-void dae::PookaBehavior::FindNewDirection()
-{
-	glm::vec2 checkLocation{};
-	glm::vec2 pos{ m_pOwner->GetWorldPosition() };
-	auto& tunnelManager = TunnelManager::GetInstance();
-	switch (m_FacingDirection)
-	{
-	case Facing::right:
-		checkLocation = pos + glm::vec2{ m_Size / 2, m_CheckDistance + m_Size };
-		if (tunnelManager.InTunnel(checkLocation))
-		{
-			m_FacingDirection = Facing::down;
-			return;
-		}
-		checkLocation = pos + glm::vec2{ -m_CheckDistance, m_Size / 2 };
-		if(tunnelManager.InTunnel(checkLocation))
-		{
-			m_FacingDirection = Facing::left;
-			return;
-		}
-		checkLocation = pos + glm::vec2{ m_Size / 2, -m_CheckDistance };
-		if (tunnelManager.InTunnel(checkLocation))
-		{
-			m_FacingDirection = Facing::up;
-			return;
-		}
-		break;
-	case Facing::down:
-		checkLocation = pos + glm::vec2{ -m_CheckDistance, m_Size / 2 };
-		if (tunnelManager.InTunnel(checkLocation))
-		{
-			m_FacingDirection = Facing::left;
-			return;
-		}
-		checkLocation = pos + glm::vec2{ m_Size / 2, -m_CheckDistance };
-		if (tunnelManager.InTunnel(checkLocation))
-		{
-			m_FacingDirection = Facing::up;
-			return;
-		}
-		checkLocation = pos + glm::vec2{ m_CheckDistance + m_Size, m_Size / 2 };
-		if (tunnelManager.InTunnel(checkLocation))
-		{
-			m_FacingDirection = Facing::right;
-			return;
-		}
-		break;
-	case Facing::left:
-		checkLocation = pos + glm::vec2{ m_Size / 2, -m_CheckDistance };
-		if (tunnelManager.InTunnel(checkLocation))
-		{
-			m_FacingDirection = Facing::up;
-			return;
-		}
-		checkLocation = pos + glm::vec2{ m_CheckDistance + m_Size, m_Size / 2 };
-		if (tunnelManager.InTunnel(checkLocation))
-		{
-			m_FacingDirection = Facing::right;
-			return;
-		}
-		checkLocation = pos + glm::vec2{ m_Size / 2, m_CheckDistance + m_Size };
-		if (tunnelManager.InTunnel(checkLocation))
-		{
-			m_FacingDirection = Facing::down;
-			return;
-		}
-		break;
-	case Facing::up:
-		checkLocation = pos + glm::vec2{ m_CheckDistance + m_Size, m_Size / 2 };
-		if (tunnelManager.InTunnel(checkLocation))
-		{
-			m_FacingDirection = Facing::right;
-			return;
-		}
-		checkLocation = pos + glm::vec2{ m_Size / 2, m_CheckDistance + m_Size };
-		if (tunnelManager.InTunnel(checkLocation))
-		{
-			m_FacingDirection = Facing::down;
-			return;
-		}
-		checkLocation = pos + glm::vec2{ -m_CheckDistance, m_Size / 2 };
-		if (tunnelManager.InTunnel(checkLocation))
-		{
-			m_FacingDirection = Facing::left;
-			return;
-		}
-		break;
-	}
-
-}
-
-void dae::PookaBehavior::SetSprite(std::shared_ptr<SpriteSheet> spriteSheet)
-{
-	m_pAnimatorComponent->AddSpriteSheet(spriteSheet);
-}
-
-void dae::PookaBehavior::SwapTarget(const double deltaTime)
-{
-	m_ChangeTargetTimer += static_cast<float>(deltaTime);
-
-	if (m_ChangeTargetTimer > m_TimeToChangeTarget)
-	{
-		m_ChangeTargetTimer = 0;
-		m_TargetIdx = std::rand() % m_PlayersTransform.size();
-	}
-}
-
-void dae::PookaBehavior::UpdateMovement()
-{
-	switch (m_FacingDirection)
-	{
-	case Facing::right:
-		m_pOwner->SetLocalPosition(m_pOwner->GetLocalPosition() + glm::vec2{ m_Speed, 0 });
-		break;
-	case Facing::down:
-		m_pOwner->SetLocalPosition(m_pOwner->GetLocalPosition() + glm::vec2{ 0, -m_Speed });
-		break;
-	case Facing::left:
-		m_pOwner->SetLocalPosition(m_pOwner->GetLocalPosition() + glm::vec2{ -m_Speed, 0 });
-		break;
-	case Facing::up:
-		m_pOwner->SetLocalPosition(m_pOwner->GetLocalPosition() + glm::vec2{ 0, m_Speed });
-	}
-}
-
-void dae::PookaBehavior::SeekNearestTunnel()
-{
-	const glm::vec2 nearestTunnelPos = TunnelManager::GetInstance().FindNearestTunnel(m_pOwner->GetWorldPosition());
-	const glm::vec2 pookaPos{ m_pOwner->GetWorldPosition() };
-
-	if (std::abs(nearestTunnelPos.y - pookaPos.y) < 0.1f)
-	{
-		(nearestTunnelPos.x > pookaPos.x) ? m_FacingDirection = Facing::right : m_FacingDirection = Facing::left;
-	}
-
-	if (std::abs(nearestTunnelPos.x - pookaPos.x) < 0.1f)
-	{
-		(nearestTunnelPos.y > pookaPos.y) ? m_FacingDirection = Facing::up : m_FacingDirection = Facing::down;
-	}
-}
-
-bool dae::PookaBehavior::IsInTunnel() const
-{
-	glm::vec2 checkPos = m_pOwner->GetWorldPosition();
-	checkPos += m_Size;
-	return TunnelManager::GetInstance().InTunnel(checkPos);
-}
-
 void dae::PookaBehavior::Die()
 {
 	ServiceLocator::GetSoundManager().Play(3, 100);
@@ -302,18 +87,4 @@ void dae::PookaBehavior::Die()
 	NotifyObserver(enemyKilledEvent);
 
 	m_pOwner->Destroy();
-}
-
-void dae::PookaBehavior::CrushedByRock()
-{
-	ServiceLocator::GetSoundManager().Play(2, 100);
-
-	m_pOwner->Destroy();
-}
-
-void dae::PookaBehavior::GetFree()
-{
-	m_pPump->Reset();
-	m_IsHooked = false;
-	m_pPump = nullptr;
 }

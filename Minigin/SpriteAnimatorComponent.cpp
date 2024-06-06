@@ -66,38 +66,24 @@ void dae::SpriteAnimatorComponent::AddSpriteSheet(std::shared_ptr<SpriteSheet> s
 
 void dae::SpriteAnimatorComponent::Render() const
 {
-	SDL_Rect srcRect{};
-	srcRect.w = m_SpriteSheet->GetWidth() / m_SpriteSheet->m_Columns;
-	srcRect.h = m_SpriteSheet->GetHeight() / m_SpriteSheet->m_Rows;
-	srcRect.x = m_CurrentFrame % m_SpriteSheet->m_Columns * srcRect.w;
-	srcRect.y = 0;
+	if (m_ShouldRender)
+	{
+		SDL_Rect srcRect{};
+		srcRect.w = m_SpriteSheet->GetWidth() / m_SpriteSheet->m_Columns;
+		srcRect.h = m_SpriteSheet->GetHeight() / m_SpriteSheet->m_Rows;
+		srcRect.x = m_CurrentFrame % m_SpriteSheet->m_Columns * srcRect.w;
+		srcRect.y = 0;
 
-	const auto& pos = m_pOwner->GetWorldPosition();
+		const auto& pos = m_pOwner->GetWorldPosition();
 
-	SDL_Rect destRect{};
-	destRect.x = static_cast<int>(pos.x);
-	destRect.y = static_cast<int>(pos.y);
-	destRect.w = srcRect.w;
-	destRect.h = srcRect.h;
+		SDL_Rect destRect{};
+		destRect.x = static_cast<int>(pos.x);
+		destRect.y = static_cast<int>(pos.y);
+		destRect.w = srcRect.w;
+		destRect.h = srcRect.h;
 
-	Renderer::GetInstance().RenderTexture(m_SpriteSheet->GetTexture(), &srcRect, &destRect);
-
-	//if (m_Left == true)
-	//{
-	//	glPushMatrix();
-	//	glScalef(-1, 1, 1);
-
-	//	m_SpriteSheet->Draw(Rectf{ -destRect.left - destRect.width, destRect.bottom, destRect.width, destRect.height }, srcRect);
-	//	glPopMatrix();
-	//}
-
-	//else if (m_Left == false)
-	//{
-	//	glPushMatrix();
-	//	glScalef(1, 1, 1);
-	//	m_SpriteSheet->Draw(destRect, srcRect);
-	//	glPopMatrix();
-	//}
+		Renderer::GetInstance().RenderTexture(m_SpriteSheet->GetTexture(), &srcRect, &destRect);
+	}
 }
 
 const bool dae::SpriteAnimatorComponent::RenderOnce()

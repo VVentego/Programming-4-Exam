@@ -1,6 +1,7 @@
 #include "PumpBehaviorComponent.h"
 #include "../Minigin/TextureComponent.h"
 #include "PookaBehavior.h"
+#include "FygarBehavior.h"
 #include <ColliderComponent.h>
 
 dae::PumpBehaviorComponent::PumpBehaviorComponent(GameObject* pOwner, const int playerIdx) :
@@ -25,7 +26,7 @@ void dae::PumpBehaviorComponent::Update(const double deltaTime)
 {
 	glm::vec2 velocity{};
 
-	if (m_Active && m_AttachedPooka == nullptr)
+	if (m_Active && m_AttachedEnemy == nullptr)
 	{
 		glm::vec2 currentPos{ m_pOwner->GetLocalPosition() };
 		switch (m_FacingDirection)
@@ -78,16 +79,16 @@ void dae::PumpBehaviorComponent::Fire(const Facing direction)
 
 	else
 	{
-		if (m_AttachedPooka != nullptr)
+		if (m_AttachedEnemy != nullptr)
 		{
-			if (m_AttachedPooka->GetHooked() == false)
+			if (m_AttachedEnemy->GetHooked() == false)
 			{
 				Reset();
-				m_AttachedPooka = nullptr;
+				m_AttachedEnemy = nullptr;
 				return;
 			}
 
-			m_AttachedPooka->Inflate(m_PlayerIdx);
+			m_AttachedEnemy->Inflate(m_PlayerIdx);
 			
 			soundManager.Play(1, 100);
 		}
@@ -99,7 +100,12 @@ void dae::PumpBehaviorComponent::CollisionEvent(GameObject* other)
 	if (auto pooka = other->GetComponent<PookaBehavior>())
 	{
 		m_Hit = true;
-		m_AttachedPooka = pooka;
+		m_AttachedEnemy = pooka;
+	}
+	if (auto fygar = other->GetComponent<FygarBehavior>())
+	{
+		m_Hit = true;
+		m_AttachedEnemy = fygar;
 	}
 }
 
@@ -109,6 +115,6 @@ void dae::PumpBehaviorComponent::Reset()
 	m_DistanceMoved = 0;
 	m_TextureComponent->m_ShouldRender = false;
 	m_Hit = false;
-	m_AttachedPooka = nullptr;
+	m_AttachedEnemy = nullptr;
 	m_pOwner->SetLocalPosition(0, 0);
 }

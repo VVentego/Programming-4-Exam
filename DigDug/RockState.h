@@ -51,6 +51,7 @@ namespace dae
 		void OnExit(RockBehavior& rock) override;
 	private:
 		float m_MinimumFallDistance{ 16.f };
+		float m_FallDelay{ 1.f };
 	};
 
 	class RockBreakState final : public RockState

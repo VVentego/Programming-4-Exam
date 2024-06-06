@@ -195,7 +195,7 @@ void LevelLoader::CreateBackground(dae::Scene& scene) const
 {
     auto go = std::make_unique<dae::GameObject>();
 
-    go->AddComponent(std::make_unique<dae::TextureComponent>(go.get(), static_cast<float>(gWindowWidth), static_cast<float>(gWindowHeight)));
+    go->AddComponent(std::make_unique<dae::TextureComponent>(go.get(), static_cast<float>(224), static_cast<float>(272)));
     go->GetComponent<dae::TextureComponent>()->SetTexture(m_Background);
     scene.Add(std::move(go));
 }
@@ -217,7 +217,7 @@ void LevelLoader::CreateEntities(dae::Scene& scene)
         pump->AddCollider(scene);
 
         auto digdug = std::make_unique<dae::GameObject>();
-        digdug->SetWorldPosition(player.position.x, player.position.y);
+        digdug->SetWorldPosition(player.position);
         digdug->AddComponent(std::make_unique<dae::DigDugController>(digdug.get(), std::string("Player").append(std::to_string(player.id)), pump.get()));
         digdug->GetComponent<dae::DigDugController>()->SetStartPos(player.position);
         digdug->AddCollider(scene);
@@ -241,7 +241,7 @@ void LevelLoader::CreateEntities(dae::Scene& scene)
     {
         auto pooka = std::make_unique<dae::GameObject>();
         pooka->AddComponent(std::make_unique<dae::PookaBehavior>(pooka.get()));
-        pooka->SetWorldPosition(pookaPos.x, pookaPos.y);
+        pooka->SetWorldPosition(pookaPos);
         pooka->SnapToGrid();
         for (auto digdug : digdugs)
         {
@@ -249,6 +249,26 @@ void LevelLoader::CreateEntities(dae::Scene& scene)
         }
         pooka->AddCollider(scene);
         scene.Add(std::move(pooka));
+    }
+
+    for (auto& fygarPos : m_Fygars)
+    {
+        auto fireBreath = std::make_unique<dae::GameObject>();
+        fireBreath->AddComponent(std::make_unique<dae::FygarBreathComponent>(fireBreath.get()));
+
+        auto fygar = std::make_unique<dae::GameObject>();
+        fygar->AddComponent(std::make_unique<dae::FygarBehavior>(fygar.get(), fireBreath->GetComponent<dae::FygarBreathComponent>()));
+        fygar->SetWorldPosition(fygarPos);
+        fygar->SnapToGrid();
+        fireBreath->SetParent(fygar.get(), false);
+        for (auto digdug : digdugs)
+        {
+            fygar->GetComponent<dae::FygarBehavior>()->AddPlayerToChase(digdug);
+        }
+        fygar->AddCollider(scene);
+        fireBreath->AddCollider(scene);
+        scene.Add(std::move(fygar));
+        scene.Add(std::move(fireBreath));
     }
 
     for (auto& rockPos : m_Rocks)
@@ -278,54 +298,4 @@ void LevelLoader::CreateUI(dae::Scene& scene)
     scene.Add(std::move(go));
 
     std::shared_ptr<dae::Font> font = std::move(resourceManager.LoadFont("Lingua.otf", 36));
-
-    //float offset{ 5 };
-    //go = std::make_unique<dae::GameObject>();
-    //go->AddComponent(std::make_unique<dae::TextComponent>("60.0", font, go.get()));
-    //go->AddComponent(std::make_unique<dae::FpsCounterComponent>(go.get()));
-    //go->GetComponent<dae::TextComponent>()->SetColor({ 255, 0, 0, 255 });
-    //go->SetWorldPosition(offset, offset);
-    //scene.Add(std::move(go));
-
-    //go = std::make_unique<dae::GameObject>();
-    //font = std::move(resourceManager.LoadFont("Lingua.otf", 14));
-    //go->AddComponent(std::make_unique<dae::TextComponent>("Use WASD to move Dig Dug, Z and X to attack.", font, go.get()));
-    //go->SetWorldPosition(5, gWindowHeight - 75);
-    //scene.Add(std::move(go));
-
-    ////Score Display Event Handler
-    //go = std::make_unique<dae::GameObject>();
-    //font = std::move(resourceManager.LoadFont("Lingua.otf", 24));
-    //go->AddComponent(std::make_unique<dae::TextComponent>("Score: 50", font, go.get()));
-    //go->AddComponent(std::make_unique<dae::ScoreDisplayComponent>(go.get(), "Player0"));
-    //go->GetComponent<dae::TextComponent>()->SetColor({ 255, 255, 255, 255 });
-    //go->SetWorldPosition(5, gWindowHeight - 100);
-    //scene.Add(std::move(go));
-
-    ////Score Display Event Handler
-    //go = std::make_unique<dae::GameObject>();
-    //font = std::move(resourceManager.LoadFont("Lingua.otf", 24));
-    //go->AddComponent(std::make_unique<dae::TextComponent>("Score: 50", font, go.get()));
-    //go->AddComponent(std::make_unique<dae::ScoreDisplayComponent>(go.get(), "Player1"));
-    //go->GetComponent<dae::TextComponent>()->SetColor({ 255, 255, 255, 255 });
-    //go->SetWorldPosition(5, gWindowHeight - 150);
-    //scene.Add(std::move(go));
-
-    ////Lives Display Event Handler
-    //go = std::make_unique<dae::GameObject>();
-    //font = std::move(resourceManager.LoadFont("Lingua.otf", 24));
-    //go->AddComponent(std::make_unique<dae::TextComponent>("Score: 50", font, go.get()));
-    //go->AddComponent(std::make_unique<dae::LivesDisplayComponent>(go.get(), "Player0"));
-    //go->GetComponent<dae::TextComponent>()->SetColor({ 255, 255, 255, 255 });
-    //go->SetWorldPosition(5, gWindowHeight - 125);
-    //scene.Add(std::move(go));
-
-    ////Lives Display Event Handler
-    //go = std::make_unique<dae::GameObject>();
-    //font = std::move(resourceManager.LoadFont("Lingua.otf", 24));
-    //go->AddComponent(std::make_unique<dae::TextComponent>("Score: 50", font, go.get()));
-    //go->AddComponent(std::make_unique<dae::LivesDisplayComponent>(go.get(), "Player1"));
-    //go->GetComponent<dae::TextComponent>()->SetColor({ 255, 255, 255, 255 });
-    //go->SetWorldPosition(5, gWindowHeight - 175);
-    //scene.Add(std::move(go));
 }

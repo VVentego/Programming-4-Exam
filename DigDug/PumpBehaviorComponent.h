@@ -1,11 +1,11 @@
 #ifndef PUMPBEHAVIOR
 #define PUMPBEHAVIOR
-#include "../Minigin/Component.h"
+#include <Component.h>
 
 namespace dae
 {
 	class TextureComponent;
-	class PookaBehavior;
+	class Enemy;
 	class PumpBehaviorComponent : public Component
 	{
 	public:
@@ -34,7 +34,7 @@ namespace dae
 		TextureComponent* m_TextureComponent{};
 		bool m_Active{};
 		bool m_Hit{};
-		PookaBehavior* m_AttachedPooka{};
+		Enemy* m_AttachedEnemy{};
 
 		float m_Timer{};
 	};

@@ -5,33 +5,48 @@
 
 namespace dae
 {
+	class FygarState;
 	class SpriteAnimatorComponent;
 	class SpriteSheet;
-	class FygarState;
-    class FygarBehavior :
-        public Component, public Enemy
-    {
-		SpriteAnimatorComponent* m_pAnimatorComponent{};
-		std::shared_ptr<SpriteSheet> m_pWalkSprite;
+	class PumpBehaviorComponent;
+	class FygarBreathComponent;
+	class FygarBehavior final : public Component, public Enemy
+	{
+	public:
+		FygarBehavior(GameObject* pOwner, FygarBreathComponent* pFygarBreathComponent);
+		~FygarBehavior();
+		FygarBehavior(const FygarBehavior& other) = delete;
+		FygarBehavior(FygarBehavior&& other) = delete;
+		FygarBehavior& operator=(const FygarBehavior& other) = delete;
+		FygarBehavior& operator=(FygarBehavior&& other) = delete;
+
+		void Update(const double deltaTime) override;
+		void CollisionEvent(GameObject* other);
+
+	private:
+		friend class FygarNormalState;
+		friend class FygarGhostState;
+		friend class FygarInflatedState;
+		friend class FygarFlattenedState;
+		friend class FygarFireBreathingState;
+		void Die() override;
+		bool PlayerInRange();
+		void ToggleFireBreath(const bool active);
+
+		FygarBreathComponent* m_FygarBreathComponent{};
+		std::shared_ptr<SpriteSheet> m_pWalkLeftSprite;
+		std::shared_ptr<SpriteSheet> m_pWalkRightSprite;
 		std::shared_ptr<SpriteSheet> m_pGhostSheet;
 		std::shared_ptr<SpriteSheet> m_pInflatedSprite1;
 		std::shared_ptr<SpriteSheet> m_pInflatedSprite2;
 		std::shared_ptr<SpriteSheet> m_pInflatedSprite3;
 		std::shared_ptr<SpriteSheet> m_pInflatedSprite4;
+		std::shared_ptr<SpriteSheet> m_pFlattenedSprite;
 
-		Facing m_FacingDirection{ Facing::right };
-		float m_Speed{ .1f };
-		int m_InflationLevel{};
-		const int m_MaxInflationLevel{ 3 };
-		const float m_TimeToChangeTarget{ 10.f };
-		float m_ChangeTargetTimer{};
-		int m_TargetIdx{};
-		std::vector<GameObject*> m_PlayersTransform;
-		float m_CheckDistance{ 0.f };
 		FygarState* m_CurrentState;
-		const int m_Size{ 14 };
-		int m_AttackingPlayerIdx{};
-		PumpBehaviorComponent* m_pPump{};
-    };
+		float m_FireTimer{};
+		const float m_FireCooldown{ 5.f };
+		const float m_FireRange{ 48.f };
+	};
 }
 #endif // !FYGAR
