@@ -54,7 +54,7 @@ DigDugState* DigDugNormalState::Update(DigDugController& digDug, const double de
 		return new DigDugDeathState;
 	}
 
-	if (!digDug.InTunnel())
+	if (!digDug.InTunnel() || !digDug.CentreInTunnel())
 	{
 		return new DigDugDigState;
 	}
@@ -83,6 +83,8 @@ void DigDugNormalState::OnEnter(DigDugController& digDug)
 		digDug.SetSpriteSheet(digDug.m_pWalkSpriteUp, 0.2);
 		break;
 	}
+
+	digDug.m_Pump->Reset();
 }
 
 void dae::DigDugNormalState::OnExit(DigDugController& digDug) 

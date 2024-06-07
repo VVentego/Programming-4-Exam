@@ -36,7 +36,10 @@ void dae::TextComponent::Update(const double)
 
 void dae::TextComponent::Render() const
 {
-	m_pTextureComponent->Render();
+	if (m_ShouldRender)
+	{
+		m_pTextureComponent->Render();
+	}
 }
 
 // This implementation uses the "dirty flag" pattern

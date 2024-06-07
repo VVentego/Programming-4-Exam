@@ -120,6 +120,7 @@ void dae::HighScoreManagerComponent::MoveRight()
 		}
 		m_SelectionHighlight->SetLocalPosition(m_LetterDisplayObjects[m_SelectionIdx]->GetLocalPosition());
 		m_SelectionHighlight->GetComponent<TextureComponent>()->SetSize(m_LetterDisplayObjects[m_SelectionIdx]->GetComponent<TextComponent>()->GetSize());
+		ServiceLocator::GetSoundManager().Play(8, 100);
 	}
 }
 
@@ -143,6 +144,7 @@ void dae::HighScoreManagerComponent::MoveLeft()
 		}
 		m_SelectionHighlight->SetLocalPosition(m_LetterDisplayObjects[m_SelectionIdx]->GetLocalPosition());
 		m_SelectionHighlight->GetComponent<TextureComponent>()->SetSize(m_LetterDisplayObjects[m_SelectionIdx]->GetComponent<TextComponent>()->GetSize());
+		ServiceLocator::GetSoundManager().Play(8, 100);
 	}
 }
 
@@ -165,36 +167,33 @@ void dae::HighScoreManagerComponent::Shoot()
 			playerName.push_back(*letter.GetChar());
 		}
 		m_HighScoreHandler.AddHighScore(playerName, m_PlayerScore);
-	}
-	m_AllowNameInput = false;
+		m_AllowNameInput = false;
 
-	auto& newScores = m_HighScoreHandler.GetScores();
-	std::string playerName{};
-	for (auto& letter : m_Letters)
-	{
-		playerName.push_back(*letter.GetChar());
-	}
-	for (size_t i{}; i < newScores.size(); ++i) 
-	{
-		if (newScores[i].score == m_PlayerScore) 
+		auto& newScores = m_HighScoreHandler.GetScores();
+
+		for (size_t i{}; i < newScores.size(); ++i)
 		{
-			// Ensure the index is within bounds
-			if (i < m_ScoreDisplays.size()) {
-				// Construct the new display text
-				std::string newText = playerName + ": " + std::to_string(m_PlayerScore);
+			if (newScores[i].score == m_PlayerScore)
+			{
+				// Ensure the index is within bounds
+				if (i < m_ScoreDisplays.size()) {
+					// Construct the new display text
+					std::string newText = playerName + ": " + std::to_string(m_PlayerScore);
 
-				m_ScoreDisplays[i]->GetComponent<TextComponent>()->SetText(newText);
-				break;
+					m_ScoreDisplays[i]->GetComponent<TextComponent>()->SetText(newText);
+					break;
+				}
 			}
 		}
-	}
 
-	for (auto& letter : m_LetterDisplayObjects)
-	{
-		letter->Destroy();
+		for (auto& letter : m_LetterDisplayObjects)
+		{
+			letter->Destroy();
+		}
+		m_LetterDisplayObjects.clear();
+		m_SelectionHighlight->Destroy();
+		ServiceLocator::GetSoundManager().Play(8, 100);
 	}
-	m_LetterDisplayObjects.clear();
-	m_SelectionHighlight->Destroy();
 }
 
 void dae::HighScoreManagerComponent::Mute()

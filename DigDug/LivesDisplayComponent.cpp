@@ -32,7 +32,7 @@ void dae::LivesDisplayComponent::Update(const double deltaTime)
 
 	if (m_pTextComponent != nullptr && m_NeedsUpdate)
 	{
-		std::string text = "# Lives: " + std::to_string(m_Lives);
+		std::string text = m_PlayerName + " # Lives: " + std::to_string(m_Lives);
 
 		m_pTextComponent->SetText(text);
 		m_NeedsUpdate = false;

@@ -31,7 +31,7 @@ public:
 
     void CreateBackground(dae::Scene& scene) const;
 
-    void CreateEntities(dae::Scene& scene);
+    int CreateEntities(dae::Scene& scene);
 
     void CreateUI(dae::Scene& scene);
 

@@ -52,5 +52,6 @@ namespace dae
         const std::string m_PlayerName{ "Player1" };
         int m_Lives{ 3 };
         bool m_BreatheFire{};
+        bool m_Dead{};
     };
 }

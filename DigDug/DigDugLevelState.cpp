@@ -34,7 +34,7 @@ void SinglePlayerState1::OnEnter(dae::Scene& scene)
     go->AddComponent(std::make_unique<dae::TextComponent>("Score: 50", font, go.get()));
     go->AddComponent(std::make_unique<dae::ScoreDisplayComponent>(go.get(), "Player0"));
     go->GetComponent<dae::TextComponent>()->SetColor({ 255, 255, 255, 255 });
-    go->SetWorldPosition(5, 24);
+    go->SetWorldPosition(5, gWindowHeight - 24);
     newScene.AddPersistentObject(std::move(go));
 
     //Lives Display Event Handler
@@ -42,18 +42,18 @@ void SinglePlayerState1::OnEnter(dae::Scene& scene)
     go->AddComponent(std::make_unique<dae::TextComponent>("Score: 50", font, go.get()));
     go->AddComponent(std::make_unique<dae::LivesDisplayComponent>(go.get(), "Player0"));
     go->GetComponent<dae::TextComponent>()->SetColor({ 255, 255, 255, 255 });
-    go->SetWorldPosition(5, 48);
-    newScene.AddPersistentObject(std::move(go));
+    go->SetWorldPosition(5, 10);
+    newScene.Add(std::move(go));
 
 	auto& tunnelManager = TunnelManager::GetInstance();
 
 	tunnelManager.Init("TunnelHorizontal.png", pLevelLoader->GetTunnels());
 
 	newScene.Add(std::unique_ptr<GameObject>(tunnelManager.GetTunnelManagerObject()));
-    pLevelLoader->CreateEntities(newScene);
+    m_EnemiesLeft = pLevelLoader->CreateEntities(newScene);
 }
 
-std::unique_ptr<LevelState> SinglePlayerState1::OnExit(dae::Scene& scene)
+std::unique_ptr<LevelState> SinglePlayerState1::OnExit(dae::Scene&)
 {
     auto start = std::chrono::high_resolution_clock::now();
     while (true)
@@ -67,7 +67,7 @@ std::unique_ptr<LevelState> SinglePlayerState1::OnExit(dae::Scene& scene)
         }
     }
 
-    scene.RemoveAll();
+    ServiceLocator::GetSoundManager().Play(7, 100);
     return std::move(m_NextState);
 }
 
@@ -91,10 +91,34 @@ void SinglePlayerState1::HandleEvent(const Event& event)
     {
         EventObserver::GetInstance().RemoveListener(this);
     }
+
+    if (event.type == EventType::ENEMY_KILLED)
+    {
+        --m_EnemiesLeft;
+        if (m_EnemiesLeft <= 0)
+        {
+            m_Exit = true;
+            EventObserver::GetInstance().RemoveListener(this);
+            m_NextState = std::make_unique<EndScreenState>();
+        }
+    }
 }
 
 std::unique_ptr<LevelState> MainMenuState::OnExit(dae::Scene& scene)
 {
+    auto start = std::chrono::high_resolution_clock::now();
+    float endLevelDelay{ 1.f };
+    while (true)
+    {
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> elapsed = end - start;
+
+        if (elapsed.count() >= endLevelDelay)
+        {
+            break;
+        }
+    }
+
     scene.RemoveAll();
     return std::move(m_NextState);
 }
@@ -154,7 +178,7 @@ void VersusPlayerState1::OnEnter(dae::Scene& scene)
     go->AddComponent(std::make_unique<dae::TextComponent>("Score: 50", font, go.get()));
     go->AddComponent(std::make_unique<dae::ScoreDisplayComponent>(go.get(), "Player0"));
     go->GetComponent<dae::TextComponent>()->SetColor({ 255, 255, 255, 255 });
-    go->SetWorldPosition(5, 24);
+    go->SetWorldPosition(5, gWindowHeight - 24);
     newScene.AddPersistentObject(std::move(go));
 
     //Lives Display Event Handler
@@ -162,23 +186,23 @@ void VersusPlayerState1::OnEnter(dae::Scene& scene)
     go->AddComponent(std::make_unique<dae::TextComponent>("Score: 50", font, go.get()));
     go->AddComponent(std::make_unique<dae::LivesDisplayComponent>(go.get(), "Player0"));
     go->GetComponent<dae::TextComponent>()->SetColor({ 255, 255, 255, 255 });
-    go->SetWorldPosition(5, 48);
-    newScene.AddPersistentObject(std::move(go));
+    go->SetWorldPosition(5, 10);
+    newScene.Add(std::move(go));
 
     //Lives Display Event Handler
     go = std::make_unique<dae::GameObject>();
     go->AddComponent(std::make_unique<dae::TextComponent>("Score: 50", font, go.get()));
     go->AddComponent(std::make_unique<dae::LivesDisplayComponent>(go.get(), "Player1"));
     go->GetComponent<dae::TextComponent>()->SetColor({ 255, 255, 255, 255 });
-    go->SetWorldPosition(5, 96);
-    newScene.AddPersistentObject(std::move(go));
+    go->SetWorldPosition(5, 40);
+    newScene.Add(std::move(go));
 
     auto& tunnelManager = TunnelManager::GetInstance();
 
     tunnelManager.Init("TunnelHorizontal.png", pLevelLoader->GetTunnels());
 
     newScene.Add(std::unique_ptr<GameObject>(tunnelManager.GetTunnelManagerObject()));
-    pLevelLoader->CreateEntities(newScene);
+    m_EnemiesLeft = pLevelLoader->CreateEntities(newScene);
 }
 
 std::unique_ptr<LevelState> VersusPlayerState1::OnExit(dae::Scene& scene)
@@ -241,6 +265,7 @@ void EndScreenState::OnEnter(dae::Scene& scene)
         {
             persistentObjects.push_back(scoreComponent);
         }
+        object->GetComponent<TextComponent>()->m_ShouldRender = false;
     }
 
     auto highScoreManager = std::make_unique<GameObject>();

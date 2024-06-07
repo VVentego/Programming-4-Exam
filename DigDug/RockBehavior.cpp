@@ -182,7 +182,7 @@ void dae::RockBehavior::CollisionEvent(GameObject* other)
 
 	if (auto enemy = other->GetComponent<Enemy>())
 	{
-		if (enemy->Flatten())
+		if (!enemy->Flatten())
 		{
 			++m_KillCount;
 		}

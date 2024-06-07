@@ -113,6 +113,12 @@ void dae::FygarPlayerController::CrushedByRock()
 
 void dae::FygarPlayerController::Die()
 {
+	if (m_Dead)
+	{
+		return;
+	}
+
+	m_Dead = true;
 	ServiceLocator::GetSoundManager().Play(3, 100);
 	ServiceLocator::GetSoundManager().Play(2, 100);
 	m_pPump->Reset();
@@ -129,7 +135,6 @@ void dae::FygarPlayerController::Die()
 
 	NotifyObserver(playerDiedEvent);
 
-
 	if (m_Lives > 0)
 	{
 		--m_Lives;
@@ -144,4 +149,5 @@ void dae::FygarPlayerController::Die()
 void dae::FygarPlayerController::Respawn()
 {
 	m_pOwner->SetWorldPosition(m_StartPos);
+	m_Dead = false;
 }

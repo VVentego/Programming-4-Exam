@@ -25,6 +25,8 @@ namespace dae
 		TextComponent(TextComponent&& other) = delete;
 		TextComponent& operator=(const TextComponent& other) = delete;
 		TextComponent& operator=(TextComponent&& other) = delete;
+
+		bool m_ShouldRender{ true };
 	protected:
 		void UpdateText();
 		bool m_needsUpdate;

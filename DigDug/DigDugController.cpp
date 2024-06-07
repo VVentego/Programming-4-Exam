@@ -80,6 +80,10 @@ void dae::DigDugController::HandleInput(Command* command)
 
 void dae::DigDugController::MoveRight()
 {
+	if (m_pOwner->GetWorldPosition().x >= 224 - 16)
+	{
+		return;
+	}
 	m_Velocity = { m_MoveSpeed, 0 };
 
 	m_NewFacingDirection = Facing::right;
@@ -88,6 +92,10 @@ void dae::DigDugController::MoveRight()
 
 void dae::DigDugController::MoveDown()
 {
+	if (m_pOwner->GetWorldPosition().y >= 272)
+	{
+		return;
+	}
 	m_Velocity = { 0, m_MoveSpeed };
 
 	m_NewFacingDirection = Facing::down;
@@ -96,6 +104,10 @@ void dae::DigDugController::MoveDown()
 
 void dae::DigDugController::MoveLeft()
 {
+	if (m_pOwner->GetWorldPosition().x <= 0)
+	{
+		return;
+	}
 	m_Velocity = { -m_MoveSpeed, 0 };
 
 	m_NewFacingDirection = Facing::left;
@@ -104,6 +116,10 @@ void dae::DigDugController::MoveLeft()
 
 void dae::DigDugController::MoveUp()
 {
+	if (m_pOwner->GetWorldPosition().y <= 16 )
+	{
+		return;
+	}
 	m_Velocity = { 0, -m_MoveSpeed };
 
 	m_NewFacingDirection = Facing::up;
@@ -276,16 +292,16 @@ bool dae::DigDugController::InTunnel()
 	switch (m_FacingDirection)
 	{
 	case Facing::right:
-		checkPos += glm::vec2{ m_CheckDistance + m_Size.x, 0 };
+		checkPos += glm::vec2{ m_CheckDistance + m_Size.x, m_Size.y / 2.f };
 		break;
 	case Facing::down:
-		checkPos += glm::vec2{ 0, m_CheckDistance + m_Size.y };
+		checkPos += glm::vec2{ m_Size.x / 2.f, m_CheckDistance + m_Size.y };
 		break;
 	case Facing::left:
-		checkPos += glm::vec2{ -m_CheckDistance, 0 };
+		checkPos += glm::vec2{ -m_CheckDistance, m_Size.y / 2.f };
 		break;
 	case Facing::up:
-		checkPos += glm::vec2{ 0, -m_CheckDistance };
+		checkPos += glm::vec2{ m_Size.x / 2.f, -m_CheckDistance };
 		break;
 	}
 

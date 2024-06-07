@@ -16,6 +16,11 @@ glm::vec2 dae::TunnelManager::FindNearestTunnel(const glm::vec2 position) const
 
 bool dae::TunnelManager::InTunnel(const glm::vec2 position)
 {
+	if (position.y < 32)
+	{
+		return true;
+	}
+
 	return m_TunnelManagerObject->GetComponent<TunnelComponent>()->InTunnel(position);
 }
 

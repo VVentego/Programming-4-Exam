@@ -32,7 +32,7 @@ void dae::ScoreDisplayComponent::Update(const double deltaTime)
 
 	if (m_pTextComponent != nullptr && m_NeedsUpdate)
 	{
-		std::string text = "Score: " + std::to_string(m_Score);
+		std::string text = m_PlayerName + " Score: " + std::to_string(m_Score);
 
 		m_pTextComponent->SetText(text);
 		m_NeedsUpdate = false;

@@ -67,10 +67,10 @@ bool HighScoreHandler::IsNewHighScore(int score) const {
 
 void HighScoreHandler::InitializeDefaultScores() {
     m_RecordedScores.clear();
-    for (int i{}; i < m_MaxHighScores; ++i) {
+    for (size_t i{}; i < m_MaxHighScores; ++i) {
         HighScoreEntry defaultEntry;
         strncpy_s(defaultEntry.name.data(), defaultEntry.name.size(), "TCL", 3);
-        defaultEntry.score = 100 * i;
+        defaultEntry.score = 100 * static_cast<int>(i);
         m_RecordedScores.push_back(defaultEntry);
     }
 }

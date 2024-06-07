@@ -230,16 +230,16 @@ void LevelLoader::CreateBackground(dae::Scene& scene) const
     scene.Add(std::move(go));
 }
 
-void LevelLoader::CreateEntities(dae::Scene& scene)
+int LevelLoader::CreateEntities(dae::Scene& scene)
 {
     std::vector<dae::GameObject*> digdugs;
-
+    int enemiesLeft{};
     for (auto& player : m_Players)
     {
         //Allow only two players
         if (player.id > 1)
         {
-            return;
+            return 0;
         }
         auto pump = std::make_unique<dae::GameObject>();
 
@@ -279,6 +279,7 @@ void LevelLoader::CreateEntities(dae::Scene& scene)
         }
         pooka->AddCollider(scene);
         scene.Add(std::move(pooka));
+        ++enemiesLeft;
     }
 
     for (auto& fygarPos : m_Fygars)
@@ -299,6 +300,7 @@ void LevelLoader::CreateEntities(dae::Scene& scene)
         fireBreath->AddCollider(scene);
         scene.Add(std::move(fygar));
         scene.Add(std::move(fireBreath));
+        ++enemiesLeft;
     }
 
     if (m_FygarPlayer != glm::vec2{ 0, 0 })
@@ -314,8 +316,10 @@ void LevelLoader::CreateEntities(dae::Scene& scene)
         fireBreath->SetParent(fygar.get(), false);
         fygar->AddCollider(scene);
         fireBreath->AddCollider(scene);
+        fygar->GetComponent<dae::FygarPlayerController>()->SetStartPos(m_FygarPlayer);
         scene.Add(std::move(fygar));
         scene.Add(std::move(fireBreath));
+        ++enemiesLeft;
     }
 
     for (auto& rockPos : m_Rocks)
@@ -331,6 +335,7 @@ void LevelLoader::CreateEntities(dae::Scene& scene)
         rock->AddCollider(scene);
         scene.Add(std::move(rock));
     }
+    return enemiesLeft;
 }
 
 

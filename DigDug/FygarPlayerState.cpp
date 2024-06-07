@@ -38,6 +38,11 @@ FygarPlayerState* dae::FygarPlayerNormalState::Update(FygarPlayerController& fyg
 		fygar.m_Velocity = {};
 	}
 
+	if (fygar.m_InflationLevel > 0 || fygar.m_IsHooked)
+	{
+		return new FygarPlayerInflatedState;
+	}
+
 	if (!fygar.IsInTunnel())
 	{
 		return new FygarPlayerGhostState;
@@ -196,6 +201,7 @@ FygarPlayerState* dae::FygarPlayerInflatedState::Update(FygarPlayerController& f
 		if (m_DeathTimer <= 0)
 		{
 			fygar.Die();
+			return new FygarPlayerNormalState;
 		}
 	}
 
