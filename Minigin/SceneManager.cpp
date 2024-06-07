@@ -57,6 +57,11 @@ void dae::SceneManager::TransferPersistentObjects(Scene& first, Scene& second)
 	}
 }
 
+std::vector<std::unique_ptr<dae::GameObject>>* dae::SceneManager::GetPersistentObjects()
+{
+	return GetCurrentScene()->GetPersistentObjects();
+}
+
 dae::Scene* dae::SceneManager::GetCurrentScene() 
 {
 	if (m_scenes.empty())

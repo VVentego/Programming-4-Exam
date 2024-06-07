@@ -116,6 +116,19 @@ void dae::DigDugController::Shoot()
 	m_Pump->Fire(m_FacingDirection);
 }
 
+void dae::DigDugController::Mute()
+{
+	ServiceLocator::GetSoundManager().ToggleMute();
+}
+
+void dae::DigDugController::Skip()
+{
+	Event skipEvent{};
+	skipEvent.type = EventType::SKIP_LEVEL;
+
+	NotifyObserver(skipEvent);
+}
+
 void dae::DigDugController::OnPlayerDeath()
 {
 	--m_Lives;

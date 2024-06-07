@@ -88,7 +88,11 @@ dae::Command* dae::InputManager::InputManagerImpl::DoProcessInput()
 			case SDL_SCANCODE_W:
 				return m_MoveUp.get();
 				break;
-			case SDL_SCANCODE_C:
+			case SDL_SCANCODE_M:
+				return m_Mute.get();
+				break;
+			case SDL_SCANCODE_F1:
+				return m_Skip.get();
 				break;
 			case SDL_SCANCODE_X:
 			case SDL_SCANCODE_Z: SDL_FALLTHROUGH;

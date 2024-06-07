@@ -8,6 +8,8 @@ dae::InputManager::InputManager() :
 	BindButtonMoveLeft(std::make_unique<MoveLeft>());
 	BindButtonMoveUp(std::make_unique<MoveUp>());
 	BindAttack(std::make_unique<Attack>());
+	BindMute(std::make_unique<Mute>());
+	BindSkip(std::make_unique<Skip>());
 }
 
 void dae::InputManager::AddPlayer1(Player& player1)
@@ -53,6 +55,16 @@ void dae::InputManager::BindButtonMoveUp(std::unique_ptr<Command> command)
 void dae::InputManager::BindAttack(std::unique_ptr<Command> command)
 {
 	m_InputImpl->BindAttack(std::move(command));
+}
+
+void dae::InputManager::BindMute(std::unique_ptr<Command> command)
+{
+	m_InputImpl->BindMute(std::move(command));
+}
+
+void dae::InputManager::BindSkip(std::unique_ptr<Command> command)
+{
+	m_InputImpl->BindSkip(std::move(command));
 }
 
 void dae::InputManager::UpdateInput(const double deltaTime)

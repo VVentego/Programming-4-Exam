@@ -61,5 +61,21 @@ namespace dae
             actor->Shoot();
         }
     };
+    class Mute :
+        public GameActorCommand
+    {
+        void Execute(Player* actor) override
+        {
+            actor->Mute();
+        }
+    };
+    class Skip :
+        public GameActorCommand
+    {
+        void Execute(Player* actor) override
+        {
+            actor->Skip();
+        }
+    };
 }
 #endif // !GAMEACTORCOMMAND

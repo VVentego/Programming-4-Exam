@@ -21,6 +21,7 @@ namespace dae
 		void DestroyObjects();
 		void RemoveCurrentScene();
 		void TransferPersistentObjects(Scene& first, Scene& second);
+		std::vector<std::unique_ptr<GameObject>>* GetPersistentObjects();
 		Scene* GetCurrentScene();
 		Scene* GetScene(const std::string& name);
 		void SetLevelState(std::unique_ptr<LevelState> levelState);

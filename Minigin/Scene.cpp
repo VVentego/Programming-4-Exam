@@ -158,3 +158,8 @@ std::vector<std::unique_ptr<GameObject>>& dae::Scene::PassPersistentObjects()
 	return m_PersistentObjects;
 }
 
+std::vector<std::unique_ptr<GameObject>>* dae::Scene::GetPersistentObjects()
+{
+	return &m_PersistentObjects;
+}
+

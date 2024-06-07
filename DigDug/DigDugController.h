@@ -22,18 +22,11 @@ namespace dae
         DigDugController& operator=(DigDugController&& other) = delete;
 
         void Update(const double deltaTime) override;
-        void HandleInput(Command* command) override;
 
-        void MoveRight() override;
-        void MoveDown() override;
-        void MoveLeft() override;
-        void MoveUp() override;
-        void Shoot() override;
-        void OnPlayerDeath();
-        virtual void CollisionEvent(GameObject* other) override;
+        void CollisionEvent(GameObject* other) override;
 
-        void SetStartPos(const glm::vec2 pos) { m_StartPos = pos; }
         void HandleEvent(const Event& event);
+        void SetStartPos(const glm::vec2 pos) { m_StartPos = pos; }
 
         const std::string m_PlayerName;
     private:
@@ -41,6 +34,17 @@ namespace dae
         friend class DigDugDigState;
         friend class DigDugDeathState;
         friend class DigDugPumpState;
+        void HandleInput(Command* command) override;
+
+        void MoveRight() override;
+        void MoveDown() override;
+        void MoveLeft() override;
+        void MoveUp() override;
+        void Shoot() override;
+        void Mute() override;
+        void Skip() override;
+        void OnPlayerDeath();
+
         void SetSpriteSheet(std::shared_ptr<SpriteSheet> spriteSheet, const double frameTime);
         void DigTunnel();
         bool CentreInTunnel();
@@ -49,6 +53,7 @@ namespace dae
         void PlayMusic();
         void StopMusic();
         void RenderTunnel(const bool doRender);
+
         const float m_MoveSpeed{ 40.f };
         const float m_CheckDistance{ 3.f };
         const float m_MoveStepDistance{ 16.f };

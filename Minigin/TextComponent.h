@@ -9,7 +9,7 @@
 namespace dae
 {
 	class Font;
-	class TextComponent : 
+	class TextComponent final : 
 		public Component
 	{
 	public:
@@ -26,6 +26,7 @@ namespace dae
 		TextComponent& operator=(const TextComponent& other) = delete;
 		TextComponent& operator=(TextComponent&& other) = delete;
 	protected:
+		void UpdateText();
 		bool m_needsUpdate;
 		std::string m_text;
 		std::shared_ptr<Font> m_font;

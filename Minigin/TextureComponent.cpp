@@ -48,3 +48,14 @@ void dae::TextureComponent::SetTexture(std::shared_ptr<Texture2D> texture)
 	m_texture.reset();
 	m_texture = texture;
 }
+
+void dae::TextureComponent::SetSize(const glm::vec2& newSize)
+{
+	m_Width = newSize.x;
+	m_Height = newSize.y;
+}
+
+void dae::TextureComponent::SetSize(const float x, const float y)
+{
+	SetSize({ x, y });
+}

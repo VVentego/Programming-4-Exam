@@ -93,9 +93,9 @@ void dae::DigDugNormalState::OnExit(DigDugController& digDug)
 
 void DigDugNormalState::HandleInput(DigDugController& digdug, Command* command) 
 {
+	if (digdug.m_DistanceMoved <= digdug.m_MoveStepDistance) return;
 	if (command != nullptr)
 	{
-		if (digdug.m_DistanceMoved <= digdug.m_MoveStepDistance) return;
 		command->Execute(&digdug);
 	}
 }
@@ -248,12 +248,12 @@ void dae::DigDugDigState::OnExit(DigDugController& digDug)
 
 void dae::DigDugDigState::HandleInput(DigDugController& digDug, Command* command)
 {
+	if (digDug.m_DistanceMoved <= digDug.m_MoveStepDistance)
+	{
+		return;
+	}
 	if (command != nullptr)
 	{
-		if (digDug.m_DistanceMoved <= digDug.m_MoveStepDistance)
-		{
-			return;
-		}
 		command->Execute(&digDug);
 	}
 }

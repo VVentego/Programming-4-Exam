@@ -29,6 +29,8 @@
     <ClCompile Include="FygarPlayerController.cpp" />
     <ClCompile Include="FygarPlayerState.cpp" />
     <ClCompile Include="FygarState.cpp" />
+    <ClCompile Include="HighScoreHandler.cpp" />
+    <ClCompile Include="HighScoreManagerComponent.cpp" />
     <ClCompile Include="LevelLoader.cpp" />
     <ClCompile Include="LivesDisplayComponent.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -54,6 +56,8 @@
     <ClInclude Include="FygarPlayerController.h" />
     <ClInclude Include="FygarPlayerState.h" />
     <ClInclude Include="FygarState.h" />
+    <ClInclude Include="HighScoreHandler.h" />
+    <ClInclude Include="HighScoreManagerComponent.h" />
     <ClInclude Include="LevelLoader.h" />
     <ClInclude Include="LivesDisplayComponent.h" />
     <ClInclude Include="MainMenuController.h" />
@@ -63,7 +67,6 @@
     <ClInclude Include="RockBehavior.h" />
     <ClInclude Include="RockState.h" />
     <ClInclude Include="ScoreDisplayComponent.h" />
-    <ClInclude Include="TunnelDweller.h" />
     <ClInclude Include="TunnelManager.h" />
     <ClInclude Include="TunnelTextureComponent.h" />
   </ItemGroup>

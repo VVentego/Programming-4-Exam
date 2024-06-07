@@ -75,6 +75,7 @@ void dae::FygarPlayerNormalState::OnExit(FygarPlayerController&)
 
 void dae::FygarPlayerNormalState::HandleInput(FygarPlayerController& fygar, Command* command)
 {
+	if (fygar.m_DistanceMoved <= fygar.m_MoveStepDistance) return;
 	if (command != nullptr)
 	{
 		command->Execute(&fygar);
@@ -129,8 +130,7 @@ void dae::FygarPlayerGhostState::OnExit(FygarPlayerController&)
 
 void dae::FygarPlayerGhostState::HandleInput(FygarPlayerController& fygar, Command* command)
 {
-
-
+	if (fygar.m_DistanceMoved <= fygar.m_MoveStepDistance) return;
 	if (command != nullptr)
 	{
 		if (dynamic_cast<Attack*>(command))

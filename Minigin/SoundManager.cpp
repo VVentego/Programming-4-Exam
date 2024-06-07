@@ -9,12 +9,18 @@ void dae::SoundManager::Init(const std::string& dataPath)
 
 void dae::SoundManager::Play(const sound_id id, const int volume)
 {
-	m_SoundSystemImpl->Play(id, volume);
+	if (!m_Muted)
+	{
+		m_SoundSystemImpl->Play(id, volume);
+	}
 }
 
 void dae::SoundManager::PlayMusic()
 {
-	m_SoundSystemImpl->PlayMusic();
+	if (!m_Muted)
+	{
+		m_SoundSystemImpl->PlayMusic();
+	}
 }
 
 void dae::SoundManager::StopMusic()
@@ -52,6 +58,8 @@ void dae::SoundManagerDebug::Init(const std::string& dataPath)
 
 void dae::SoundManagerDebug::Play(const sound_id id, const int volume)
 {
+	if (m_Muted) return;
+
 	SoundManager::Play(id, volume);
 	std::cout << "Playing sound of ID: " << std::to_string(id) << " at volume: " << std::to_string(volume) << std::endl;
 }
@@ -78,3 +86,16 @@ void dae::SoundManagerDebug::StopMusic()
 	SoundManager::StopMusic();
 }
 
+void dae::SoundManagerDebug::ToggleMute()
+{
+	SoundSystem::ToggleMute();
+	if (m_Muted == true)
+	{
+		std::cout << "Sound muted!" << std::endl;
+	}
+
+	else
+	{
+		std::cout << "Sound unmuted!" << std::endl;
+	}
+}

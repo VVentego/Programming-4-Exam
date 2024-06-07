@@ -9,18 +9,10 @@
 #include <Minigin.h>
 #include "LivesDisplayComponent.h"
 #include "MainMenuController.h"
+#include "HighScoreManagerComponent.h"
 #include <chrono>
 
 using namespace dae;
-SinglePlayerState1::SinglePlayerState1()
-{
-}
-
-SinglePlayerState1::~SinglePlayerState1()
-{
-    
-}
-
 void SinglePlayerState1::OnEnter(dae::Scene& scene)
 {
 	std::unique_ptr<LevelLoader> pLevelLoader{ std::make_unique<LevelLoader>() };
@@ -61,7 +53,7 @@ void SinglePlayerState1::OnEnter(dae::Scene& scene)
     pLevelLoader->CreateEntities(newScene);
 }
 
-std::unique_ptr<LevelState> SinglePlayerState1::OnExit(dae::Scene&)
+std::unique_ptr<LevelState> SinglePlayerState1::OnExit(dae::Scene& scene)
 {
     auto start = std::chrono::high_resolution_clock::now();
     while (true)
@@ -75,6 +67,7 @@ std::unique_ptr<LevelState> SinglePlayerState1::OnExit(dae::Scene&)
         }
     }
 
+    scene.RemoveAll();
     return std::move(m_NextState);
 }
 
@@ -100,14 +93,10 @@ void SinglePlayerState1::HandleEvent(const Event& event)
     }
 }
 
-MainMenuState::MainMenuState() :
-	LevelState::LevelState()
+std::unique_ptr<LevelState> MainMenuState::OnExit(dae::Scene& scene)
 {
-}
-
-MainMenuState::~MainMenuState()
-{
-  
+    scene.RemoveAll();
+    return std::move(m_NextState);
 }
 
 void MainMenuState::OnEnter(dae::Scene&)
@@ -116,12 +105,13 @@ void MainMenuState::OnEnter(dae::Scene&)
     auto mainMenuController = std::make_unique<GameObject>();
     mainMenuController->AddComponent(std::make_unique<dae::MainMenuController>(mainMenuController.get(), gWindowWidth, gWindowHeight, newScene));
     newScene.Add(std::move(mainMenuController));
-}
 
-std::unique_ptr<LevelState> MainMenuState::OnExit(dae::Scene& scene)
-{
-    scene.RemoveAll();
-    return std::move(m_NextState);
+    auto title = std::make_unique<GameObject>();
+    title->AddComponent(std::make_unique<TextureComponent>(title.get()));
+    auto titleTexture = title->GetComponent<TextureComponent>();
+    titleTexture->SetTexture("Title.png");
+    title->SetWorldPosition(gWindowWidth / 4.f - titleTexture->GetSize().x / 2.f, 10);
+    newScene.Add(std::move(title));
 }
 
 void MainMenuState::HandleEvent(const Event& event)
@@ -141,14 +131,6 @@ void MainMenuState::HandleEvent(const Event& event)
             m_Exit = true;
         }
     }
-}
-
-VersusPlayerState1::VersusPlayerState1()
-{
-}
-
-VersusPlayerState1::~VersusPlayerState1()
-{
 }
 
 void VersusPlayerState1::OnEnter(dae::Scene& scene)
@@ -199,7 +181,7 @@ void VersusPlayerState1::OnEnter(dae::Scene& scene)
     pLevelLoader->CreateEntities(newScene);
 }
 
-std::unique_ptr<LevelState> VersusPlayerState1::OnExit(dae::Scene&)
+std::unique_ptr<LevelState> VersusPlayerState1::OnExit(dae::Scene& scene)
 {
     auto start = std::chrono::high_resolution_clock::now();
     while (true)
@@ -213,6 +195,7 @@ std::unique_ptr<LevelState> VersusPlayerState1::OnExit(dae::Scene&)
         }
     }
 
+    scene.RemoveAll();
     return std::move(m_NextState);
 }
 
@@ -235,5 +218,42 @@ void VersusPlayerState1::HandleEvent(const Event& event)
     if (event.type == EventType::LOAD_LEVEL)
     {
         EventObserver::GetInstance().RemoveListener(this);
+    }
+}
+
+std::unique_ptr<LevelState> EndScreenState::OnExit(dae::Scene& scene)
+{
+    scene.RemoveAll();
+    return std::move(m_NextState);
+}
+
+void EndScreenState::OnEnter(dae::Scene& scene)
+{
+    auto& newScene = dae::SceneManager::GetInstance().CreateScene("versus1");
+    SceneManager& sceneManager = SceneManager::GetInstance();
+    sceneManager.TransferPersistentObjects(scene, newScene);
+    
+    std::vector<ScoreDisplayComponent*> persistentObjects{};
+    auto newSceneObjects = newScene.GetPersistentObjects();
+    for (auto& object : *newSceneObjects)
+    {
+        if (ScoreDisplayComponent* scoreComponent = object->GetComponent<ScoreDisplayComponent>())
+        {
+            persistentObjects.push_back(scoreComponent);
+        }
+    }
+
+    auto highScoreManager = std::make_unique<GameObject>();
+    highScoreManager->AddComponent(std::make_unique<HighScoreManagerComponent>(highScoreManager.get(), newScene, glm::vec2{ gWindowWidth, gWindowHeight }, persistentObjects));
+    newScene.Add(std::move(highScoreManager));
+}
+
+void EndScreenState::HandleEvent(const Event& event)
+{
+    if (event.type == EventType::SKIP_LEVEL)
+    {
+        EventObserver::GetInstance().RemoveListener(this);
+        m_NextState = std::make_unique<MainMenuState>();
+        m_Exit = true;
     }
 }

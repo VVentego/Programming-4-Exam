@@ -70,6 +70,7 @@ namespace dae
 		void AddMusic(const std::string& fileName) override;
 		virtual void PlayMusic() override;
 		virtual void StopMusic() override;
+		void ToggleMute() override;
 	};
 
 #ifndef SOUNDSYSTEMIMPL

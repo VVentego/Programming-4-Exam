@@ -76,6 +76,19 @@ void dae::FygarPlayerController::Shoot()
 	m_BreatheFire = true;
 }
 
+void dae::FygarPlayerController::Mute()
+{
+	ServiceLocator::GetSoundManager().ToggleMute();
+}
+
+void dae::FygarPlayerController::Skip()
+{
+	Event skipEvent{};
+	skipEvent.type = EventType::SKIP_LEVEL;
+
+	NotifyObserver(skipEvent);
+}
+
 void dae::FygarPlayerController::CrushedByRock()
 {
 	ServiceLocator::GetSoundManager().Play(2, 100);

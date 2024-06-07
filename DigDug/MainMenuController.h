@@ -21,13 +21,15 @@ namespace dae
     private:
         void HandleInput(Command* command) override;
 
-        void MoveRight()override {};
+        void MoveRight() override {};
         void MoveDown() override;
         void MoveLeft() override {};
         void MoveUp() override;
         void Shoot() override;
+        void Mute() override;
+        void Skip() override {};
         int m_SelectionIdx{};
-        const int m_MaxOptions{ 3 };
+        const int m_MaxOptions{ 2 };
     };
 }
 #endif //MAINMENU

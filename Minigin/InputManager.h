@@ -27,6 +27,8 @@ namespace dae
 		void BindButtonMoveLeft(std::unique_ptr<Command> command);
 		void BindButtonMoveUp(std::unique_ptr<Command> command);
 		void BindAttack(std::unique_ptr<Command> command);
+		void BindMute(std::unique_ptr<Command> command);
+		void BindSkip(std::unique_ptr<Command> command);
 
 		void UpdateInput(const double deltaTime) override;
 	private:
@@ -54,6 +56,8 @@ namespace dae
 		void BindButtonMoveRight(std::unique_ptr<Command> command) { m_MoveRight = std::move(command); }
 		void BindButtonMoveUp(std::unique_ptr<Command> command) { m_MoveUp = std::move(command); }
 		void BindAttack(std::unique_ptr<Command> command) { m_Attack = std::move(command); }
+		void BindMute(std::unique_ptr<Command> command) { m_Mute = std::move(command); }
+		void BindSkip(std::unique_ptr<Command> command) { m_Skip = std::move(command); }
 
 		bool ShouldQuit() const { return m_ShouldQuit; }
 
@@ -68,6 +72,8 @@ namespace dae
 		std::unique_ptr<Command> m_MoveLeft{};
 		std::unique_ptr<Command> m_MoveUp{};
 		std::unique_ptr<Command> m_Attack{};
+		std::unique_ptr<Command> m_Mute{};
+		std::unique_ptr<Command> m_Skip{};
 
 		Player* m_pPlayer1{};
 		Player* m_pPlayer2{};

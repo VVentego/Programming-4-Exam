@@ -15,23 +15,30 @@ MainMenuController::MainMenuController(GameObject* pOwner, const int windowWidth
 	auto& resourceManager = ResourceManager::GetInstance();
 	const float spacing{ 40 };
 
+
 	std::shared_ptr<Font> font = std::move(resourceManager.LoadFont("Lingua.otf", 14));
 	std::unique_ptr<GameObject> textObject = std::make_unique<GameObject>();
-	textObject->AddComponent(std::make_unique<TextComponent>("Single Player", font, textObject.get()));
+	auto textComponent{ std::make_unique<TextComponent>("Single Player", font, textObject.get()) };
+	auto size = textComponent->GetSize().x;
+	textObject->AddComponent(std::move(textComponent));
 	textObject->SetParent(pOwner);
-	textObject->SetWorldPosition(windowWidth / static_cast<float>(4), windowHeight / static_cast<float>(2) - spacing);
+	textObject->SetWorldPosition(windowWidth / 4.f - size / 2.f, windowHeight / 2.f - spacing);
 	scene.Add(std::move(textObject));
 
 	textObject = std::make_unique<GameObject>();
-	textObject->AddComponent(std::make_unique<TextComponent>("Multiplayer", font, textObject.get()));
+	textComponent = std::make_unique<TextComponent>("Multiplayer", font, textObject.get());
+	size = textComponent->GetSize().x;
+	textObject->AddComponent(std::move(textComponent));
 	textObject->SetParent(pOwner);
-	textObject->SetWorldPosition(windowWidth / static_cast<float>(4), windowHeight / static_cast<float>(2) - spacing * 2);
+	textObject->SetWorldPosition(windowWidth / 4.f - size / 2.f, windowHeight / 2.f - spacing * 2);
 	scene.Add(std::move(textObject));
 	
 	textObject = std::make_unique<GameObject>();
-	textObject->AddComponent(std::make_unique<TextComponent>("Versus", font, textObject.get()));
+	textComponent = std::make_unique<TextComponent>("Versus", font, textObject.get());
+	size = textComponent->GetSize().x;
+	textObject->AddComponent(std::move(textComponent));
 	textObject->SetParent(pOwner);
-	textObject->SetWorldPosition(windowWidth / static_cast<float>(4), windowHeight / static_cast<float>(2) - spacing * 3);
+	textObject->SetWorldPosition(windowWidth / 4.f - size / 2.f, windowHeight / 2.f - spacing * 3);
 	scene.Add(std::move(textObject));
 }
 
@@ -95,4 +102,9 @@ void dae::MainMenuController::Shoot()
 		EventObserver::GetInstance().Notify(loadLevelEvent);
 		break;
 	}
+}
+
+void dae::MainMenuController::Mute()
+{
+	ServiceLocator::GetSoundManager().ToggleMute();
 }

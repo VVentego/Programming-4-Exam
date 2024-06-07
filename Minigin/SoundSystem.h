@@ -16,6 +16,20 @@ namespace dae
 		virtual void Destroy() = 0;
 		virtual void PlayMusic() = 0;
 		virtual void StopMusic() = 0;
+		virtual void ToggleMute()
+		{
+			if (!m_Muted)
+			{
+				m_Muted = true;
+				StopMusic();
+			}
+			else
+			{
+				m_Muted = false;
+			}
+		}
+	protected:
+		bool m_Muted{};
 	};
 
 	class NullSoundSystem : public SoundSystem

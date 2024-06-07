@@ -23,6 +23,8 @@ namespace dae
 		void RemovePersistentObject(std::unique_ptr<GameObject> object);
 		std::vector<std::unique_ptr<GameObject>>& PassPersistentObjects();
 
+		std::vector<std::unique_ptr<GameObject>>* GetPersistentObjects();
+
 		~Scene();
 		Scene(const Scene& other) = delete;
 		Scene(Scene&& other) = delete;

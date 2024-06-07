@@ -20,6 +20,8 @@ namespace dae
 		virtual void MoveLeft() = 0;
 		virtual void MoveUp() = 0;
 		virtual void Shoot() = 0;
+		virtual void Mute() = 0;
+		virtual void Skip() = 0;
 	};
 }
 #endif //PLAYER

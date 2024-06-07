@@ -20,6 +20,7 @@ namespace dae
 
 		virtual void HandleEvent(const Event& event) override;
 		const int GetScore() const { return m_Score; }
+		const std::string& GetPlayerName() const { return m_PlayerName; }
 	private:
 		int m_Score{ 0 };
 		dae::TextComponent* m_pTextComponent;

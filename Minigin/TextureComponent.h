@@ -24,6 +24,8 @@ namespace dae
 		TextureComponent& operator=(TextureComponent&& other) = delete;
 
 		const glm::vec2 GetSize() const;
+		void SetSize(const glm::vec2& newSize);
+		void SetSize(const float x, const float y);
 		bool m_ShouldRender{ true };
 	protected:
 		std::shared_ptr<Texture2D> m_texture{};

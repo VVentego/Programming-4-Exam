@@ -21,6 +21,7 @@ namespace dae
 		virtual void BindButtonMoveLeft(std::unique_ptr<Command> command) = 0;
 		virtual void BindButtonMoveUp(std::unique_ptr<Command> command) = 0;
 		virtual void BindAttack(std::unique_ptr<Command> command) = 0;
+		virtual void BindSkip(std::unique_ptr<Command> command) = 0;
 
 		virtual void UpdateInput(const double) = 0;
 		virtual bool HasQuit() const { return m_Quit; }
@@ -48,6 +49,7 @@ namespace dae
 		void BindButtonMoveLeft(std::unique_ptr<Command>) override {};
 		void BindButtonMoveUp(std::unique_ptr<Command>) override {};
 		void BindAttack(std::unique_ptr<Command>) override {};
+		void BindSkip(std::unique_ptr<Command>) override {};
 
 		virtual void UpdateInput(const double) 
 		{

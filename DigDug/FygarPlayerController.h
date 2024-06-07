@@ -23,6 +23,8 @@ namespace dae
         void MoveLeft() override;
         void MoveUp() override;
         void Shoot() override;
+        void Mute() override;
+        void Skip() override;
 
         void SetStartPos(const glm::vec2 pos) { m_StartPos = pos; }
 
