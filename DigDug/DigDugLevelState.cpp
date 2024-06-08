@@ -364,16 +364,16 @@ void CoopState1::HandleEvent(const Event& event)
                 m_NextState = std::make_unique<MainMenuState>();
             }
         }
-    }
-    if (event.stringValue == "Player2")
-    {
-        --m_Player2Lives;
-        ServiceLocator::GetSoundManager().Play(9, 100);
-        if (m_Player1Lives <= 0 && m_Player2Lives <= 0)
+        if (event.stringValue == "Player2")
         {
-            m_Exit = true;
-            EventObserver::GetInstance().RemoveListener(this);
-            m_NextState = std::make_unique<MainMenuState>();
+            --m_Player2Lives;
+            ServiceLocator::GetSoundManager().Play(9, 100);
+            if (m_Player1Lives <= 0 && m_Player2Lives <= 0)
+            {
+                m_Exit = true;
+                EventObserver::GetInstance().RemoveListener(this);
+                m_NextState = std::make_unique<MainMenuState>();
+            }
         }
     }
 
@@ -582,18 +582,19 @@ void CoopState3::HandleEvent(const Event& event)
                 m_NextState = std::make_unique<MainMenuState>();
             }
         }
-    }
-    if (m_Player1Lives <= 0 && m_Player2Lives <= 0)
-    {
-        --m_Player2Lives;
-        ServiceLocator::GetSoundManager().Play(9, 100);
-        if (m_Player2Lives <= 0)
+        if (m_Player1Lives <= 0 && m_Player2Lives <= 0)
         {
-            m_Exit = true;
-            EventObserver::GetInstance().RemoveListener(this);
-            m_NextState = std::make_unique<MainMenuState>();
+            --m_Player2Lives;
+            ServiceLocator::GetSoundManager().Play(9, 100);
+            if (m_Player2Lives <= 0)
+            {
+                m_Exit = true;
+                EventObserver::GetInstance().RemoveListener(this);
+                m_NextState = std::make_unique<MainMenuState>();
+            }
         }
     }
+
 
     if (event.type == EventType::SKIP_LEVEL)
     {

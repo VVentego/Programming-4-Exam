@@ -57,7 +57,7 @@ dae::Minigin::Minigin(const char* dataPath) :
 	}
 
 	g_window = SDL_CreateWindow(
-		"Programming 4 assignment",
+		"Dig Dug - 2DAE09_ChaiLeng_TanLim_exam",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
 		gWindowWidth,
