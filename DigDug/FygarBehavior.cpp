@@ -34,6 +34,12 @@ dae::FygarBehavior::~FygarBehavior()
 
 void dae::FygarBehavior::Update(const double deltaTime)
 {
+	if (m_StartDelay > 0)
+	{
+		m_StartDelay -= static_cast<float>(deltaTime);
+		return;
+	}
+
 	auto nextState = m_CurrentState->Update(*this, deltaTime);
 
 	if (nextState != nullptr)

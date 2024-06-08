@@ -33,7 +33,7 @@ namespace dae
 
 		fygar.TrackPlayer();
 
-		fygar.UpdateMovement();
+		fygar.UpdateMovement(static_cast<float>(deltaTime));
 
 		fygar.CheckForTunnel();
 
@@ -113,7 +113,7 @@ namespace dae
 			fygar.SwapTarget(deltaTime);
 		}
 
-		fygar.GhostSeek();
+		fygar.GhostSeek(static_cast<float>(deltaTime));
 
 		if (m_StateTimer > m_GhostStateDuration)
 		{

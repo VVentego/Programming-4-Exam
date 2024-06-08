@@ -37,7 +37,7 @@ namespace dae
 		bool IsDoneDying();
 		GameObject* GetNearestPlayer();
 		void SetInstigatingPlayer();
-		const float m_FallSpeed{ 10.f };
+		const float m_FallSpeed{ 40.f };
 		const float m_TunnelCheckOffset{ 10.f };
 		RockState* m_CurrentState;
 		SpriteAnimatorComponent* m_pAnimatorComponent{};

@@ -96,7 +96,7 @@ FygarPlayerState* dae::FygarPlayerGhostState::Update(FygarPlayerController& fyga
 		fygar.m_pOwner->SetLocalPosition(currentPos.x + fygar.m_Velocity.x * static_cast<float>(deltaTime),
 			currentPos.y + fygar.m_Velocity.y * static_cast<float>(deltaTime));
 
-		fygar.m_DistanceMoved += fygar.m_MoveSpeed * static_cast<float>(deltaTime);
+		fygar.m_DistanceMoved += fygar.m_GhostSpeed * static_cast<float>(deltaTime);
 	}
 
 	else

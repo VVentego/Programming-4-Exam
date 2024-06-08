@@ -185,31 +185,31 @@ void dae::Enemy::SwapTarget(const double deltaTime)
 	}
 }
 
-void dae::Enemy::UpdateMovement()
+void dae::Enemy::UpdateMovement(const float deltaTime)
 {
 	switch (m_FacingDirection)
 	{
 	case Facing::right:
-		m_pEnemyOwner->SetLocalPosition(m_pEnemyOwner->GetLocalPosition() + glm::vec2{ m_Speed, 0 });
+		m_pEnemyOwner->SetLocalPosition(m_pEnemyOwner->GetLocalPosition() + glm::vec2{ m_Speed, 0 } * deltaTime);
 		break;
 	case Facing::down:
-		m_pEnemyOwner->SetLocalPosition(m_pEnemyOwner->GetLocalPosition() + glm::vec2{ 0, m_Speed });
+		m_pEnemyOwner->SetLocalPosition(m_pEnemyOwner->GetLocalPosition() + glm::vec2{ 0, m_Speed } * deltaTime);
 		break;
 	case Facing::left:
-		m_pEnemyOwner->SetLocalPosition(m_pEnemyOwner->GetLocalPosition() + glm::vec2{ -m_Speed, 0 });
+		m_pEnemyOwner->SetLocalPosition(m_pEnemyOwner->GetLocalPosition() + glm::vec2{ -m_Speed, 0 } * deltaTime);
 		break;
 	case Facing::up:
-		m_pEnemyOwner->SetLocalPosition(m_pEnemyOwner->GetLocalPosition() + glm::vec2{ 0, -m_Speed });
+		m_pEnemyOwner->SetLocalPosition(m_pEnemyOwner->GetLocalPosition() + glm::vec2{ 0, -m_Speed } * deltaTime);
 	}
 }
 
-void dae::Enemy::GhostSeek()
+void dae::Enemy::GhostSeek(const float deltaTime)
 {
 	const glm::vec2 playerPos{ m_PlayersTransform[m_TargetIdx]->GetWorldPosition() };
 	const glm::vec2 currentPos{ m_pEnemyOwner->GetWorldPosition() };
 	glm::vec2 direction = playerPos - currentPos;
 	direction = glm::normalize(direction);
-	direction *= m_Speed;
+	direction *= m_GhostSpeed * deltaTime;
 
 	m_pEnemyOwner->SetLocalPosition(m_pEnemyOwner->GetLocalPosition() + direction);
 }

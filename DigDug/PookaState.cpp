@@ -28,7 +28,7 @@ namespace dae
 
 		pooka.TrackPlayer();
 
-		pooka.UpdateMovement();
+		pooka.UpdateMovement(static_cast<float>(deltaTime));
 
 		pooka.CheckForTunnel();
 
@@ -99,7 +99,7 @@ namespace dae
 			pooka.SwapTarget(deltaTime);
 		}
 
-		pooka.GhostSeek();
+		pooka.GhostSeek(static_cast<float>(deltaTime));
 
 		if (m_StateTimer > m_GhostStateDuration)
 		{

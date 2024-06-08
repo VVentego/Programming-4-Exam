@@ -24,8 +24,8 @@ namespace dae
 		virtual void FindNewDirection();
 		virtual void SetSprite(std::shared_ptr<SpriteSheet> spriteSheet);
 		virtual void SwapTarget(const double deltaTime);
-		virtual void UpdateMovement();
-		virtual void GhostSeek();
+		virtual void UpdateMovement(const float deltaTime);
+		virtual void GhostSeek(const float deltaTime);
 		virtual void SeekNearestTunnel();
 		virtual bool IsInTunnel() const;
 		virtual void CrushedByRock();
@@ -42,11 +42,13 @@ namespace dae
 		SpriteAnimatorComponent* m_pAnimatorComponent{};
 
 		Facing m_FacingDirection{ Facing::right };
-		float m_Speed{ .1f };
+		const float m_Speed{ 40.f };
+		const float m_GhostSpeed{ 20.f };
 		const float m_TimeToChangeTarget{ 10.f };
 		float m_ChangeTargetTimer{};
 		int m_TargetIdx{};
 		float m_CheckDistance{ 5.f };
+		float m_StartDelay{ 1.f };
 
 	public:
 		virtual bool GetHooked() const { return m_IsHooked; }

@@ -11,10 +11,10 @@ enum class EventType {
 };
 
 struct Event {
-    EventType type;
-    int intValue;
-    float floatValue;
-    std::string stringValue;
+    EventType type{ -1 };
+    int intValue{};
+    float floatValue{};
+    std::string stringValue{};
 };
 
 class EventListener
