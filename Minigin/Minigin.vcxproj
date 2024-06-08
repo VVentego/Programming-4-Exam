@@ -241,7 +241,6 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="InputManagerImpl.cpp" />
-    <ClCompile Include="LevelState.cpp" />
     <ClCompile Include="Minigin.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />

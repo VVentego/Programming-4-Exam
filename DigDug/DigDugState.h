@@ -1,6 +1,7 @@
 #ifndef DIGDUGSTATE
 #define DIGDUGSTATE
 #include "DigDugController.h"
+#include <chrono>
 namespace dae
 {
 	class DigDugState
@@ -84,7 +85,7 @@ namespace dae
 		float m_DeathTimer{ 2.f };
 	};
 
-
+	using namespace std::chrono_literals;
 	class DigDugPumpState final : public DigDugState
 	{
 	public:
@@ -104,7 +105,10 @@ namespace dae
 
 	private:
 		bool m_Dead{};
-		bool m_DoneDigging{};
+		std::chrono::time_point<std::chrono::steady_clock> m_LastPressTime{ std::chrono::steady_clock::now() };
+		const std::chrono::duration<double> m_ButtonTapThreshold{ 0.1s };
+		std::chrono::time_point<std::chrono::steady_clock> m_LastAttackTime{ std::chrono::steady_clock::now() };
+		const std::chrono::duration<double> m_HoldButtonAttackInterval{ 0.3s };
 	};
 }
 #endif //DIGDUGSTATE

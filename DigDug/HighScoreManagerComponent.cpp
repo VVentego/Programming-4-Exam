@@ -103,9 +103,16 @@ dae::HighScoreManagerComponent::~HighScoreManagerComponent()
 
 void dae::HighScoreManagerComponent::HandleInput(Command* command)
 {
+	auto currentTime = std::chrono::steady_clock::now();
+	auto holdDuration = std::chrono::duration_cast<std::chrono::duration<double>>(currentTime - m_LastButtonPress);
 	if (command != nullptr)
 	{
-		command->Execute(this);
+		if (holdDuration >= m_HoldButtonThreshold)
+		{
+			command->Execute(this);
+
+			m_LastButtonPress = currentTime;
+		}
 	}
 }
 

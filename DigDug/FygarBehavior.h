@@ -48,6 +48,7 @@ namespace dae
 		friend class FygarFlattenedState;
 		friend class FygarFireBreathingState;
 		bool PlayerInRange();
+		virtual void CrushedByRock() override;
 		FygarState* m_CurrentState;
 	};
 }

@@ -1,10 +1,15 @@
--- level0.lua
+-- level0Coop.lua
 background = "Level1.png"
 
 players = {
     {
     id = 0,
-    x = 96, 
+    x = 80, 
+    y = 144
+    },
+    {
+    id = 1,
+    x = 112, 
     y = 144
     }
 }

@@ -1,12 +1,17 @@
--- level1Versus.lua
+-- level1Coop.lua
 background = "Level1.png"
 
 players = {
     {
-    id = 0,
-    x = 96, 
-    y = 144
-    }
+        id = 0,
+        x = 80, 
+        y = 144
+        },
+        {
+        id = 1,
+        x = 112, 
+        y = 144
+        }
 }
 
 pookas = {
@@ -16,10 +21,7 @@ pookas = {
 }
 
 fygars = {
-    { x = 176, y = 80 }
-}
-
-fygarplayer = {
+    { x = 176, y = 80 },
     { x = 176, y = 208 }
 }
 

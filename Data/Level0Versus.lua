@@ -1,4 +1,4 @@
--- level0.lua
+-- level0versus.lua
 background = "Level1.png"
 
 players = {
@@ -15,9 +15,10 @@ pookas = {
     { x = 144, y = 228 }
 }
 
-fygars = {
+fygarplayer = {
     { x = 48, y = 192 }
 }
+
 
 tunnels = {
     { x = 96, y = 48 },

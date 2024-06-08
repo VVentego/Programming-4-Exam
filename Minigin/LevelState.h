@@ -6,7 +6,7 @@
 class LevelState : public EventListener
 {
 public:
-	LevelState();
+	LevelState() = default;
 	virtual ~LevelState() = default;
 	virtual void OnEnter(dae::Scene& scene) = 0;
 	virtual std::unique_ptr<LevelState> OnExit(dae::Scene& scene) = 0;

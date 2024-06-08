@@ -31,17 +31,13 @@ dae::Command* dae::InputManager::InputManagerImpl::DoProcessXInput(const int pla
 	{
 		return nullptr; // Controller is not connected or failed to retrieve state
 	}
-	if (!(prevState->Gamepad.wButtons & XINPUT_GAMEPAD_A) && (currentState->Gamepad.wButtons & XINPUT_GAMEPAD_A))
+	if (currentState->Gamepad.wButtons & XINPUT_GAMEPAD_A)
 	{
 		return m_Attack.get();
 	}
-	if (!(prevState->Gamepad.wButtons & XINPUT_GAMEPAD_B) && (currentState->Gamepad.wButtons & XINPUT_GAMEPAD_B))
+	if (currentState->Gamepad.wButtons & XINPUT_GAMEPAD_B)
 	{
 		return m_Attack.get();
-	}
-
-	if (!(prevState->Gamepad.wButtons & XINPUT_GAMEPAD_X) && (currentState->Gamepad.wButtons & XINPUT_GAMEPAD_X))
-	{
 	}
 
 	if (currentState->Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT)
@@ -72,35 +68,43 @@ dae::Command* dae::InputManager::InputManagerImpl::DoProcessInput()
 			m_ShouldQuit = true;
 		}
 
-		if (e.type == SDL_KEYDOWN)
+		if (e.type == SDL_KEYUP)
 		{
 			switch (e.key.keysym.scancode)
 			{
-			case SDL_SCANCODE_D:
-				return m_MoveRight.get();
-				break;
-			case SDL_SCANCODE_S:
-				return m_MoveDown.get();
-				break;
-			case SDL_SCANCODE_A:
-				return m_MoveLeft.get();
-				break;
-			case SDL_SCANCODE_W:
-				return m_MoveUp.get();
-				break;
 			case SDL_SCANCODE_M:
 				return m_Mute.get();
 				break;
 			case SDL_SCANCODE_F1:
 				return m_Skip.get();
 				break;
-			case SDL_SCANCODE_X:
-			case SDL_SCANCODE_Z: SDL_FALLTHROUGH;
-				return m_Attack.get();
-				break;
 			}
 		}
 	}
+	//For continuous keypresses
+	const Uint8* keystate = SDL_GetKeyboardState(NULL);
+
+	if (keystate[SDL_SCANCODE_D])
+	{
+		return m_MoveRight.get();
+	}
+	if (keystate[SDL_SCANCODE_S])
+	{
+		return m_MoveDown.get();
+	}
+	if (keystate[SDL_SCANCODE_A])
+	{
+		return m_MoveLeft.get();
+	}
+	if (keystate[SDL_SCANCODE_W])
+	{
+		return m_MoveUp.get();
+	}
+	if (keystate[SDL_SCANCODE_X] || keystate[SDL_SCANCODE_Z])
+	{
+		return m_Attack.get();
+	}
+
 	return nullptr;
 }
 

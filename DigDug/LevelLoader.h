@@ -9,7 +9,6 @@
 struct LoadedPlayer {
     uint32_t id;
     glm::vec2 position;
-    bool usesController;
 };
 
 class dae::Scene;

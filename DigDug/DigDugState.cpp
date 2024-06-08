@@ -200,7 +200,6 @@ DigDugState* dae::DigDugDigState::Update(DigDugController& digDug, const double 
 		digDug.m_Velocity = {};
 		digDug.m_pOwner->SnapToGrid();
 		digDug.DigTunnel();
-		//m_DoneDigging = true;
 	}
 
 	if (m_Dead)
@@ -223,6 +222,7 @@ DigDugState* dae::DigDugDigState::Update(DigDugController& digDug, const double 
 void dae::DigDugDigState::OnEnter(DigDugController& digDug)
 {
 	digDug.RenderTunnel(true);
+	digDug.m_Pump->Reset();
 
 	switch (digDug.m_FacingDirection)
 	{
@@ -339,7 +339,33 @@ void dae::DigDugPumpState::HandleInput(DigDugController& digDug, Command* comman
 {
 	if (command != nullptr)
 	{
-		command->Execute(&digDug);
+		if (dynamic_cast<Attack*>(command) != nullptr)
+		{
+			auto currentTime = std::chrono::steady_clock::now();
+			auto holdDuration = std::chrono::duration_cast<std::chrono::duration<double>>(currentTime - m_LastPressTime);
+			if (holdDuration > m_ButtonTapThreshold)
+			{
+				// Button tapped
+				command->Execute(&digDug);
+			}
+			else
+			{
+				//Attack every 0.3 seconds
+				auto timeSinceAttack{ std::chrono::duration_cast<std::chrono::duration<double>>(currentTime - m_LastAttackTime) };
+				if (timeSinceAttack >= m_HoldButtonAttackInterval) 
+				{
+					command->Execute(&digDug);
+
+					m_LastAttackTime = currentTime;
+				}
+			}
+			m_LastPressTime = currentTime;
+		}
+		else
+		{
+			command->Execute(&digDug);
+		}
+
 	}
 }
 

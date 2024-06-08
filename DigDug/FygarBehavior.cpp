@@ -85,6 +85,16 @@ bool dae::FygarBehavior::PlayerInRange()
 	return false;
 }
 
+void dae::FygarBehavior::CrushedByRock()
+{
+	Event event{};
+	event.type = EventType::ENEMY_KILLED;
+	event.stringValue = "Fygar";
+
+	NotifyObserver(event);
+	Enemy::CrushedByRock();
+}
+
 void dae::FygarBehavior::ToggleFireBreath(const bool active)
 {
 	bool facingRight{};

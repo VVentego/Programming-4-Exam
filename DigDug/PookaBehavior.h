@@ -29,6 +29,7 @@ namespace dae
 		friend class PookaInflatedState;
 		friend class PookaFlattenedState;
 		void Die() override;
+		void CrushedByRock() override;
 
 		std::shared_ptr<SpriteSheet> m_pWalkLeftSprite;
 		std::shared_ptr<SpriteSheet> m_pWalkRightSprite;

@@ -42,14 +42,13 @@ namespace dae
         const float m_CheckDistance{ 3.f };
         const float m_MoveStepDistance{ 16.f };
         Facing m_NewFacingDirection{};
-        Facing m_FacingDirection{ Facing::right };
         float m_DistanceMoved{ m_MoveStepDistance + 1 };
         const float m_InvulnLength{ 2.f };
         float m_InvulnerabilityTimer{ m_InvulnLength };
         glm::vec2 m_Velocity{};
         glm::vec2 m_StartPos{};
         FygarPlayerState* m_CurrentState;
-        const std::string m_PlayerName{ "Player1" };
+        const std::string m_PlayerName{ "Player2" };
         int m_Lives{ 3 };
         bool m_BreatheFire{};
         bool m_Dead{};

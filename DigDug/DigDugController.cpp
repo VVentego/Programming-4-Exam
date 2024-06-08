@@ -47,7 +47,7 @@ dae::DigDugController::~DigDugController()
 
 	EventObserver::GetInstance().RemoveListener(this);
 
-	if (m_PlayerName == "Player1")
+	if (m_PlayerName == "Player0")
 	{
 		ServiceLocator::GetInputManager().RemovePlayer1();
 	}
@@ -128,6 +128,22 @@ void dae::DigDugController::MoveUp()
 
 void dae::DigDugController::Shoot()
 {
+	switch (m_FacingDirection)
+	{
+	case Facing::right:
+		m_pPumpObject->SetLocalPosition(-m_Size.x / 2.f, m_Size.y / 2.f);
+		break;
+	case Facing::down:
+		m_pPumpObject->SetLocalPosition(m_Size.x / 2.f, -m_Size.y / 2.f);
+		break;
+	case Facing::left:
+		m_pPumpObject->SetLocalPosition(-m_Size.x / 2.f, m_Size.y / 2.f);
+		break;
+	case Facing::up:
+		m_pPumpObject->SetLocalPosition(m_Size.x / 2.f, -m_Size.y / 2.f);
+		break;
+	}
+
 	m_InvulnerabilityTimer = 0;
 	m_Pump->Fire(m_FacingDirection);
 }
@@ -172,11 +188,6 @@ void dae::DigDugController::CollisionEvent(GameObject* other)
 
 void dae::DigDugController::HandleEvent(const Event& event)
 {
-	if (event.stringValue.back() != m_PlayerName.back())
-	{
-		return;
-	}
-
 	if (event.type == EventType::ENEMY_KILLED)
 	{
 		Event scoreEvent{};
@@ -320,7 +331,7 @@ bool dae::DigDugController::IsDoneDying()
 
 void dae::DigDugController::PlayMusic()
 {
-	if (m_PlayerName == "Player0")
+	if (m_PlayerName == "Player1")
 	{
 		ServiceLocator::GetSoundManager().PlayMusic();
 	}
@@ -328,7 +339,7 @@ void dae::DigDugController::PlayMusic()
 
 void dae::DigDugController::StopMusic()
 {
-	if (m_PlayerName == "Player0")
+	if (m_PlayerName == "Player1")
 	{
 		ServiceLocator::GetSoundManager().StopMusic();
 	}

@@ -227,6 +227,7 @@ namespace dae
 
 	void FygarFlattenedState::OnEnter(FygarBehavior& fygar)
 	{
+		ServiceLocator::GetSoundManager().Play(10, 100);
 		fygar.SetSprite(fygar.m_pFlattenedSprite);
 	}
 

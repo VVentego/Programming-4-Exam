@@ -2,9 +2,11 @@
 #define MAINMENU
 #include <Component.h>
 #include <Player.h>
+#include <chrono>
 
 namespace dae
 {
+    using namespace std::chrono_literals;
     class MainMenuController :
         public Component, public Player
     {
@@ -30,6 +32,12 @@ namespace dae
         void Skip() override {};
         int m_SelectionIdx{};
         const int m_MaxOptions{ 2 };
+        std::vector <glm::vec2> m_ButtonPositions;
+        glm::vec2 m_PointerSize{};
+
+        std::chrono::time_point<std::chrono::steady_clock> m_LastButtonPress{ std::chrono::steady_clock::now() };
+        const std::chrono::duration<double> m_HoldButtonThreshold{ 0.1s };
+        GameObject* m_Pointer{};
     };
 }
 #endif //MAINMENU

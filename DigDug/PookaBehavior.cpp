@@ -88,3 +88,13 @@ void dae::PookaBehavior::Die()
 
 	m_pOwner->Destroy();
 }
+
+void dae::PookaBehavior::CrushedByRock()
+{
+	Event event{};
+	event.type = EventType::ENEMY_KILLED;
+	event.stringValue = "Pooka";
+
+	NotifyObserver(event);
+	Enemy::CrushedByRock();
+}

@@ -1,6 +1,6 @@
 #ifndef FPSCOUNTER
 #define FPSCOUNTER
-#include "../Minigin/TextComponent.h"
+#include <TextComponent.h>
 
 namespace dae
 {

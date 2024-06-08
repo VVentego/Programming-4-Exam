@@ -55,10 +55,6 @@ void LevelLoader::LoadPlayers() {
                 player.position.y = static_cast<float>(lua_tointeger(L, -1));
                 lua_pop(L, 1);
 
-                lua_getfield(L, -1, "usesController");
-                player.usesController = lua_toboolean(L, -1);
-                lua_pop(L, 1);
-
                 m_Players.push_back(player);
             }
             lua_pop(L, 1);
@@ -243,12 +239,12 @@ int LevelLoader::CreateEntities(dae::Scene& scene)
         }
         auto pump = std::make_unique<dae::GameObject>();
 
-        pump->AddComponent(std::make_unique<dae::PumpBehaviorComponent>(pump.get(), 0));
+        pump->AddComponent(std::make_unique<dae::PumpBehaviorComponent>(pump.get(), player.id + 1));
         pump->AddCollider(scene);
 
         auto digdug = std::make_unique<dae::GameObject>();
         digdug->SetWorldPosition(player.position);
-        digdug->AddComponent(std::make_unique<dae::DigDugController>(digdug.get(), std::string("Player").append(std::to_string(player.id)), pump.get()));
+        digdug->AddComponent(std::make_unique<dae::DigDugController>(digdug.get(), std::string("Player").append(std::to_string(player.id + 1)), pump.get()));
         digdug->GetComponent<dae::DigDugController>()->SetStartPos(player.position);
         digdug->AddCollider(scene);
         digdug->SnapToGrid();

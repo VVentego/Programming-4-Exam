@@ -33,12 +33,14 @@ namespace dae
         glm::vec2 FindNearestTunnel(const glm::vec2 position) const;
         bool InTunnel(const glm::vec2 position);
         void DigTunnel(const glm::vec2 position);
+        void ReplaceTunnels(std::vector<glm::vec2> tunnels);
 
         GameObject* GetTunnelManagerObject() { return m_TunnelManagerObject; }
         class TunnelComponent;
     private:
         void AdjustTunnelPositions();
         TunnelManager() = default;
+        TunnelComponent* m_pTunnelComponent{};
         GameObject* m_TunnelManagerObject{};
 
     };
@@ -58,6 +60,7 @@ namespace dae
         void DigTunnel(const glm::vec2 position);
         void SetTunnelLength(const float tunnelLength) { m_TunnelLength = tunnelLength; }
         void AdjustTunnelPositions();
+        void ReplaceTunnels(std::vector<glm::vec2> newTunnels);
     private:
         TunnelTextureComponent* m_pTextureComponent{};
         float m_TunnelLength{};

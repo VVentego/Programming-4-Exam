@@ -258,6 +258,7 @@ FygarPlayerState* dae::FygarPlayerFireBreathingState::Update(FygarPlayerControll
 
 void dae::FygarPlayerFireBreathingState::OnEnter(FygarPlayerController& fygar)
 {
+	ServiceLocator::GetSoundManager().Play(10, 100);
 	fygar.ToggleFireBreath(true);
 }
 

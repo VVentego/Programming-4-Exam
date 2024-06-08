@@ -25,8 +25,9 @@ namespace dae
 
 		const int m_PlayerIdx{};
 	private:
+		const bool IsInTunnel() const;
 		const float m_ShootDistance{ 20.f };
-		const float m_Speed{ 20.f };
+		const float m_Speed{ 40.f };
 		float m_DistanceMoved{};
 		glm::vec2 m_Velocity{};
 		std::vector<std::shared_ptr<Texture2D>> m_Textures;

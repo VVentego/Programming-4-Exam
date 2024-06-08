@@ -2,9 +2,12 @@
 #include <Component.h>
 #include "HighScoreHandler.h"
 #include <vector>
+#include <chrono>
+
 
 namespace dae
 {
+    using namespace std::chrono_literals;
     class LetterSelection
     {
     public:
@@ -63,5 +66,8 @@ namespace dae
         std::vector<GameObject*> m_ScoreDisplays;
         bool m_AllowNameInput{};
         int m_PlayerScore{};
+
+        std::chrono::time_point<std::chrono::steady_clock> m_LastButtonPress{ std::chrono::steady_clock::now() };
+        const std::chrono::duration<double> m_HoldButtonThreshold{ 0.2s };
     };
 }

@@ -45,7 +45,8 @@ void HighScoreHandler::ReadFromFile()
     file.close();
 }
 
-void HighScoreHandler::WriteToFile() const {
+void HighScoreHandler::WriteToFile() const 
+{
     std::ofstream file(m_FileName, std::ios::binary);
     if (!file.is_open()) return;
 
@@ -56,7 +57,8 @@ void HighScoreHandler::WriteToFile() const {
     file.close();
 }
 
-bool HighScoreHandler::IsNewHighScore(int score) const {
+bool HighScoreHandler::IsNewHighScore(int score) const 
+{
     const auto& scores = m_RecordedScores;
     if (scores.size() < m_MaxHighScores) 
     {
@@ -65,7 +67,8 @@ bool HighScoreHandler::IsNewHighScore(int score) const {
     return score > scores.back().score;
 }
 
-void HighScoreHandler::InitializeDefaultScores() {
+void HighScoreHandler::InitializeDefaultScores() 
+{
     m_RecordedScores.clear();
     for (size_t i{}; i < m_MaxHighScores; ++i) {
         HighScoreEntry defaultEntry;

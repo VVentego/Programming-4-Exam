@@ -5,6 +5,7 @@ void dae::TunnelManager::Init(const std::string& tunnelFileName, std::vector <gl
 {
 	m_TunnelManagerObject = new GameObject;
 	auto tunnelComponent = std::make_unique<TunnelComponent>(m_TunnelManagerObject, tunnelFileName, tunnels);
+	m_pTunnelComponent = tunnelComponent.get();
 	m_TunnelManagerObject->AddComponent(std::move(tunnelComponent));
 	AdjustTunnelPositions();
 }
@@ -52,19 +53,24 @@ bool dae::TunnelManager::TunnelComponent::InTunnel(const glm::vec2 positionToChe
 
 void dae::TunnelManager::DigTunnel(const glm::vec2 position)
 {
-	m_TunnelManagerObject->GetComponent<TunnelComponent>()->DigTunnel(position);
+	m_pTunnelComponent->DigTunnel(position);
+}
+
+void dae::TunnelManager::ReplaceTunnels(std::vector<glm::vec2> tunnels)
+{
+	m_pTunnelComponent->ReplaceTunnels(tunnels);
 }
 
 void dae::TunnelManager::AdjustTunnelPositions()
 {
-	m_TunnelManagerObject->GetComponent<TunnelComponent>()->AdjustTunnelPositions();
+	m_pTunnelComponent->AdjustTunnelPositions();
 }
 
 glm::vec2 dae::TunnelManager::TunnelComponent::FindNearestTunnel(const glm::vec2 position) const
 {
 	if (m_Tunnels.empty())
 	{
-		return glm::vec2();
+		return glm::vec2{};
 	}
 
 	auto nearestTunnel = std::min_element(m_Tunnels.begin(), m_Tunnels.end(),
@@ -92,4 +98,12 @@ void dae::TunnelManager::TunnelComponent::AdjustTunnelPositions()
 		snappedPos.y = std::round(tunnelPos.y / 16.0f) * 16.0f;
 		tunnelPos = snappedPos;
 	}
+}
+
+void dae::TunnelManager::TunnelComponent::ReplaceTunnels(std::vector<glm::vec2> newTunnels)
+{
+	m_Tunnels.clear();
+	m_Tunnels = std::move(newTunnels);
+
+	AdjustTunnelPositions();
 }

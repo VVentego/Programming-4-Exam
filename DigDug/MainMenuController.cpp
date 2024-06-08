@@ -22,7 +22,8 @@ MainMenuController::MainMenuController(GameObject* pOwner, const int windowWidth
 	auto size = textComponent->GetSize().x;
 	textObject->AddComponent(std::move(textComponent));
 	textObject->SetParent(pOwner);
-	textObject->SetWorldPosition(windowWidth / 4.f - size / 2.f, windowHeight / 2.f - spacing);
+	textObject->SetWorldPosition(windowWidth / 4.f - size / 2.f, windowHeight / 2.f - spacing * 3);
+	m_ButtonPositions.push_back(textObject->GetWorldPosition());
 	scene.Add(std::move(textObject));
 
 	textObject = std::make_unique<GameObject>();
@@ -31,15 +32,25 @@ MainMenuController::MainMenuController(GameObject* pOwner, const int windowWidth
 	textObject->AddComponent(std::move(textComponent));
 	textObject->SetParent(pOwner);
 	textObject->SetWorldPosition(windowWidth / 4.f - size / 2.f, windowHeight / 2.f - spacing * 2);
+	m_ButtonPositions.push_back(textObject->GetWorldPosition());
 	scene.Add(std::move(textObject));
-	
+
 	textObject = std::make_unique<GameObject>();
 	textComponent = std::make_unique<TextComponent>("Versus", font, textObject.get());
 	size = textComponent->GetSize().x;
 	textObject->AddComponent(std::move(textComponent));
 	textObject->SetParent(pOwner);
-	textObject->SetWorldPosition(windowWidth / 4.f - size / 2.f, windowHeight / 2.f - spacing * 3);
+	textObject->SetWorldPosition(windowWidth / 4.f - size / 2.f, windowHeight / 2.f - spacing * 1);
+	m_ButtonPositions.push_back(textObject->GetWorldPosition());
 	scene.Add(std::move(textObject));
+
+	auto pointer = std::make_unique<GameObject>();
+	pointer->AddComponent(std::make_unique<TextureComponent>(pointer.get()));
+	pointer->GetComponent<TextureComponent>()->SetTexture("PumpRight.png");
+	m_Pointer = pointer.get();
+	m_PointerSize = pointer->GetComponent<TextureComponent>()->GetSize();
+	m_Pointer->SetWorldPosition(m_ButtonPositions[0].x - m_PointerSize.x, m_ButtonPositions[0].y + m_PointerSize.y / 2.f);
+	scene.Add(std::move(pointer));
 }
 
 dae::MainMenuController::~MainMenuController()
@@ -53,9 +64,16 @@ void dae::MainMenuController::Update(const double)
 
 void dae::MainMenuController::HandleInput(Command* command)
 {
+	auto currentTime = std::chrono::steady_clock::now();
+	auto holdDuration = std::chrono::duration_cast<std::chrono::duration<double>>(currentTime - m_LastButtonPress);
 	if (command != nullptr)
 	{
-		command->Execute(this);
+		if (holdDuration >= m_HoldButtonThreshold)
+		{
+			command->Execute(this);
+
+			m_LastButtonPress = currentTime;
+		}
 	}
 }
 
@@ -66,6 +84,8 @@ void dae::MainMenuController::MoveDown()
 	{
 		m_SelectionIdx = 0;
 	}
+	const glm::vec2 newPointerPos{ m_ButtonPositions[m_SelectionIdx].x - m_PointerSize.x, m_ButtonPositions[m_SelectionIdx].y + m_PointerSize.y / 2.f };
+	m_Pointer->SetWorldPosition(newPointerPos);
 #ifdef _DEBUG
 	std::cout << "Menu selection = " << std::to_string(m_SelectionIdx) << std::endl;
 #endif
@@ -78,6 +98,8 @@ void dae::MainMenuController::MoveUp()
 	{
 		m_SelectionIdx = m_MaxOptions;
 	}
+	const glm::vec2 newPointerPos{ m_ButtonPositions[m_SelectionIdx].x - m_PointerSize.x, m_ButtonPositions[m_SelectionIdx].y + m_PointerSize.y / 2.f };
+	m_Pointer->SetWorldPosition(newPointerPos);
 #ifdef _DEBUG
 	std::cout << "Menu selection = " << std::to_string(m_SelectionIdx) << std::endl;
 #endif
@@ -94,7 +116,7 @@ void dae::MainMenuController::Shoot()
 		EventObserver::GetInstance().Notify(loadLevelEvent);
 		break;
 	case 1:
-		loadLevelEvent.stringValue = "CoopLevel0";
+		loadLevelEvent.stringValue = "Coop";
 		EventObserver::GetInstance().Notify(loadLevelEvent);
 		break;
 	case 2:
