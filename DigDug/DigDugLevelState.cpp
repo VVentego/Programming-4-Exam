@@ -692,6 +692,12 @@ void MainMenuState::HandleEvent(const Event& event)
             m_NextState = std::make_unique<VersusPlayerState1>();
             m_Exit = true;
         }
+        if (event.stringValue == "highscore")
+        {
+            EventObserver::GetInstance().RemoveListener(this);
+            m_NextState = std::make_unique<EndScreenState>();
+            m_Exit = true;
+        }
     }
 }
 

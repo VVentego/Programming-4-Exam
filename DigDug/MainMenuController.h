@@ -31,12 +31,12 @@ namespace dae
         void Mute() override;
         void Skip() override {};
         int m_SelectionIdx{};
-        const int m_MaxOptions{ 2 };
+        const int m_MaxOptions{ 3 };
         std::vector <glm::vec2> m_ButtonPositions;
         glm::vec2 m_PointerSize{};
 
         std::chrono::time_point<std::chrono::steady_clock> m_LastButtonPress{ std::chrono::steady_clock::now() };
-        const std::chrono::duration<double> m_HoldButtonThreshold{ 0.1s };
+        const std::chrono::duration<double> m_HoldButtonThreshold{ 0.2s };
         GameObject* m_Pointer{};
     };
 }

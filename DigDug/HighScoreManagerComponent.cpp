@@ -8,24 +8,34 @@
 dae::HighScoreManagerComponent::HighScoreManagerComponent(GameObject* pOwner, Scene& scene, const glm::vec2 screenDimensions, std::vector<ScoreDisplayComponent*> persistentObjects) :
 	Component::Component(pOwner), m_HighScoreHandler{ "../data/highscores.dat" } 
 {
-	std::string playerName{ persistentObjects[0]->GetPlayerName() };
-	m_PlayerScore = persistentObjects[0]->GetScore();
+	auto& resourceManager = ResourceManager::GetInstance();
+	std::shared_ptr<dae::Font> font = resourceManager.LoadFont("Lingua.otf", 24);
 
-	if (persistentObjects.size() > 1)
+	if (!persistentObjects.empty())
 	{
-		if (persistentObjects[0]->GetScore() < persistentObjects[1]->GetScore())
-		{
-			playerName = persistentObjects[1]->GetPlayerName();
-			m_PlayerScore = persistentObjects[1]->GetScore();
-		}
-	}
+		std::string playerName{ persistentObjects[0]->GetPlayerName() };
+		m_PlayerScore = persistentObjects[0]->GetScore();
 
+		if (persistentObjects.size() > 1)
+		{
+			if (persistentObjects[0]->GetScore() < persistentObjects[1]->GetScore())
+			{
+				playerName = persistentObjects[1]->GetPlayerName();
+				m_PlayerScore = persistentObjects[1]->GetScore();
+			}
+		}
+		auto scoreDisplay = std::make_unique<GameObject>();
+		scoreDisplay->AddComponent(std::make_unique<TextComponent>("High score:", font, scoreDisplay.get()));
+		std::string playerNr{ playerName.back() };
+		playerName.pop_back();
+		scoreDisplay->GetComponent<TextComponent>()->SetText(playerName + " " + playerNr + std::string{ " Score: " } + std::to_string(m_PlayerScore));
+		scoreDisplay->SetWorldPosition(screenDimensions.x / 7.f - scoreDisplay->GetComponent<TextComponent>()->GetSize().x / 2.f, 40);
+		scene.Add(std::move(scoreDisplay));
+	}
 	ServiceLocator::GetInputManager().AddPlayer1(*this);
 	ServiceLocator::GetInputManager().AddPlayer2(*this);
 
 	m_AllowNameInput = m_HighScoreHandler.IsNewHighScore(m_PlayerScore);
-	auto& resourceManager = ResourceManager::GetInstance();
-	std::shared_ptr<dae::Font> font = resourceManager.LoadFont("Lingua.otf", 24);
 
 	if (m_AllowNameInput)
 	{
@@ -59,14 +69,7 @@ dae::HighScoreManagerComponent::HighScoreManagerComponent(GameObject* pOwner, Sc
 		m_SelectionHighlight->GetComponent<TextureComponent>()->SetSize(m_LetterDisplays[0]->GetSize());
 	}
 
-	auto scoreDisplay = std::make_unique<GameObject>();
-	scoreDisplay->AddComponent(std::make_unique<TextComponent>("High score:", font, scoreDisplay.get()));
-	std::string playerNr{ playerName.back() };
-	playerName.pop_back();
 	font = resourceManager.LoadFont("Lingua.otf", 20);
-	scoreDisplay->GetComponent<TextComponent>()->SetText(playerName + " " + playerNr + std::string{ " Score: " } + std::to_string(m_PlayerScore));
-	scoreDisplay->SetWorldPosition(screenDimensions.x / 7.f - scoreDisplay->GetComponent<TextComponent>()->GetSize().x / 2.f, 40);
-	scene.Add(std::move(scoreDisplay));
 	auto title = std::make_unique<GameObject>();
 	title->AddComponent(std::make_unique<TextComponent>("HIGH SCORES", font, title.get()));
 	title->SetWorldPosition(screenDimensions.x / 7.f - title->GetComponent<TextComponent>()->GetSize().x / 2.f, 10);

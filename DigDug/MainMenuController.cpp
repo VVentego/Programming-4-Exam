@@ -22,7 +22,7 @@ MainMenuController::MainMenuController(GameObject* pOwner, const int windowWidth
 	auto size = textComponent->GetSize().x;
 	textObject->AddComponent(std::move(textComponent));
 	textObject->SetParent(pOwner);
-	textObject->SetWorldPosition(windowWidth / 4.f - size / 2.f, windowHeight / 2.f - spacing * 3);
+	textObject->SetWorldPosition(windowWidth / 4.f - size / 2.f, windowHeight / 2.f - spacing * 4);
 	m_ButtonPositions.push_back(textObject->GetWorldPosition());
 	scene.Add(std::move(textObject));
 
@@ -31,7 +31,7 @@ MainMenuController::MainMenuController(GameObject* pOwner, const int windowWidth
 	size = textComponent->GetSize().x;
 	textObject->AddComponent(std::move(textComponent));
 	textObject->SetParent(pOwner);
-	textObject->SetWorldPosition(windowWidth / 4.f - size / 2.f, windowHeight / 2.f - spacing * 2);
+	textObject->SetWorldPosition(windowWidth / 4.f - size / 2.f, windowHeight / 2.f - spacing * 3);
 	m_ButtonPositions.push_back(textObject->GetWorldPosition());
 	scene.Add(std::move(textObject));
 
@@ -40,7 +40,16 @@ MainMenuController::MainMenuController(GameObject* pOwner, const int windowWidth
 	size = textComponent->GetSize().x;
 	textObject->AddComponent(std::move(textComponent));
 	textObject->SetParent(pOwner);
-	textObject->SetWorldPosition(windowWidth / 4.f - size / 2.f, windowHeight / 2.f - spacing * 1);
+	textObject->SetWorldPosition(windowWidth / 4.f - size / 2.f, windowHeight / 2.f - spacing * 2);
+	m_ButtonPositions.push_back(textObject->GetWorldPosition());
+	scene.Add(std::move(textObject));
+
+	textObject = std::make_unique<GameObject>();
+	textComponent = std::make_unique<TextComponent>("High Scores", font, textObject.get());
+	size = textComponent->GetSize().x;
+	textObject->AddComponent(std::move(textComponent));
+	textObject->SetParent(pOwner);
+	textObject->SetWorldPosition(windowWidth / 4.f - size / 2.f, windowHeight / 2.f - spacing);
 	m_ButtonPositions.push_back(textObject->GetWorldPosition());
 	scene.Add(std::move(textObject));
 
@@ -121,6 +130,10 @@ void dae::MainMenuController::Shoot()
 		break;
 	case 2:
 		loadLevelEvent.stringValue = "versus";
+		EventObserver::GetInstance().Notify(loadLevelEvent);
+		break;
+	case 3:
+		loadLevelEvent.stringValue = "highscore";
 		EventObserver::GetInstance().Notify(loadLevelEvent);
 		break;
 	}
